@@ -1,0 +1,4314 @@
+unit uTools;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  DB, extctrls, Variants, ComCtrls, MDOQuery, MDOCustomDataSet, MDOTable,
+  MDODatabase, MDOStoredProc, ShellApi;
+
+Const
+  Verdadero = 1;
+  Falso = 0;
+
+  NUEVO_REGISTRO = -1;
+  SIN_TALLE = 'S/T';
+  SIN_DETALLE_TALLE = -100;
+  MinValorTalleStr = 200;
+
+  Con_Controlador = 1;
+  Con_Impresora = 2;
+
+  ControladorSoloTicket = 1;
+  ControladorTktFactura = 2;
+  ControladorTipoFactura = 3;
+  ControladorTipoEstacion = 4;
+  ControladorTktFact_NC = 5;
+
+  MaxNroCF = 4;
+
+  Impersonal = 1;
+
+  //------------ Constantes p/ articulo
+  PedirCant = 0;
+  PedirTodo = 1;
+  PedirTotal = 2;
+  //------------ Constantes del Sistema
+  MaxPagos = 20;
+  MaxPagosCC = 6;
+  MaxBody  = 100;
+  MaxCarga = 10;
+  LimVtaCFi = 999000.000;
+  LimVtaCFd = 999000.000;
+  MaxDtoPer = 0.00;
+
+  MaxDetExt= 4;
+  MaxCntIt = 9999.9999;
+  PrcItmCero = 0.001;
+  PrcItmCero425 = 0.01;
+  MaxCtaPorRec = 8;
+  Cero = #0;
+  Vacio = '';
+  NoEncontrado = -1;
+  //------------ Constantes Alc. IVAS
+  TasaGral     = 1;
+  SobreTasa    = 2;
+  TDiferencial = 3;
+  //------------ Tipos Comprobantes del sistema
+  FacA = 1;
+  DebA = 2;
+  CreA = 3;
+  RecA = 4;
+  Tkt  = 5;
+  FacB = 6;
+  DebB = 7;
+  CreB = 8;
+  RecB = 9;
+  CrrZ = 10;
+  FacC = 11;
+  DebC = 12;
+  CreC = 13;
+  RecC = 14;
+  RemitoX = 15;
+  DcAd = 16;
+  ODV  = 17;
+  NoImputable = 18;
+  NotaPedido = 19;
+  Presupuesto = 20;
+  ReciboX = 21;
+  Liquidacion = 22;
+  ResumenCierre = 23;
+  CargoHabitacion = 24;
+  NoFiscal = 25;
+  Devolucion = 26;
+  Cuota = 27;
+  Entrega = 29;
+  PagoACuenta = 30;
+  DebitoAjuste = 31;
+  CreditoAjuste = 32;
+  SaldoInicial = 33;
+  Anticipos = 34;
+  RetirosEfectivo = 35;
+  VoucherTarjeta = 36;
+  VoucherServicio = 37;
+  Cancelado = 38;
+  RemitoTraspaso = 39;
+  RemitoR = 40;
+  OrdenCompra = 41;
+  SaldoAFavor = 42;
+  CanceladoA = 43;
+  CanceladoB = 44;
+  CanceladoT = 45;
+  RemitoAjusteSt = 46;
+  FacM = 47;
+  RemitoPrecios = 48;
+  OrdenDePago = 50;
+  Descuento_B = 51;
+  Descuento_D = 52;
+  RemitoInventario = 53;
+  PresentacionTM = 54;
+  LiquidacionA = 55;
+  LiquidacionC = 56;
+  AvisoMora_1 = 57;
+  AvisoMora_2 = 58;
+  AvisoMora_3 = 59;
+  AcuerdoExJud = 60;
+  Venta_Consig = 90;
+  Cobro_Sena = 100;
+
+  //------------ Organizacion de Productos Administrativos
+  IdArEmpresa = 100;
+  IdGrEmpresa = 1;
+  IdSGEmpresa = 1;
+  IdPrdCuota  = 1;
+  IdPrdDebito = 2;
+  IdPrdMora   = 3;
+
+  //------------ Estados de Comprobantes para Server Fiscal
+  NoImpresa = 0;
+  Impresa = 1;
+  Imprimiendo = 2;
+  ServerFiscal = 7;
+  //------------ Tipos Situacion frente al IVA
+  RI  = 1;
+  RNI = 2;
+  CFi = 3;
+  EX  = 4;
+  RMT = 6;
+  NC  = 7;
+  BU  = 8;
+  NR  = 9;
+
+  //------------- Tipos Documentos Fiscales
+  //                               HASAR     EPSON
+  CUIT = 1;       //TIPO_CUIT 	   = 67      CUIT
+  LC = 2;         //TIPO_LC 	   = 49      LC
+  LE = 3;         //TIPO_LE 	   = 48      LE
+  DNI = 4;        //TIPO_DNI 	   = 50      DNI
+  PASAPORTE = 5;  //TIPO_PASAPORTE = 51      PRTE
+  CI = 6;         //TIPO_CI 	   = 52      CI
+  NINGUNO = 7;    //TIPO_NINGUNO   = 32      NADA
+  CUIL = 8;
+
+  //------------- Estados Movimientos de  Ctas. Ctes.
+  ccPagada = 0;
+  ccPendiente = 1;
+
+  opNormal  = 0;
+  opBorrada = 1;
+  opCambiada= 2;
+
+  //------------- Estados de Movimientos Bancarios propios
+  bpCheque    = 1;
+  bpDeposito  = 2;
+  bpDebito    = 3;
+  bpCredito   = 4;
+  bpExtraccion= 5;
+  bpImpuesto  = 6;
+
+  bpDebe = 1;
+  bpHaber = -1;
+  //------------- Estados de Movimientos Bancarios de Terceros
+  btEnCartera = 0;
+  btEntregado = 1;
+  btRechazado = 2;
+  btDepositado= 3;
+  btCobrado   = 4;
+  btSinDefinir= 5;
+  //------------- Estación de Impresora Fiscal
+  En_Ticket = 0;
+  En_Slip = 1;
+  //------------- Formas de Pago Permitidad. Constantes para PedirFormas de Pago
+  TFPagos: array[0..15] of String[30] = ('0- Imprimir',        '1- Contado',
+                                         '2- Bonos / Tickets', '3- Cuenta Corriente',
+                                         '4- Cheques Propios', '5- Valores de 3ºs',
+                                         '6- Señas / SaF',     '7- Tarjetas/Mutuales',
+                                         '8- Cerrar s/ Grabar','9- Grabar Anulado',
+                                         'A- Terminar',        'B- Continuar Comprobante',
+                                         'C- Bonificación',    'D- Saldo a favor',
+                                         'E- Impuestos',       'F- N.de Crédito x cambio');
+  //------------- Valores constanstes para Comprobantes de Egresos
+  fcCompra = 1;
+  fcGastos = 2;
+  fcRemito = 3;
+  fcLiqPre = 4;
+
+  //------------- Valores Constantes para Control de Seguridad
+  AccesoLibre = 999;
+  AccesoLibreStr = '<Acceso libre>';
+  SuperVisor = 1;
+  SoloVentas = 5;
+  Administrador = 0;
+  //------------- Constante de Identificacion del Sistema
+  SysFirm = 'IyC/Gestión';
+  Casa_Central = 1;
+  MaxDesignerPasswords = 6;
+  User_Designer: array [1..MaxDesignerPasswords] of String = ('6512', 'JCPB', '1965', 'A842', 'ADZ6', '2845');
+
+  Ordenes = 'Select O.IDORDEN, O.ENTIDAD, O.FECHAOP, O.NROCOMPOP, '+
+            '       O.CANTOP, O.TOTALOP, O.CONTADO, O.TICKETS, '+
+            '       O.BANCOPROP, O.BANCOTER, O.BONIFPROV, '+
+            '       O.RETENCIONES, O.USUARIO, O.ESTADO, O.NOCOMPOP, '+
+            '       O.NETOOP, O.RETENCIONI, O.RETENCIONG, O.RETENCIONB, '+
+            '       O.PRCRETG, O.PRCRETI, O.PRCRETB1, O.PRCRETB2, '+
+            '       O.RETENCIONS, O.PRCRETS, O.RETENCIONH, '+
+            '       O.NROCERTIVA, O.NROCERTGAN, O.NROCERTIBT, '+
+            '       O.NROCERTSES, O.IDEMPRESA '+
+            'From ORDENES O ';
+//            'Where O.IDORDEN =:IdOrden ';
+
+  Clientes ='Select C.IDCLIENTE, C.IDSUCURSAL, C.NOMBRE, C.DIRECCION, '+
+            '       C.LOCALIDAD, C.PROVINCIA, C.CODPOSTAL, C.TELEFONOS, '+
+            '       C.TELFAX, C.TIPOIVA, C.TIPODOC, C.DOCUMENTO, C.INGBRUTOS, '+
+            '       C.TIPOCLI, D.Documento as DetDoc, I.IvaCorto as DetIva '+
+            'From CLIENTES C '+
+            'Left Outer Join TipoDoc D '+
+            '  on D.TipoDoc = C.TipoDoc '+
+            'Left Outer Join TipoIva I '+
+            '  on I.TipoIva = C.TipoIva ';
+//            'Where C.IdCliente =:IdCliente ';
+
+  Supply =  'Select P.IDPROVEEDOR, P.IDSUCURSAL, P.NOMBRE, P.NOMBREFANTASIA, '+
+            '       P.DIRECCION, P.LOCALIDAD, P.PROVINCIA, P.CODPOSTAL, '+
+            '       P.TELEFONOS, P.TELFAX, P.MAIL, P.WEB, P.TIPOIVA, P.TIPODOC, '+
+            '       P.DOCUMENTO, P.INGBRUTOS, P.CONTACTO, P.TELCONTACTO, '+
+            '       P.CODCTACON, P.AUTORIZADO, P.DOCAUTOR, P.PERCEPCIONES, '+
+            '       P.NROREGPERCP, P.NORETENCION_I, P.NROREGRETEN_I, '+
+            '       P.VALIDEZNORET_I, P.MONTORETENCION_I, P.PRCRETENCION_I, '+
+            '       P.NORETENCION_G, P.NROREGRETEN_G, P.VALIDEZNORET_G, '+
+            '       P.MONTORETENCION_G, P.PRCRETENCION_G, P.MONTORETENCION_B, '+
+            '       P.PRCRETENCION_B1, P.PRCRETENCION_B2, P.PROVSERVICIOS, '+
+            '       P.MTORETENCION_SS, P.DETREGIMEN_G, P.FACTURAENDOLAR, '+
+            '       D.Documento as DetDoc, I.IvaCorto as DetIva '+
+            'From PROVEEDORES P '+
+            'Left Outer Join TipoDoc D '+
+            '  on D.TipoDoc = P.TipoDoc '+
+            'Left Outer Join TipoIva I '+
+            '  on I.TipoIva = P.TipoIva ';
+//            'Where P.IdProveedor =:IdProveedor And P.IdSucursal =:Idsucursal ';
+
+  Vendor =  'Select E.IDEMPLEADO, E.NOMBRE, E.DIRECCION, E.LOCALIDAD, '+
+            '       E.PROVINCIA, E.CODPOSTAL, E.TELEFONOS, E.TIPOIVA, '+
+            '       E.TIPODOC, E.DOCUMENTO, E.SALDO, E.ACTIVO, E.PASSW, '+
+            '       E.AUTORIZADESCUENTO, E.IDTAREAFUNCION, E.ALTAMOD, '+
+            '       E.IDSUCASIGNADA, E.TIPOE, D.Documento as DetDoc, '+
+            '       F.Funcion, I.IvaCorto as DetIva '+
+            'From EMPLEADOS E '+
+            'Left Outer Join TipoDoc D '+
+            '  on D.TipoDoc = E.TipoDoc '+
+            'Left Outer Join TipoIva I '+
+            '  on I.TipoIva = E.TipoIva '+
+            'Left Outer Join Functions F '+
+            '  on F.IdFuncion = E.IdTareaFuncion ';
+//            'Where E.IdEmpleado =:IdEmpleado';
+
+type
+  EUsuario = Exception;
+
+  St01 = String[01];
+  St03 = String[03];
+  St04 = String[04];
+  St05 = String[05];
+  St08 = String[08];
+  St10 = String[10];
+  St13 = String[13];
+  St15 = String[15];
+  St20 = String[20];
+  St30 = String[30];
+  St40 = String[40];
+  St80 = String[80];
+
+  TComp_Referencia = record
+    NCCliente,
+    IdFactura,
+    IdSucursal,
+    IdPuntoVenta,
+    IdSubDep,
+    IdTarjeta: Integer;
+    NroFactura: St13;
+    TipoFactura: SmallInt;
+    FechaF: TDate;
+    NroCtas,
+    Empleado: Integer;
+    Contado,
+    Tarjeta,
+    CtaCte,
+    Cheque,
+    Tickets,
+    CobSenas,
+    OtrosPagos,
+    Total: Currency;
+  end;
+
+  TCodChars = set of Char;
+
+  TSearchArt = record
+    IdArticulo: Longint;
+    IdTalle: SmallInt;
+  end;
+
+  TCantidades = (cConStock, cTodas, cFaltantes, cSinVta, cDistribucion);
+
+  TTalles = (sinTalles, conTalles);
+  TAccionPago = (apPago, apCancelo, apAnulo, apTermino, apContinuar); //Cancelar no graba. Anular graba como anulado
+  TFormasPago = (Imprimir, Contado, Bonos, CtaCte, Cheque, Valores, Senas,
+                 Tarjeta, Cancelar, Anular, Terminar, Continuar, Bonif,
+                 SdoAFav, Impuestos, NotaCre);
+
+  TPagosElegidos = set of TFormasPago;
+  TOperacion = (Venta, Compra, Cobros, Pagos, Gastos, Suspen, Remito, PA_Cta, PreLiq);
+
+  TDetalleExt = Array [1..MaxDetExt] of String;
+
+  TTipoCamPre = (cpTemporal, cpPermanente);
+
+  TItemFiscal = record
+    IdProducto,
+    IdItem,
+    TIvaEnt,
+    IdPuntoVenta,
+    IdFactura,
+    IdSucursal,
+    IdMarkUp,
+    IdSubDep,
+    Talle,
+    IdAutorDto,
+    IdSucDestino,
+    IdSucSalida,
+    IdSector: Integer;
+    TipoAj: SmallInt;
+    FechaF,
+    FecVto,
+    VtoSte: TDate;
+    CodySal,
+    CodProd,
+    Marca,
+    Detalle,
+    DescProd,
+    SubDet,
+    Color,
+    ListaStr: String;
+    DetalleExt: TDetalleExt;
+    EnOferta,
+    Consignacion,
+    Servicio,
+    EsKit,
+    Combustible,                     // Solo por compatibilidad con Gestión 32
+    DetalleExtendido,
+    ConDescStk: Boolean;
+    EnPedido,
+    EnRemito,
+    IdItmDomRem: SmallInt;
+    IdOrdPedido,
+    IdItmPedido,
+    IdFacDomRem,
+    IdSucDomRem,
+    IdPtoDomRem: Integer;
+    PrecioCosto,
+    PrecioTotal,
+    PrecioLista,
+    PrecioFinal,
+    PrecioNetoU,
+    PrecioNetoT,
+    NoComputable,
+    Exento,
+    MtoIva,
+    IngBto,
+    Descuento,
+    PrecioPublico,
+    PrecioActual,
+    EntContado: Currency;
+    Bonificacion,
+    Cantidad,
+    CoefImpInt,
+    CoefMarkUp,
+    AlicuotaIva,
+    AlicuotaIB: Double;
+    IdAlcIva,
+    IdAlcIB,
+    TipoImpInt,
+    Cuota,
+    MosDom: Integer;
+  end;
+
+  TBody_Fiscal = Array [1..MaxBody] of TItemFiscal;
+
+  TFactura = Record
+    IdFactura,
+    IdRemito,
+    Entidad,
+    IdEmpresa,
+    Garante1,
+    Garante2,
+    IdPeriodo: Integer;
+    NombreEnt,
+    NombreFan,
+    NomGan1,
+    NomGan2,
+    Direccion,
+    Localidad,
+    Provincia,
+    Telefono,
+    CodPostal,
+    EntregarA,
+    DomicilioE,
+    DtEmpresa: String;
+    NroDocumento: St13;
+    CaiProv: St15;
+    TipoIva: Integer;
+    TipoIvaStr: St30;
+    TipoIvaCF: Integer;
+    TipoDoc: Integer;
+    TipoDocStr: St30;
+    TipoDocCF: Integer;
+    TipoOp: TOperacion;
+    IdPuntoVenta,
+    IdSucursal: Integer;
+    TipoFactura,
+    TipoCompCli,
+    TipoAj,
+    TipoComRef: SmallInt;
+    TipoFacStr: St30;
+    TipoFactCF: Integer;
+    PuntoVta: SmallInt;
+    IdStOrigen: Integer;
+    DepOrigen: String;
+    IdStDestino: Integer;
+    DepDestino: String;
+    IdSubDepO: Integer;
+    IdSubDepD: Integer;
+    Periodo,
+    FechaF,
+    FechaI,
+    FechaIS,
+    FechaLD,
+    FechaLH: TDate;
+    DiaHora: TDateTime;
+    NroFactura: St13;
+    CompRef: St13;
+    IdCompRef,
+    IdMotivo: Integer;
+    CantCuotas,
+    CantArtic: SmallInt;
+    ValorCta: Currency;
+    PrcDscto: Double;
+    Descuento: Currency;
+    AlcPercep: Double;
+    PPCuenta,
+    RetGan,
+    RetIBt,
+    RetLH,
+    Neto,
+    Exento,
+    NoComputables,
+    MACapitalizar: Currency;
+    AlicuotaIva1: Double;
+    IvaAlicuota1: Currency;
+    AlicuotaIva2: Double;
+    IvaAlicuota2: Currency;
+    IvaOtAlc: Currency;
+    Total: Currency;
+    Situacion: SmallInt;
+    Contado: Currency;
+    BonosTkt: Currency;
+    Tarjeta: Currency;
+    IdTarjeta: Integer;
+    CtaCte: Currency;
+    Credito: Currency;
+    ChequeProp: Currency;
+    ChequeTer: Currency;
+    CobSenas: Currency;
+    SdoAFavor: Currency;
+    OtrosPagos: Currency;
+    EntContado: Currency;
+    Comision: Currency;
+    Empleado,
+    IdFletero,
+    NroLiquidacion: Integer;
+    NombreEmpleado,
+    DetSuc,
+    Detalle: String;
+    Imprimir_Totales,
+    Alta: Boolean;
+    IdSubDep,
+    Sector,
+    TipoOper: Integer;
+  end;
+
+  TPrecios = record
+    IdAlcIB,
+    IdAlcIva: Integer;
+    AlicuotaIva,
+    AlicuotaIB,
+    Cantid,
+    CoefImpInt,
+    Total,
+    PFinal,
+    Neto,
+    Iva1,
+    Iva2,
+    IvaOT,
+    Exento,
+    ImpInt,
+    IngBto,
+    Descto,
+    PrcDto,
+    PLista,
+    FLista,
+    MaxBon,
+    EntContado,
+    ValorCuota: Currency;
+    EnOferta: Boolean;
+  end;
+
+  TPagos = record
+    CantPagos: Word;
+    ModoPago: array [ 1..MaxPagos ] of record
+      NCompPago: St20;
+      FormaPago: TFormasPago;
+      ImportePago: Currency;
+    end;
+  end;
+
+  TPagosCC = array of record
+     NroMov,
+     IdFactura: Integer;
+     TipoMov: SmallInt;
+     Importe: Currency;
+   end;
+
+  TPagosCheqVal = record
+    TotalValores: Currency;
+    Datos: TDataSet;
+  end;
+
+  TPagosCtaCte = record // ingreso de pagos y vencimientos para Pagos Multiples
+    TotalCtaCte: Double;
+    FechaVence: TDate;
+    IdNroMov: Integer;
+  end;
+
+  TPagosBonifNC = record // ingreso de pagos y vencimientos para Pagos Multiples
+    CantPagos: SmallInt;
+    TotalBonif: Double;
+    Pagos: array [0..6] of record
+      FechaNC: TDate;
+      Importe: Double;
+      NroComp: St13;
+      IdNroMov,
+      IdCompRef: Integer;
+    end;
+  end;
+
+  TCuotasTarjetas = array [1..20] of Record
+    NroCuota: SmallInt;
+    MontoCta: Currency;
+    FechaVto: TDate;
+    FechaPgo: TDate;
+    IdCliCta: Integer;
+    CantPago,
+    EstPagos: SmallInt;
+    DetaPago: array [1..5] of Record
+      NroRecPg: St13;
+      MontoPag: Currency;
+      FechaRec: TDate;
+      DebitoRc: Currency;
+      CreditRc: Currency;
+      StateRec: SmallInt;
+    end;
+  end;
+
+  TPagosTarjetas = Record
+    CantTarjetas: SmallInt;
+    TotalTarjeta: Double;
+    Movimientos: array [1..10] of record
+      IdTarMut,
+      IdMovTar,
+      IdCliente: Integer;
+      TipoEntidad,
+      Estado: SmallInt;
+      NomCliente: St30;
+      CodigoComercio,
+      NomTarjeta,
+      NumTarjeta: St20;
+      Autorizacion: St10;
+      Terminal: Integer;
+      CantidadCuotas,
+      CantidadPagadas: Word;
+      MontoCuota,
+      MontoOriginal,
+      InteresCuota,
+      TotalTarj,
+      Coeficiente,
+      TotalInteres: Currency;
+      Cupon: St20;
+      Lote: String;
+      Vencimiento,
+      Venc_1a_Cta: TDate;
+      Datos_Cta: TCuotasTarjetas;
+    end;
+  end;
+
+  TPagosNC = record
+     Id_Cliente: Integer;
+     NroNotaCre: St13;
+     FecNotaCre: TDate;
+     MtoNotaCre: Currency;
+     IdFNotaCre: Integer;
+     IdSNotaCre: Integer;
+     IdPNotaCre: Integer;
+   end;
+
+  TDatosPagos = record
+    IdEntidad,
+    IdEmpresa: Integer;
+    Coeficiente: Double;
+    CantidadCuotas,
+    CuotasPagadas: Integer;
+    FechaOp: TDate;
+    FechaOr: TDate;
+    IdPuntoVenta,
+    IdSucursal,
+    IdComprobante,
+    IdOrdPago,
+    IdCompRef,
+    IdTarjeta,
+    IdMovTar: Integer;
+    NomEntidad: St30;
+    NroUltimoSaF,
+    NroOrdDePago,
+    NroComprobante,
+    CompReferencia: St13;
+    TipoOperacion: TOperacion;
+    TipoComprobante,
+    TipoCtaCteCli,
+    TipoComRef,
+    IdMotivo,
+    OpcionNC,
+    CantOper: SmallInt;
+    PagosRealizados: TPagosElegidos;
+    ImpNeto,
+    ImpNComp,
+    ImpRetIva,
+    ImpRetGan,
+    ImpRetIB1,
+    ImpRetIB2,
+    ImpRetSS: Currency;
+    PrcRetIva,
+    PrcRetGan,
+    PrcRetIB1,
+    PrcRetIB2,
+    PrcRetSS: Double;
+    Bonificacion: Currency;
+    TotalPagos: Currency;
+    Total_Oper: Currency;
+    RestaPagar: Currency;
+    PagosContado: Currency;
+    PagosBonosTk: Currency;
+    PagosSena: Currency;
+    PagosDcto: Currency;
+    PagosCtaCte: TPagosCtaCte;
+    PagosTarjeta: TPagosTarjetas;
+    PagosCheques: TPagosCheqVal;
+    PagosValores: TPagosCheqVal;
+    PagosBonif: TPagosBonifNC;
+    PagosNCred: TPagosNC;
+    PagosDebitos: Currency;
+    SdoAFavor: Currency;
+    PagosReten: Currency;
+    IdVendedor: Integer;
+    IdCajero: Integer;
+    Aplicar_RIB: Boolean;
+    Observaciones: St80;
+    IdCliente,
+    IdSucCli: Integer;
+    NombreCli,
+    Direccion,
+    Localidad,
+    Provincia: St30;
+    TipoIva,
+    TipoDoc: SmallInt;
+    Documento: St13;
+  end;
+
+  TMovBancoBusqueda = (bbBancoProp, bbBancoTer);
+  TUltimos = (CCCliente, CCProveedor, CajaRend, FacCompra,
+              FacVenta, RemTrasp, FacOC, OrdPag, RegPrc,
+              RemInv, Pcl_TM);
+
+  TServerFiscal = Record
+    IdComprobante,
+    PuertoCF: Integer;
+    Estado: Boolean;
+    NroComp: St13;
+  end;
+
+  TDatosChequeP = Record
+    IdBco: Integer;
+    TMov : Integer;
+    Emis : TDate;
+    Venc : TDate;
+    Resu : TDate;
+    IdEn : Integer;
+    DMov : String;
+    Mont : Currency;
+    NChq : Integer;
+    IdOP : Integer;
+    NUsr : Integer;
+    Debe : Currency;
+    Habe : Currency;
+    Esta : Integer;
+    NPro : String;
+    MPIm : Boolean;
+  end;
+
+  TDatosCheque3 = Record
+    IdOP : Integer;
+    NBco : String;
+    NCta : String;
+    NChq,
+    ITit : Integer;
+    NTit : String;
+    IEnd : Integer;
+    NEnd : String;
+    IFac : Integer;
+    ISuc : Integer;
+    NFac : String;
+    Venc : TDate;
+    Entr : TDate;
+    IEnt : Integer;
+    NEnt : String;
+    Mont : Currency;
+    Situ : Integer;
+    FeIS : TDate;
+  end;
+
+  TDatos_Art = Record
+    IdArticulo,
+    IdArea,
+    IdGrupo,
+    IdSubGrupo: Integer;
+    CodBarra: St20;
+    Marca,
+    Color: St20;
+    Detalle: St40;
+    DetProd: String;
+    Precio,
+    PreLst,
+    PBase,
+    ImpInt,
+    Costo: Currency;
+    IdAlcI,
+    IdAlcB,
+    EstiloFac,
+    TieneTalle,
+    EsKit: SmallInt;
+    AlcIva,
+    AlcIBt,
+    Exento,
+    Ganancia,
+    CoefMarkUp,
+    MaxDtoCdo,
+    MaxRndPre: Double;
+    VencOf: TDate;
+    Oferta,
+    Activo,
+    Servicio,
+    IdTarDcto,
+    TSinStk,
+    IdMarkUp: Integer;
+    DetArea,
+    DetGrupo,
+    DetSubGr: St40;
+  end;
+
+  TDatos_Ent = Record
+    IdEnt,
+    IdSuc: Integer;
+    TipoEnt,
+    Tipo_Per: SmallInt;
+    Nombre,
+    NomFan,
+    Autorizado,
+    Direccion,
+    Localidad,
+    Provincia,
+    Telefono,
+    CodPostal,
+    Documento,
+    IngBrutos: String;
+    TipoDoc,
+    TipoIva,
+    Tarea: SmallInt;
+    DetDoc,
+    DetIva,
+    PassW: St10;
+    Activo,
+    ConValorDolar,
+    PERCEPCIONES: Boolean;
+    NROREGPERCP: St04;
+
+    NORETENCION_I: Boolean;
+    NROREGRETEN_I: St04;
+    MONTORETENCION_I: Currency;
+    VALIEDEZNORET_I: TDate;
+    PRCRETENCION_I: Double;
+
+    NORETENCION_G: Boolean;
+    NROREGRETEN_G: St04;
+    MONTORETENCION_G: Currency;
+    VALIEDEZNORET_G: TDate;
+    PRCRETENCION_G: Double;
+    DETRETENCION_G: String;
+
+    MONTORETENCION_B: Currency;
+    PRCRETENCION_B1: Double;
+    PRCRETENCION_B2: Double;
+
+    PROVSERVICIOS: Boolean;
+    MONTORETENCION_S: Currency;
+  end;
+
+  TDatos_PlanCta = Record
+    IdCuenta: Integer;
+    Descripcion: String;
+    DetalleCtro: String;
+    CodigoCon: String;
+  end;
+
+  procedure Set_Terminal(IdP, IdSc, Usr, E_S: Integer);
+  procedure Update_Parts(PartNo, Stk: Integer; Qty: Double; Talle, TC, TJ: Integer;
+                         Servicio, Kit: Boolean; dbSaveArt: TMDODataBase; tTran: TMDOTransaction);
+  // Anulacion de Cheques y Valores
+  procedure Grabar_Cheque_Anulado(IdMov, TBco: Integer);
+
+  function File_Copy(Archivo, DirOrigen, DirDestino: String): Boolean;
+  function DocumentoValido(IFModelo: Integer; Doc: Integer): Integer;
+  function Get_User_Designer(Password: String): Boolean;
+  procedure ReNumerar_Contadores;
+  function Precio(PrecioTotal, PrecioFinal, Cantidad, Bonif: Currency; IdProducto, Accion, CantCuotas: Integer): TPrecios;
+  function Descuento(PrecioTotal, PrecioFinal, Contado, ImpInt, Bonificacion, PrcExento, Cantidad: Currency; Alc_Iva, AlcIB, CantCuotas: Integer): TPrecios;
+  function Redondeo(X: Currency; Centavos: Byte): Currency;
+  procedure Check_Oferta;
+  function GetPrecio(Articulo, IdCard: Integer; CantCtas: SmallInt; PrecioActual, Descuento, CoefTarj, Contado: Currency; Cant: Double; Var Precio: TPrecios): Currency;
+  function ChangePrecio(Articulo: Integer; PrcGan: Currency): TPrecios;
+  function GetAlcIva(IdAlc: Integer): Double;
+  function GetAlcIBt(IdAlc: Integer): Double;
+  function Inc_NComp(NC: St13): String;
+  function Inc_NCert(NC: String):String;
+  function Validate_Documento_Fiscal(C: St13): Boolean;
+  function ExisteForm(Cual: String): Boolean;
+  function Up_Case(S: String): String;
+  function Up_CaseCF(S: String): String;
+  function HexToInt(HexValue: String): Integer;
+  procedure N_A_L(StrMoneda: St30; R: Double; Largo: Byte; Relleno: Char; Var Parte1,Parte2: St80);
+  function CheckDocEnt(TEntidad: Integer; TipDoc: SmallInt; Documento: St13): Integer;
+  function GetText_Comprobante(T: Integer; Corta:  SmallInt): String;
+  function Get_DetEmp(E: Integer): String;
+  function Get_DetSuc(S: Integer; Cual: SmallInt): String;
+  function GetLevel(Var User: Integer; Var UserStr: St20): Integer;
+  function GetLevel_Requerido(Nivel: Integer; Var User: Integer; Var UserStr: St20): Boolean;
+
+   // Ultimos Nº de Comprobantes
+  function GetNumeroComprobante(IdSuc: Integer; Punto: St04; TipoIvaEnt, TipoComprobante: SmallInt): St13;
+  function DeleteAlphaChars(Source: String): String;
+  function MaxDctoPermitido(IdArticulo, IdTarjeta, CantCuotas, IdSucursal: Integer): Double;
+  function GetCoefTar(IdTar, IdSuc, NrCta: Integer): Double;
+  procedure LoadListView(lv: TListView; Datos: TDataSet; CampoCaption, CampoIndice: String);
+  function GetOS: String;
+  function GetDatosArt(IdProducto: Integer; CodProd: String; Var A: TDatos_Art): Boolean;
+  procedure UpDate_DatosSistema(IdSuc, Cual: Integer);
+  function GetDatosCuenta(IdCta: Integer; Var C: TDatos_PlanCta): Boolean;
+  function GetDatosChequesP(IdMov: Integer; Var C: TDatosChequeP): Boolean;
+  function GetDatosCheques3(IdMov: Integer; Var C: TDatosCheque3): Boolean;
+  function GetDatosEnt(IdEnt, IdSuc: Integer; TEnt: SmallInt; Var C: TDatos_Ent): Boolean;
+  function GetDatosEmp(IdEnt: Integer; PassW: St04; TEnt: SmallInt; Var C: TDatos_Ent): Boolean;
+  function GetTextTalle(ElTalle: Integer): string;
+  function SetTextTalle(ElTalle: String): Integer;
+  function Get_Stock(IdArt, IdStk, Talle: Integer; TT: Boolean): Integer;
+  function Get_Stock_AFecha(IdArt, IdStk: Integer; Desde, Hasta: TDate): Integer;
+
+  procedure Rz_KeyDown(Key: Word; MYForm: TCustomForm);
+  function Tree_GetFieldList(FieldList: TStringList; Lista: String; DataSet: TDataSet): TStringList;
+  procedure Calculadora(Handle: THandle);
+  procedure Print_PCL_TM(IdF, IdS, IdP: Integer);
+
+var
+  Nombre_Impersonal, NombreUsuario,
+  DetalleTarea, OwnerName, OwnerAddres,
+  OwnerState, Owner_ID: St40;
+  PtoVta, Clave: St04;
+  AuxNCmp: St13;
+  Parte1, Parte2: St80;
+
+  Date_Old,
+  Ano_2000,
+  Ano_2012,
+  Ano_2007,
+  Ano_2025: TDate;
+
+  PasoExe, DataDirectory, BranchConfig,
+  PointConfig, BaseDirectory, TipoConversion,
+  NameBranch, StringDisplay, StringEdit,
+  Text_PieComprobante, PasoWin: String;
+
+  IdEntidad, IdSucEnt, Usuario, Tarea, CualCC,
+  IdSalesPoint, IdBranch, Id_Cia, MaxCta, IF_Modelo,
+  Valid_DocF,Nivel_Mod, Old_Area, IdListaPre,
+  Nivel_Adm, Nivel_Con, Nivel_Dto, SectorSistema,
+  Max_Suc, AutorDto: Integer;
+
+  Hubo_ModComprobante, ImprimirEnControlador,
+  ServidorFiscal, ControladorLocal, ConSubDep,
+  AutoFacturacion, ImprimirEnLinea, ControladorOK,
+  ComprobanteOk, ComprobanteAbierto, Tipo_Factura,
+  Tipo_Estacion, Tipo_FacNC, IsServer, Atras,
+  VaFacturaConRemito, ModificaCosto, ModPreF,
+  Control_Talles, EsRemota, ModoTest, Anulando_BcoProp,
+  Multi_Empresas,
+  Hacer_Trans_EnFact,
+  EmitirRtoDomicilio,
+  Sistema_DeCreditos,
+  Incluir_CostoConII,
+  Con_Señas_Creditos,
+  Con_ListasDePrecio,
+  PermitirRem_DeProv: Boolean;
+
+  Decimales, CentavosP,
+  CualTipoControlador,
+  CuotaPromo,
+  Estado_Cliente: SmallInt;
+
+  MaxDtoArtII,
+  IntMoraDia: Double;
+
+  Datos_Art: TDatos_Art;
+  Datos_Ent: TDatos_Ent;
+  Datos_Cta: TDatos_PlanCta;
+  ItemFiscal: TItemFiscal;
+  ItemsFiscal: TBody_Fiscal;
+  Factura: TFactura;
+  DatosPago: TDatosPagos;
+  PagosCC: TPagosCC;
+  APrice: TPrecios;
+  Elegido: TSearchArt;
+  DatosChqP: TDatosChequeP;
+  DatosChq3: TDatosCheque3;
+  FormasPago: TFormasPago;
+  CodChars: TCodChars;
+
+implementation
+
+uses
+  TypInfo, udmGestion, udmSaveFile, Math, uSelecUsuario, uConfiguracion;
+
+procedure Set_Terminal(IdP, IdSc, Usr, E_S: Integer);
+var
+  q: TMDOQuery;
+begin
+  try
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := dmGestion.dbGestion;
+      q.Transaction := dmGestion.trProc;
+      Case E_S of
+        1: begin // Entrada
+            q.SQL.Add('UpDate CfgPtoVta ');
+            q.SQL.Add(' Set UEntrada = :T, ');
+            q.SQL.Add('     USalida = null, ');
+            q.SQL.Add('     Usuario = :U, ');
+            q.SQL.Add('     Estado = 1 ');
+            q.SQL.Add('Where (IdSucursal = :S) And  ');
+            q.SQL.Add('      (IdPuntoVenta = :P) ');
+        end;
+
+        0: begin // Salida
+            q.SQL.Add('UpDate CfgPtoVta ');
+            q.SQL.Add(' Set USalida = :T, ');
+            q.SQL.Add('     Usuario = :U, ');
+            q.SQL.Add('     Estado = 0 ');
+            q.SQL.Add('Where (IdSucursal = :S) And  ');
+            q.SQL.Add('      (IdPuntoVenta = :P) ');
+        end;
+      end;
+      q.ParamByName('T').AsDateTime:= Now;
+      q.ParamByName('U').AsInteger := Usr;
+      q.ParamByName('S').AsInteger := IdSc;
+      q.ParamByName('P').AsInteger := IdP;
+      try
+        if dmGestion.trProc.Active then
+        begin
+          if not dmGestion.trProc.InTransaction then
+            dmGestion.trProc.StartTransaction;
+          q.ExecSQL;
+          dmGestion.trProc.Commit;
+        end;
+      except
+        on E:Exception do
+        begin
+          dmGestion.trProc.Rollback;
+          // raise EUsuario.Create(E.Message);
+        end;
+      end;
+    finally
+      q.Free;
+    end;
+  except
+
+  end;
+end;
+
+procedure Update_Parts(PartNo, Stk: Integer; Qty: Double;
+                       Talle, TC, TJ: Integer; Servicio, Kit: Boolean;
+                       dbSaveArt: TMDODataBase; tTran: TMDOTransaction);
+Const
+  IsStG = 'Select Count(*) as Cantidad '+
+          'From StockArt S '+
+          'Where S.IdArticulo =:IdArtic And '+
+          '      S.IdStock =:IdStock ';
+
+  IsStT = 'Select Count(*) as Cantidad '+
+          'From StockArtTalles T '+
+          'Where T.IdArticulo = :IdArtic And '+
+          '      T.IdStock = :IdStock And '+
+          '      T.Talle =:Talle ';
+
+  UStkG = 'UpDate StockArt '+
+          'Set Egresos = Egresos + :Egresos, '+
+          '    Actual = Actual + :Actual, '+
+          '    Ingresos = Ingresos + :Ingresos, '+
+          '    FechaControl =:FechaC '+
+          'Where IdArticulo =:IdArtic And IdStock =:IdStock ';
+
+  UStkT = 'UpDate StockArtTalles '+
+          'Set Egresos = Egresos + :Egresos, '+
+          '    Actual = Actual + :Actual, '+
+          '    Ingresos = Ingresos + :Ingresos, '+
+          '    FechaControl =:FechaC '+
+          'Where IdArticulo = :IdArtic And '+
+          '      IdStock = :IdStock And '+
+          '      Talle = :Talle';
+
+  IStkG = 'Insert InTo '+
+          'StockArt(IdArticulo, IdStock, Egresos, Ingresos, Actual, FechaControl, DifInv, StkAInv) '+
+          'Values(:IdArticulo, :IdStock, :Egresos, :Ingresos, :Actual, :FechaC, :DifInv, :StkAInv) ';
+
+  IStkT = 'Insert InTo '+
+          'StockArtTalles(IdArticulo, IdStock, Talle, Egresos, Ingresos, Actual, FechaControl, DifInv, StkAInv) '+
+          'Values(:IdArticulo, :IdStock, :Talle, :Egresos, :Ingresos, :Actual, :FechaC, :DifInv, :StkAInv) ';
+
+  EsKit = 'Select IdArt_Comp, Cantidad '+
+          'From ArtKits '+
+          'Where IdArticulo =:IdProducto ';
+var
+  Factor,
+  Existe: Integer;
+  qSStk, q: TMDOQuery;
+  AuxQty: Double;
+begin
+  if Servicio then
+    Factor := -1
+  else
+    Factor := 1;
+  Existe := 0;
+  try
+    qSStk := TMDOQuery.Create(Application);
+    if (PartNo > 0) and
+       (Qty <> 0) then
+    begin
+      qSStk.Close;   // Chequeo de Articulo existente en el stock
+      qSStk.Sql.Clear;
+      qSStk.Database := dbSaveArt;
+      qSStk.Transaction := tTran;
+      qSStk.SQL.Text := IsStG;
+      qSStk.ParamByName('IdArtic').AsInteger := PartNo;
+      qSStk.ParamByName('IdStock').AsInteger := Stk;
+      qSStk.Open;
+      Existe := qSStk.FieldByName('Cantidad').AsInteger;
+      if Existe > 0 then  // Articulo Existente
+      begin
+        if Kit then
+        begin
+          try
+            q := TMDOQuery.Create(nil);
+            q.Database := dbSaveArt;
+            q.Transaction := tTran;
+            q.SQL.Text := EsKit;
+            q.ParamByName('IdProducto').AsInteger := PartNo;
+            q.Open;
+            if not q.IsEmpty then
+            begin
+              AuxQty := Qty;
+              q.First;
+              while not q.Eof do
+              begin
+                PartNo := q.FieldByName('IdArt_Comp').AsInteger;
+                Qty := q.FieldByName('Cantidad').AsFloat * AuxQty;
+                if (PartNo > 0) and (Qty <> 0) then
+                begin
+                  qSStk.Close;
+                  qSStk.Database := dbSaveArt;
+                  qSStk.Transaction := tTran;
+                  qSStk.Sql.Clear;
+                  qSStk.SQL.Text := IsStG;
+                  qSStk.ParamByName('IdArtic').AsInteger := PartNo;
+                  qSStk.ParamByName('IdStock').AsInteger := Stk;
+                  qSStk.Open;
+                  Existe := qSStk.FieldByName('Cantidad').AsInteger;
+                  if Existe > 0 then
+                    begin
+                    qSStk.Close;
+                    qSStk.Database := dbSaveArt;
+                    qSStk.Transaction := tTran;
+                    qSStk.Sql.Clear;
+                    qSStk.Sql.Text := UStkG;
+                    qSStk.ParamByName('IdArtic').AsInteger := PartNo;
+                    qSStk.ParamByName('IdStock').AsInteger := Stk;
+                    qSStk.ParamByName('FechaC').AsDate := Date;
+                    Case TC of
+                      FacA, FacB, Tkt, FacC, Venta_Consig: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end;
+                      end;
+                      CreA, CreB, CreC: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat:= 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end;
+                      end;
+                      RemitoTraspaso, RemitoAjusteSt, Descuento_D: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat := 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end;
+                      end;
+                    end;
+                    qSStk.ExecSQL;
+                  end
+                  else begin
+                    qSStk.Close;
+                    qSStk.Database := dbSaveArt;
+                    qSStk.Transaction := tTran;
+                    qSStk.Sql.Clear;
+                    qSStk.Sql.Text := IStkG;
+                    qSStk.ParamByName('IdArticulo').AsInteger := PartNo;
+                    qSStk.ParamByName('IdStock').AsInteger := Stk;
+                    qSStk.ParamByName('FechaC').AsDate := Date;
+                    qSStk.ParamByName('DifInv').AsInteger := 0;
+                    qSStk.ParamByName('StkAInv').AsInteger := 0;
+                    Case TC of
+                      FacA, FacB, Tkt, FacC, Venta_Consig: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end;
+                      end;
+                      CreA, CreB, CreC: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat:= 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end;
+                      end;
+                      RemitoTraspaso, RemitoAjusteSt, Descuento_D: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat:= 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end;
+                      end;
+                    end;
+                    qSStk.ExecSQL;
+                  end;
+                end;
+                Existe := 0;
+                q.Next;
+              end;
+            end;
+          finally
+            q.Free;
+          end;
+        end
+        else begin
+          qSStk.Close;
+          qSStk.Database := dbSaveArt;
+          qSStk.Transaction := tTran;
+          qSStk.Sql.Clear;
+          qSStk.Sql.Text := UStkG;
+          qSStk.ParamByName('IdArtic').AsInteger := PartNo;
+          qSStk.ParamByName('IdStock').AsInteger := Stk;
+          qSStk.ParamByName('FechaC').AsDate := Date;
+          Case TC of
+            FacA, FacB, Tkt, FacC, Venta_Consig: begin
+              if TJ > 0 then
+              begin
+                qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := 0;
+              end
+              else begin
+                qSStk.ParamByName('Egresos').AsFloat:= 0;
+                qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+              end;
+            end;
+            CreA, CreB, CreC: begin
+              if TJ > 0 then
+              begin
+                qSStk.ParamByName('Egresos').AsFloat:= 0;
+                qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+              end
+              else begin
+                qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := 0;
+              end;
+            end;
+            RemitoTraspaso, RemitoAjusteSt, Descuento_D: begin
+              if TJ > 0 then
+              begin
+                qSStk.ParamByName('Egresos').AsFloat := 0;
+                qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+              end
+              else begin
+                qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := 0;
+              end;
+            end;
+          end;
+          qSStk.ExecSQL;
+        end;
+      end
+      else begin  // Articulo Nuevo
+        qSStk.Close;
+        qSStk.Database := dbSaveArt;
+        qSStk.Transaction := tTran;
+        qSStk.Sql.Clear;
+        qSStk.Sql.Text := IStkG;
+        qSStk.ParamByName('IdArticulo').AsInteger := PartNo;
+        qSStk.ParamByName('IdStock').AsInteger := Stk;
+        qSStk.ParamByName('FechaC').AsDate := Date;
+        qSStk.ParamByName('DifInv').AsInteger := 0;
+        qSStk.ParamByName('StkAInv').AsInteger := 0;
+        Case TC of
+          FacA, FacB, Tkt, FacC, Venta_Consig: begin
+            if TJ > 0 then
+            begin
+              qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+              qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+              qSStk.ParamByName('Ingresos').AsFloat := 0;
+            end
+            else begin
+              qSStk.ParamByName('Egresos').AsFloat:= 0;
+              qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+              qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+            end;
+          end;
+          CreA, CreB, CreC: begin
+            if TJ > 0 then
+            begin
+              qSStk.ParamByName('Egresos').AsFloat:= 0;
+              qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+              qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+            end
+            else begin
+              qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+              qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+              qSStk.ParamByName('Ingresos').AsFloat := 0;
+            end;
+          end;
+          RemitoTraspaso, RemitoAjusteSt, Descuento_D: begin
+            if TJ > 0 then
+            begin
+              qSStk.ParamByName('Egresos').AsFloat:= 0;
+              qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+              qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+            end
+            else begin
+              qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+              qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+              qSStk.ParamByName('Ingresos').AsFloat := 0;
+            end;
+          end;
+        end;
+        qSStk.ExecSQL;
+        qSStk.Close;
+
+        if Kit then
+        begin
+          try
+            q := TMDOQuery.Create(nil);
+            q.Database := dbSaveArt;
+            q.Transaction := tTran;
+            q.SQL.Text := EsKit;
+            q.ParamByName('IdProducto').AsInteger := PartNo;
+            q.Open;
+            if not q.IsEmpty then
+            begin
+              AuxQty := Qty;
+              q.First;
+              while not q.Eof do
+              begin
+                PartNo := q.FieldByName('IdArt_Comp').AsInteger;
+                Qty := q.FieldByName('Cantidad').AsFloat * AuxQty;
+                qSStk.Close;
+                qSStk.Database := dbSaveArt;
+                qSStk.Transaction := tTran;
+                qSStk.Sql.Clear;
+                if (PartNo > 0) and (Qty <> 0) then
+                begin
+                  qSStk.SQL.Text := IsStG;
+                  qSStk.ParamByName('IdArtic').AsInteger := PartNo;
+                  qSStk.ParamByName('IdStock').AsInteger := Stk;
+                  qSStk.Open;
+                  Existe := qSStk.FieldByName('Cantidad').AsInteger;
+                  if Existe > 0 then
+                  begin
+                    qSStk.Close;
+                    qSStk.Sql.Clear;
+                    qSStk.Database := dbSaveArt;
+                    qSStk.Transaction := tTran;
+                    qSStk.Sql.Text := UStkG;
+                    qSStk.ParamByName('IdArtic').AsInteger := PartNo;
+                    qSStk.ParamByName('IdStock').AsInteger := Stk;
+                    qSStk.ParamByName('FechaC').AsDate := Date;
+                    Case TC of
+                      FacA, FacB, Tkt, FacC, Venta_Consig: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end;
+                      end;
+                      CreA, CreB, CreC: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat:= 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end;
+                      end;
+                      RemitoTraspaso, RemitoAjusteSt, Descuento_D: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat := 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end;
+                      end;
+                    end;
+                    qSStk.ExecSQL;
+                  end
+                  else begin
+                    qSStk.Close;
+                    qSStk.Sql.Clear;
+                    qSStk.Database := dbSaveArt;
+                    qSStk.Transaction := tTran;
+                    qSStk.Sql.Text := IStkG;
+                    qSStk.ParamByName('IdArticulo').AsInteger := PartNo;
+                    qSStk.ParamByName('IdStock').AsInteger := Stk;
+                    qSStk.ParamByName('FechaC').AsDate := Date;
+                    qSStk.ParamByName('DifInv').AsInteger := 0;
+                    qSStk.ParamByName('StkAInv').AsInteger := 0;
+                    Case TC of
+                      FacA, FacB, Tkt, FacC, Venta_Consig: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end;
+                      end;
+                      CreA, CreB, CreC: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat:= 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end;
+                      end;
+                      RemitoTraspaso, RemitoAjusteSt, Descuento_D: begin
+                        if TJ > 0 then
+                        begin
+                          qSStk.ParamByName('Egresos').AsFloat:= 0;
+                          qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+                        end
+                        else begin
+                          qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                          qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                          qSStk.ParamByName('Ingresos').AsFloat := 0;
+                        end;
+                      end;
+                    end;
+                    qSStk.ExecSQL;
+                  end;
+                end;
+                Existe := 0;
+                q.Next;
+              end;
+            end;
+          finally
+            q.Free;
+          end;
+        end;
+      end;
+
+      if (Talle > 0) And
+         (Control_Talles) then
+      begin
+        qSStk.Close;
+        qSStk.Sql.Clear;
+        qSStk.Database := dbSaveArt;
+        qSStk.Transaction := tTran;
+        qSStk.SQL.Text := IsStT;
+        qSStk.ParamByName('IdArtic').AsInteger := PartNo;
+        qSStk.ParamByName('IdStock').AsInteger := Stk;
+        qSStk.ParamByName('Talle').AsInteger := Talle;
+        qSStk.Open;
+        Existe := qSStk.FieldByName('Cantidad').AsInteger;
+        if Existe > 0 then
+        begin
+          qSStk.Close;
+          qSStk.Sql.Clear;
+          qSStk.Database := dbSaveArt;
+          qSStk.Transaction := tTran;
+          qSStk.Sql.Text := UStkT;
+          qSStk.ParamByName('IdArtic').AsInteger := PartNo;
+          qSStk.ParamByName('IdStock').AsInteger := Stk;
+          qSStk.ParamByName('Talle').AsInteger := Talle;
+          Case TC of
+            FacA, FacB, Tkt, FacC: begin
+              if TJ > 0 then
+              begin
+                qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := 0;
+              end
+              else begin
+                qSStk.ParamByName('Egresos').AsFloat:= 0;
+                qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+              end;
+            end;
+
+            CreA, CreB, CreC: begin
+              if TJ > 0 then
+              begin
+                qSStk.ParamByName('Egresos').AsFloat:= 0;
+                qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+              end
+              else begin
+                qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := 0;
+              end;
+            end;
+
+            RemitoTraspaso, RemitoAjusteSt, Descuento_D: begin
+              if TJ > 0 then
+              begin
+                qSStk.ParamByName('Egresos').AsFloat:= 0;
+                qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+              end
+              else begin
+                qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := 0;
+              end;
+            end;
+          end;
+          qSStk.ParamByName('FechaC').AsDate := Date;
+          qSStk.ExecSQL;
+        end
+        else begin
+          qSStk.Close;
+          qSStk.Sql.Clear;
+          qSStk.Database := dbSaveArt;
+          qSStk.Transaction := tTran;
+          qSStk.Sql.Text := IStkT;
+          qSStk.ParamByName('IdArticulo').AsInteger := PartNo;
+          qSStk.ParamByName('IdStock').AsInteger := Stk;
+          qSStk.ParamByName('Talle').AsInteger := Talle;
+          qSStk.ParamByName('FechaC').AsDate := Date;
+          qSStk.ParamByName('DifInv').AsInteger := 0;
+          qSStk.ParamByName('StkAInv').AsInteger := 0;
+          Case TC of
+            FacA, FacB, Tkt, FacC: begin
+              if TJ > 0 then
+              begin
+                qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := 0;
+              end
+              else begin
+                qSStk.ParamByName('Egresos').AsFloat:= 0;
+                qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+              end;
+            end;
+            CreA, CreB, CreC: begin
+              if TJ > 0 then
+              begin
+                qSStk.ParamByName('Egresos').AsFloat:= 0;
+                qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+              end
+              else begin
+                qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := 0;
+              end;
+            end;
+            RemitoTraspaso, RemitoAjusteSt, Descuento_D: begin
+              if TJ > 0 then
+              begin
+                qSStk.ParamByName('Egresos').AsFloat:= 0;
+                qSStk.ParamByName('Actual').AsFloat := (Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := (Factor * Qty);
+              end
+              else begin
+                qSStk.ParamByName('Egresos').AsFloat:= (Factor * Qty);
+                qSStk.ParamByName('Actual').AsFloat := -(Factor * Qty);
+                qSStk.ParamByName('Ingresos').AsFloat := 0;
+              end;
+            end;
+          end;
+          qSStk.ExecSQL;
+        end;
+        qSStk.Close;
+      end;
+    end;
+  finally
+    qSStk.Free;
+  end;
+end;
+
+procedure Grabar_Cheque_Anulado(IdMov, TBco: Integer);
+begin
+  with dmSaveFile do
+  begin
+    try
+      spModVrs.Transaction := trSaveComp;
+      spModVrs.UnPrepare;
+      spModVrs.Close;
+      Case TBco of
+        1: spModVrs.StoredProcName := 'BANCOS_ANULAR_MOVPROP(:IDMOVBCO)'; // Cheques Propios
+        2: spModVrs.StoredProcName := 'BANCOS_ANULAR_MOVTER(:IDMOVBCO)';  // Cheques de Terceros
+      end;
+      spModVrs.Prepare;
+      spModVrs.ParamByName('IDMOVBCO').AsInteger := IdMov;
+      spModVrs.ExecProc;
+    except
+      on E:Exception do
+      begin
+        raise EUsuario.Create(E.Message);
+      end;
+    end;
+  end;
+end;
+
+function DocumentoValido(IFModelo: Integer; Doc: Integer): Integer;
+var
+  q: TMDOQuery;
+begin
+  Result := NoEncontrado;
+  if IFModelo <> 0 then
+  begin
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := dmGestion.dbGestion;
+      q.Transaction := dmGestion.trProc;
+      q.SQL.Add('Select IP'+IntToStr(IFModelo));
+      q.SQL.Add('From TIPOSCOMP ');
+      q.SQL.Add('Where IDCOMPROBANTE =:D ');
+      q.ParamByName('D').AsInteger := Doc;
+      q.Open;
+      Result := q.Fields[0].AsInteger;
+    finally
+      q.Free;
+    end;
+  end;
+end;
+
+function File_Copy(Archivo, DirOrigen, DirDestino: String): Boolean;
+var
+  F: TSearchRec;
+  Attr: Integer;
+begin
+  try
+    Result := True;
+    if DirOrigen[Length(DirOrigen)] <> PathDelim then
+      DirOrigen := DirOrigen + PathDelim;
+    if DirDestino[Length(DirDestino)] <> PathDelim then
+      DirDestino := DirDestino + PathDelim;
+    if Trim(Archivo) = '' then
+    begin
+      if FindFirst(DirOrigen + '*.*', Attr, F) = 0 then
+      begin
+        repeat
+          CopyFile(PChar(DirOrigen + F.Name), PChar(DirDestino + ExtractFileName(F.Name)), False);
+        until FindNext(F) <> 0;
+        FindClose(F);
+      end;
+    end
+    else begin
+      if FindFirst(DirOrigen + Archivo, Attr, F) = 0 then
+      begin
+        repeat
+          CopyFile(PChar(DirOrigen + F.Name), PChar(DirDestino + ExtractFileName(F.Name)), False);
+        until FindNext(F) <> 0;
+        FindClose(F);
+      end
+      else begin
+        Result := False;
+      end;
+    end;
+  except
+    Result := False;
+  end;
+end;
+
+function Get_User_Designer(Password: String): Boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+  try
+    for i := 1 to MaxDesignerPasswords do
+    begin
+      if User_Designer[i] = Password then
+      begin
+        Result := True;
+        Break;
+      end;
+    end;
+  except
+    Result := False;
+  end;
+end;
+
+procedure ReNumerar_Contadores;
+Const
+  U = 'Select Max(<field>) as Ultimo From <tabla>';
+  Z = 'Update Ultimos Set <field> =:Valor ';
+var
+  q: TMDOQuery;
+  p: TMDOStoredProc;
+  c: String;
+  n: Integer;
+begin
+  try
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := dmGestion.dbGestion;
+      q.Transaction := dmSaveFile.trSaveComp;
+      if not dmSaveFile.trSaveComp.InTransaction then
+        dmSaveFile.trSaveComp.StartTransaction;
+      // Ultimo Registro CtaCte Proveedores
+      c := StringReplace(U, '<field>', 'NroMovimiento', [rfReplaceAll]);
+      c := StringReplace(C, '<tabla>', 'CCProv', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.Open;
+      n := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+
+      C := StringReplace(Z, '<field>', 'UltimoCCProveedor', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.ParamByName('Valor').AsInteger := n;
+      q.ExecSQL;
+
+      // Ultimo Registro Facturas de Compras
+      c := StringReplace(U, '<field>', 'IdFactura', [rfReplaceAll]);
+      c := StringReplace(C, '<tabla>', 'FacCom', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.Open;
+      n := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+      C := StringReplace(Z, '<field>', 'UltimoFacC', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.ParamByName('Valor').AsInteger := n;
+      q.ExecSQL;
+
+      q.Close; // Ultimo Registro Facturas de Ventas
+      c := StringReplace(U, '<field>', 'IdFactura', [rfReplaceAll]);
+      c := StringReplace(C, '<tabla>', 'FacVen', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.Open;
+      n := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+      C := StringReplace(Z, '<field>', 'UltimoFacV', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.ParamByName('Valor').AsInteger := n;
+      q.ExecSQL;
+
+      q.Close; // Ultimo Registro Remitos Traspaso
+      c := StringReplace(U, '<field>', 'IdFactura', [rfReplaceAll]);
+      c := StringReplace(C, '<tabla>', 'Traspaso', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.Open;
+      n := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+      C := StringReplace(Z, '<field>', 'UltimoFacT', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.ParamByName('Valor').AsInteger := n;
+      q.ExecSQL;
+
+      q.Close; // Ultimo Registro Ordenes de Compra
+      c := StringReplace(U, '<field>', 'IdOrdCmp', [rfReplaceAll]);
+      c := StringReplace(C, '<tabla>', 'OrdCmp', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.Open;
+      n := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+      C := StringReplace(Z, '<field>', 'UltimoFacO', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.ParamByName('Valor').AsInteger := n;
+      q.ExecSQL;
+
+      q.Close; // Ultimo Registro Ordenes de Pago
+      c := StringReplace(U, '<field>', 'IdOrden', [rfReplaceAll]);
+      c := StringReplace(C, '<tabla>', 'Ordenes', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.Open;
+      n := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+      C := StringReplace(Z, '<field>', 'UltimoOrdPago', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.ParamByName('Valor').AsInteger := n;
+      q.ExecSQL;
+
+      q.Close; // Ultimo Registro Rendiciones
+      c := StringReplace(U, '<field>', 'IdRend', [rfReplaceAll]);
+      c := StringReplace(C, '<tabla>', 'R_Rend', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.Open;
+      n := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+      C := StringReplace(Z, '<field>', 'UltimoRendicion', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.ParamByName('Valor').AsInteger := n;
+      q.ExecSQL;
+
+      q.Close; // Ultimo Registro de Cambios de Precios
+      c := StringReplace(U, '<field>', 'IdRemMod', [rfReplaceAll]);
+      c := StringReplace(C, '<tabla>', 'ArtModPrc', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.Open;
+      n := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+      C := StringReplace(Z, '<field>', 'UltimoRegPre', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.ParamByName('Valor').AsInteger := n;
+      q.ExecSQL;
+
+      q.Close; // Ultimo Registro de Inventario
+      c := StringReplace(U, '<field>', 'IdFactura', [rfReplaceAll]);
+      c := StringReplace(C, '<tabla>', 'Inventario', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.Open;
+      n := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+      C := StringReplace(Z, '<field>', 'UltimoInventario', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.ParamByName('Valor').AsInteger := n;
+      q.ExecSQL;
+      q.Close;
+
+      q.Close; // Ultimo Registro de Liquidaciones
+      c := StringReplace(U, '<field>', 'IdLiquidacion', [rfReplaceAll]);
+      c := StringReplace(C, '<tabla>', 'PCL_TarMut', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.Open;
+      n := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+      C := StringReplace(Z, '<field>', 'UltimoLiquidacion', [rfReplaceAll]);
+      q.SQL.Text := C;
+      q.ParamByName('Valor').AsInteger := n;
+      q.ExecSQL;
+      q.Close;
+    finally
+      q.Free;
+    end;
+    dmSaveFile.trSaveComp.Commit;
+  except
+    dmSaveFile.trSaveComp.Rollback;
+    raise;
+  end;
+end;
+
+function GetLevel(Var User: Integer; Var UserStr: St20): Integer;
+begin
+  Result := AccesoLibre;
+  frmSelecUsuario := TfrmSelecUsuario.Create(nil);
+  if frmSelecUsuario.ShowModal = mrOk then
+  begin
+    Result := Tarea;
+    User := Usuario;
+    UserStr := NombreUsuario;
+  end;
+end;
+
+function GetLevel_Requerido(Nivel: Integer; Var User: Integer; Var UserStr: St20): Boolean;
+begin
+  Result := False;
+  frmSelecUsuario := TfrmSelecUsuario.Create(nil);
+  if frmSelecUsuario.ShowModal = mrOk then
+  begin
+    if GetDatosEmp(User, Vacio, 3, Datos_Ent) then
+    begin
+      if (Datos_Ent.Tarea = Nivel) and
+         (Datos_Ent.Activo) then
+      begin
+        Result := True;
+        User := Datos_Ent.IdEnt;
+        UserStr := Datos_Ent.Nombre;
+      end;
+    end;
+  end;
+end;
+
+function GetNumeroComprobante(IdSuc: Integer; Punto: St04; TipoIvaEnt, TipoComprobante: SmallInt): St13;
+var
+  q: TMDOQuery;
+begin
+  with dmGestion do
+  begin
+    try
+      qTerminales.Close;
+      qTerminales.Transaction := trProc;
+      qTerminales.ParamByName('IdSucursal').AsInteger := IdSuc;
+      qTerminales.ParamByName('IdPuntoVenta').AsInteger := IdSalesPoint;
+      if Trim(Punto) <= Vacio then
+        Punto := qTerminalesNROPTOVTACONTROLADOR.AsString;
+      try
+        if not trProc.InTransaction then
+          trProc.StartTransaction;
+
+        qTerminales.Open;
+        if not qTerminales.IsEmpty then
+        begin
+          case TipoComprobante of
+            OrdenCompra: begin
+              Result := '0001-00000001';
+              try
+                q := TMDOQuery.Create(nil);
+                q.Database := dmGestion.dbGestion;
+                q.Transaction := dmGestion.trProc;
+                q.SQL.Add('Select NOrdCompra From DatosSis ');
+                q.SQL.Add('Where IdEmpresa = :IdEmp ');
+                q.ParamByName('IdEmp').AsInteger := qTerminalesIDEMPRESA.AsInteger;
+                q.Open;
+                if not q.IsEmpty then
+                  Result := q.FieldByName('NOrdCompra').AsString;
+                q.Close;
+              finally
+                q.Free;
+              end;
+            end;
+            AvisoMora_1,
+            AvisoMora_2,
+            AvisoMora_3: begin
+              if Trim(qTerminalesAVISOSMORA.AsString) > Vacio  then
+              begin
+                try
+                  Result := qTerminalesAVISOSMORA.AsString
+                except
+                  Result := Punto + '-XXXXXXXX';
+                end;
+              end
+              else begin
+                Result := Punto + '-00000001';
+              end;
+            end;
+            AcuerdoExJud: begin
+              if Trim(qTerminalesACUERDOEXJ.AsString) > Vacio  then
+              begin
+                try
+                  Result := qTerminalesACUERDOEXJ.AsString
+                except
+                  Result := Punto + '-00000001';
+                end;
+              end
+              else begin
+                Result := Punto + '-00000001';
+              end;
+            end;
+            PresentacionTM: begin
+              Result := '0001-00000001';
+              try
+                q := TMDOQuery.Create(nil);
+                q.Database := dmGestion.dbGestion;
+                q.Transaction := dmGestion.trProc;
+                q.SQL.Add('Select NROLIQPRES From DatosSis ');
+                q.SQL.Add('Where IdEmpresa = :IdEmp ');
+                q.ParamByName('IdEmp').AsInteger := qTerminalesIDEMPRESA.AsInteger;
+                q.Open;
+                if not q.IsEmpty then
+                  Result := q.FieldByName('NROLIQPRES').AsString;
+                q.Close;
+              finally
+                q.Free;
+              end;
+            end;
+            RemitoX: begin
+              try
+                Result := qTerminalesRemX.AsString
+              except
+                Result := Punto + '-XXXXXXXX';
+              end;
+            end;
+            ReciboX: begin
+              if Trim(qTerminalesRECX.AsString) > Vacio  then
+              begin
+                try
+                  Result := qTerminalesRECX.AsString
+                except
+                  Result := Punto + '-XXXXXXXX';
+                end;
+              end
+              else begin
+                Result := Punto + '-00000001';
+              end;
+            end;
+            Presupuesto: begin
+              try
+                Result := qTerminalesPRESUPUESTO.AsString
+              except
+                Result := Punto + '-XXXXXXXX';
+              end;
+            end;
+            else begin
+              case TipoIvaEnt of
+                RI,
+                RNI,
+                NC: case TipoComprobante of
+                      FacA,
+                      DebA: try
+                              Result := qTerminalesCompA.AsString
+                            except
+                              Result := Punto + '-XXXXXXXX';
+                            end;
+                      CreA: try
+                              Result := qTerminalesNotCredA.AsString
+                            except
+                              Result := Punto + '-XXXXXXXX';
+                            end;
+                    end;
+                CFi, EX, RMT, BU,
+                NR: case TipoComprobante of
+                      Tkt : try
+                              Result := qTerminalesCompT.AsString
+                            except
+                              Result := Punto + '-XXXXXXXX';
+                            end;
+                      FacB,
+                      DebB: try
+                              Result := qTerminalesCompB.AsString
+                            except
+                              Result := Punto + '-XXXXXXXX';
+                            end;
+                      CreB: try
+                              Result := qTerminalesNotCredB.AsString
+                            except
+                              Result := Punto + '-XXXXXXXX';
+                            end;
+                    end;
+              end;
+            end;
+          end;
+        end
+        else begin
+          if IdBranch > Casa_Central then
+            raise EUsuario.Create('terminal no definidad');
+        end;
+        trProc.Commit;
+      except
+        trProc.Rollback;
+        raise;
+      end;
+    finally
+      qTerminales.Transaction := trGestion;
+    end;
+  end;
+end;
+
+function MaxDctoPermitido(IdArticulo, IdTarjeta, CantCuotas, IdSucursal: Integer): Double;
+var
+  q: TMDOQuery;
+  con, tar, esp, res: Double;
+  tii: Boolean;
+begin
+  try
+    Result := 0.000000;
+    con := 0.000000;
+    tar := 0.000000;
+    esp := 0.000000;
+    res := 0.000000;
+    tii := False;
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := dmGestion.dbGestion;
+      q.Transaction := dmGestion.trProc;
+      q.SQL.Add('Select A.ImpInt, S.MaxDtoCdo ');
+      q.SQL.Add('From Articulos A ');
+      q.SQL.Add('Join SubGrupos S ');
+      q.SQL.Add('  on S.IdArea = A.IdArea And ');
+      q.SQL.Add('     S.IdGrupo = A.IdGrupo And ');
+      q.SQL.Add('     S.IdSubGrupo = A.IdSubGrupo ');
+      q.SQL.Add('Where IdArticulo =:I ');
+      q.ParamByName('I').AsInteger := IdArticulo;
+      q.Open;
+      con := q.FieldByName('MaxDtoCdo').AsFloat;
+      tii := (True And (q.FieldByName('ImpInt').AsCurrency > 0));
+      q.Close;
+    finally
+      q.Free;
+    end;
+
+    if (CantCuotas > 0) then
+    begin
+      try
+        q := TMDOQuery.Create(nil);
+        q.Database := dmGestion.dbGestion;
+        q.Transaction := dmGestion.trProc;
+        q.SQL.Add('Select MaxDcto ');
+        q.SQL.Add('From TARPLAN ');
+        q.SQL.Add('Where (IDTARJETA =:T) and ');
+        q.SQL.Add('      (NROCUOTA =:N) and ');
+        q.SQL.Add('      (IDSUCURSAL =:S Or IDSUCURSAL = 0) ');
+        q.ParamByName('T').AsInteger := IdTarjeta;
+        q.ParamByName('N').AsInteger := CantCuotas;
+        q.ParamByName('S').AsInteger := IdSucursal;
+        q.Open;
+        tar := q.FieldByName('MaxDcto').AsFloat;
+        q.Close;
+      finally
+        q.Free;
+      end;
+
+      try
+        q := TMDOQuery.Create(nil);
+        q.Database := dmGestion.dbGestion;
+        q.Transaction := dmGestion.trProc;
+        q.SQL.Add('Select O.DctoPer ');
+        q.SQL.Add('From Ofertas_Esp O ');
+        q.SQL.Add('Join Articulos A ');
+        q.SQL.Add('  on A.IdArea = O.IdArea And   ');
+        q.SQL.Add('     A.IdGrupo = O.IdGrupo And  ');
+        q.SQL.Add('     A.IdSubGrupo = O.IdSubGr ');
+        q.SQL.Add('Where (IDTARJETA =:T) and ');
+        q.SQL.Add('      (NROCTAS =:N) and ');
+        q.SQL.Add('      (IDSUCUR =:S Or IDSUCUR = 0) And ');
+        q.SQL.Add('      (A.IDARTICULO =:A) ');
+        q.ParamByName('T').AsInteger := IdTarjeta;
+        q.ParamByName('N').AsInteger := CantCuotas;
+        q.ParamByName('S').AsInteger := IdSucursal;
+        q.ParamByName('A').AsInteger := IdArticulo;
+        q.Open;
+        esp := q.FieldByName('DctoPer').AsFloat;
+        q.Close;
+      finally
+        q.Free;
+      end;
+    end;
+
+    if tar > 0 then
+    begin
+      if esp > tar then
+        res := esp
+      else
+        res := tar
+    end
+    else begin
+      if (IdTarjeta > 0) then
+        res := 0
+      else
+        res := con;
+    end;
+    if tii then
+    begin
+      if res > 0 then
+        res := res + MaxDtoArtII;
+    end;
+  finally
+    Result := res;
+  end;
+end;
+
+function GetCoefTar(IdTar, IdSuc, NrCta: Integer): Double;
+var
+  q: TMDOQuery;
+begin
+  Result := -1;
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    q.SQL.Add('Select First 1 CoefPlan ');
+    q.SQL.Add('From TARPLAN ');
+    q.SQL.Add('Where (IDTARJETA = :T) And ');
+    q.SQL.Add('      (NROCUOTA = :N) And ');
+    q.SQL.Add('      ((IDSUCURSAL = :S Or IDSUCURSAL = 0)) ');
+    q.SQL.Add('Order By IdSucursal desc ');
+    q.ParamByName('T').AsInteger := IdTar;
+    q.ParamByName('N').AsInteger := NrCta;
+    q.ParamByName('S').AsInteger := IdSuc;
+    q.Open;
+    Result := q.FieldByName('CoefPlan').AsFloat;
+    q.Close;
+  finally
+    q.Free;
+  end;
+   (*
+   Select First 1 CoefPlan From TARPLAN
+   Where (IDTARJETA = :T) And
+         (NROCUOTA = :N) And
+         ((IDSUCURSAL = :S Or IDSUCURSAL = 0))
+   Order By IdSucursal desc
+   *)
+end;
+
+procedure UpDate_DatosSistema(IdSuc, Cual: Integer);
+var
+  q: TMDOQuery;
+begin
+  try
+    if not dmGestion.trProc.InTransaction then
+      dmGestion.trProc.StartTransaction;
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := dmGestion.dbGestion;
+      q.Transaction := dmGestion.trProc;
+      q.SQL.Add('UpDate Sucursales ');
+      Case Cual of
+        1: q.SQL.Add('   Set ULTIMA_ACT = :F ');
+        2: q.SQL.Add('   Set ULTIMA_ACT_ORG = :F ');
+      End;
+      if IdSuc > 0 then
+      begin
+        q.SQL.Add('Where IDSUCURSAL = :S ');
+        q.ParamByName('S').AsInteger := IdSuc;
+      end;
+      q.ParamByName('F').AsDate := Date;
+      q.ExecSQL;
+    finally
+      q.Free;
+    end;
+    dmGestion.trProc.Commit;
+  except
+    on E:Exception do
+    begin
+      dmGestion.trProc.Rollback;
+      raise EUsuario.Create(Format('Error marcando registro de actualización de Sucursal: %d ', [IdSuc]));
+    end;
+  end;
+end;
+
+function GetDatosCuenta(IdCta: Integer; Var C: TDatos_PlanCta): Boolean;
+var
+  q: TMDOQuery;
+begin
+  Result := False;
+  FillChar(C, SizeOf(TDatos_PlanCta), 0);
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    q.SQL.Add('Select IdCuenta, Descripcion, ');
+    q.SQL.Add('       DetalleCentro, CodigoContable ');
+    q.SQL.Add('From PlanCtas ');
+    q.SQL.Add('Where (IdCuenta =:IdCta) And ');
+    q.SQL.Add('      (Nivel = 1) ');
+    q.ParamByName('IdCta').AsInteger := IdCta;
+    q.Open;
+    if not q.IsEmpty then
+    begin
+      Result := True;
+      C.IdCuenta := q.FieldByName('IdCuenta').AsInteger;
+      C.Descripcion := q.FieldByName('Descripcion').AsString;
+      C.DetalleCtro := q.FieldByName('DetalleCentro').AsString;
+      C.CodigoCon := q.FieldByName('CodigoContable').AsString;
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+end;
+
+
+function GetDatosArt(IdProducto: Integer; CodProd: String; Var A: TDatos_Art): Boolean;
+var
+  q: TMDOQuery;
+begin
+  Result := False;
+  FillChar(A, SizeOf(TDAtos_Art), 0);
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trGestion;
+    q.Close;
+    q.SQL.Text := 'Select A.IdArticulo, A.CodBarra, A.IdArea, A.IdGrupo, '+
+                  '       A.IdSubGrupo, A.Marca, A.Detalle, A.Precio, '+
+                  '       A.PBase, A.ImpInt, A.Costo, A.AlcIva, A.AlcIB, '+
+                  '       A.PNeto, A.Exento, A.Ganancia, A.Oferta, A.DurOferta, '+
+                  '       A.Activo, A.Servicio, A.TSinStock, R.Area, G.Grupo, '+
+                  '       S.SubGrupo, A.TieneTalle, S.MaxDtoCdo, S.MaxRndPre, '+
+                  '       A.EstiloFac, A.IdMarkUp, A.EsKit, A.IdEmpresa, '+
+                  '       M.CoefMarkUp, C.Color, B.CoefIB, I.CoefAlicuota '+
+                  'From Articulos A '+
+                  'Left Outer Join Areas R '+
+                  '  on R.IdArea = A.IdArea '+
+                  'Left Outer Join Grupos G '+
+                  '  on G.IdArea = A.IdArea and '+
+                       'G.IdGrupo = A.IdGrupo '+
+                  'Left Outer Join SubGrupos S '+
+                  '  on S.IdArea = A.IdArea and '+
+                  '     S.IdGrupo = A.IdGrupo And '+
+                  '     S.IdSubGrupo = A.IdSubGrupo '+
+                  'Left Outer Join Colores C '+
+                  '  on C.IdColor = A.IdColor '+
+                  'Left Outer Join IngBruto B '+
+                  '  on B.IdIngBru = A.AlcIB '+
+                  'Left Outer Join Alicuotas I '+
+                  '  on I.IdAlicuota = A.AlcIva '+
+                  'Left Outer Join MarkUp M '+
+                  '  on M.IdMarkUp = A.IdMarkUp ';
+
+    if IdProducto > 0 then
+    begin
+      q.SQL.Add('Where A.IdArticulo =:IdArt ');
+      q.ParamByName('IdArt').AsInteger := IdProducto;
+    end
+    else begin
+      if CodProd > Vacio then
+      begin
+        q.SQL.Add('Where A.CodBarra =:IdArt ');
+        q.ParamByName('IdArt').AsString := CodProd;
+      end
+      else
+        Exit;
+    end;
+//    q.ParamByName('IdSuc').AsInteger := IdBranch;
+//    q.ParamByName('IdEmp').AsInteger := IdCompany;
+    q.Open;
+
+    if not q.IsEmpty then
+    begin
+      Result := True;
+      A.IdArticulo := q.FieldByName('IdArticulo').AsInteger;
+      A.IdArea := q.FieldByName('IdArea').AsInteger;
+      A.IdGrupo := q.FieldByName('IdGrupo').AsInteger;
+      A.IdSubGrupo := q.FieldByName('IdSubGrupo').AsInteger;
+      A.CodBarra := q.FieldByName('CodBarra').AsString;
+      A.Marca := q.FieldByName('Marca').AsString;
+      A.Color := q.FieldByName('Color').AsString;
+      A.Detalle := q.FieldByName('Detalle').AsString;
+      A.Precio := q.FieldByName('Precio').AsCurrency;
+      A.PBase := q.FieldByName('PBase').AsCurrency;
+      A.ImpInt := q.FieldByName('ImpInt').AsCurrency;
+      A.Costo := q.FieldByName('Costo').AsCurrency;
+      A.IdAlcI := q.FieldByName('AlcIva').AsInteger;
+      A.IdAlcB := q.FieldByName('AlcIB').AsInteger;
+      A.AlcIva := q.FieldByName('CoefAlicuota').AsFloat;
+      A.AlcIBt := q.FieldByName('CoefIB').AsFloat;
+      A.Exento := q.FieldByName('Exento').AsFloat;
+      A.Ganancia := q.FieldByName('Ganancia').AsFloat;
+      A.MaxDtoCdo := q.FieldByName('MaxDtoCdo').AsFloat;
+      A.MaxRndPre := q.FieldByName('MaxRndPre').AsFloat;
+      A.VencOf := q.FieldByName('DurOferta').AsDateTime;
+      A.Oferta := q.FieldByName('Oferta').AsInteger;
+      A.Activo := q.FieldByName('Activo').AsInteger;
+      A.Servicio := q.FieldByName('Servicio').AsInteger;
+      A.EstiloFac := q.FieldByName('EstiloFac').AsInteger;
+      A.TieneTalle := q.FieldByName('TieneTalle').AsInteger;
+      A.IdMarkUp := q.FieldByName('IdMarkUp').AsInteger;
+      A.CoefMarkUp := q.FieldByName('CoefMarkUp').AsFloat;
+      A.DetArea := q.FieldByName('Area').AsString;
+      A.DetGrupo := q.FieldByName('Grupo').AsString;
+      A.DetSubGr := q.FieldByName('SubGrupo').AsString;
+      A.TSinStk := q.FieldByName('TSinStock').AsInteger;
+      A.EsKit := q.FieldByName('EsKit').AsInteger;
+      A.DetProd := A.Marca+' '+A.Detalle+' '+A.Color;
+      if ((A.ImpInt > A.Costo) or
+          (A.ImpInt > A.PBase)) and
+         (A.ImpInt > 0) then
+      begin
+        try
+          A.ImpInt := (A.Precio / (1+(A.AlcIva/100))) -
+                      (A.Precio / (1+(A.AlcIva/100)) /
+                      (1+(dmGestion.EmpresasCOEFIMPINT.AsFloat/100)))
+        except
+          A.ImpInt := 0;
+        end;
+      end;
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+
+  // Precio Especial Sucursal
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    q.SQL.Add('Select PrecioEsp ');
+    q.SQL.Add('From ArtPreEsp ');
+    q.SQL.Add('Where (IdArticulo = :A) And ');
+    q.SQL.Add('      ((IdSucursal = 0) or (IdSucursal = :S)) And ');
+    q.SQL.Add('      (Duracion >= :D) ');
+    q.ParamByName('A').AsInteger := A.IdArticulo;
+    q.ParamByName('S').AsInteger := IdBranch;
+    q.ParamByName('D').AsDate := Date;
+    q.Open;
+    if not (q.IsEmpty) then
+      A.Precio := q.FieldByName('PrecioEsp').AsCurrency;
+    q.Close;
+  finally
+    q.Free;
+  end;
+end;
+
+function GetDatosChequesP(IdMov: Integer; Var C: TDatosChequeP): Boolean;
+Const
+  ChqP = 'Select B.IDMOV, B.IDBANCO, B.IDORDPAGO, B.TIPOMOV, B.NROCHEQUE, '+
+         '       B.FECHAEMISION, B.FECHAVENCIMIENTO, B.FECHARESUMEN, '+
+         '       B.IDENTIDAD, B.DETALLEMOV, B.MONTO, B.DEBE, B.HABER, '+
+         '       B.USUARIO, B.ESTADO, P.NOMBRE, E.ModName '+
+         'From BANCOPROP B '+
+         'Left Outer Join PROVEEDORES P '+
+         '  on P.IdProveedor = B.IDENTIDAD '+
+         'Join Bancos E '+
+         '  on E.IdBanco = B.IdBanco '+
+         'Where B.IDMOV =:IdMov ';
+            (*
+            IdCheque := qSaveComp.FieldByName('IdMov').AsInteger;
+            Tiene_PreImp := not qSaveComp.FieldByName('ModName').IsNull;
+            qSaveComp.Close;
+            *)
+var
+  q: TMDOQuery;
+begin
+  Result := False;
+  FillChar(C, SizeOf(TDatosChequeP), 0);
+  q := TMDOQuery.Create(nil);
+  q.Database := dmGestion.dbGestion;
+  q.Transaction := dmGestion.trProc;
+  q.SQL.Text := ChqP;
+  q.ParamByName('IdMov').AsInteger := IdMov;
+  try
+    q.Open;
+    if not q.IsEmpty then
+    begin
+      Result := True;
+      C.IdBco:= q.FieldByName('IdBanco').AsInteger;
+      C.TMov := q.FieldByName('TipoMov').AsInteger;
+      C.Emis := q.FieldByName('FechaEmision').AsDateTime;
+      C.Venc := q.FieldByName('FechaVencimiento').AsDateTime;
+      C.Resu := q.FieldByName('FechaResumen').AsDateTime;
+      C.IdEn := q.FieldByName('IdEntidad').AsInteger;
+      C.DMov := q.FieldByName('DetalleMov').AsString;
+      C.Mont := q.FieldByName('Monto').AsCurrency;
+      C.NChq := q.FieldByName('NroCheque').AsInteger;
+      C.IdOP := q.FieldByName('IdOrdPago').AsInteger;
+      C.NUsr := q.FieldByName('Usuario').AsInteger;
+      C.Debe := q.FieldByName('Debe').AsCurrency;
+      C.Habe := q.FieldByName('Haber').AsCurrency;
+      C.Esta := q.FieldByName('Estado').AsInteger;
+      C.NPro := q.FieldByName('Nombre').AsString;
+      C.MPIm := not (q.FieldByName('ModName').IsNull);
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+end;
+
+function GetDatosCheques3(IdMov: Integer; Var C: TDatosCheque3): Boolean;
+Const
+  Chq3 = 'Select B.IDMOV, B.IDORDPAGO, B.NOMBREBANCO, B.NROCUENTA, '+
+         '       B.NROCHEQUE, B.IDTITULAR, B.TITULAR, B.IDENDOSO, '+
+         '       B.ENDOSO, B.IDFACTURA, B.IDSUCURSAL, B.NROFACTURA, '+
+         '       B.FECHAVENCIMIENTO, B.FECHAENTREGA, B.IDENTREGA, '+
+         '       B.ENTREGA, B.MONTO, B.SITUACION, B.FECHAIS '+
+         'From BANCOTER B '+
+         'Where B.IDMOV =:IdMov ';
+var
+  q: TMDOQuery;
+begin
+  Result := False;
+  FillChar(C, SizeOf(TDatosChequeP), 0);
+  if IdMov > 0 then
+  begin
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    q.SQL.Text := Chq3;
+    q.ParamByName('IdMov').AsInteger := IdMov;
+    try
+      q.Open;
+      if not q.IsEmpty then
+      begin
+        Result := True;
+        C.IdOP := q.FieldByName('IdOrdPago').AsInteger;
+        C.NBco := q.FieldByName('NombreBanco').AsString;
+        C.NCta := q.FieldByName('NroCuenta').AsString;
+        C.NChq := q.FieldByName('NroCheque').AsInteger;
+        C.ITit := q.FieldByName('IdTitular').AsInteger;
+        C.NTit := q.FieldByName('Titular').AsString;
+        C.IEnd := q.FieldByName('IdEndoso').AsInteger;
+        C.NEnd := q.FieldByName('Endoso').AsString;
+        C.IFac := q.FieldByName('IdFactura').AsInteger;
+        C.ISuc := q.FieldByName('IdSucursal').AsInteger;
+        C.NFac := q.FieldByName('NroFactura').AsString;
+        C.Venc := q.FieldByName('FechaVencimiento').AsDateTime;
+        C.Entr := q.FieldByName('FechaEntrega').AsDateTime;
+        C.IEnt := q.FieldByName('IdEntrega').AsInteger;
+        C.NEnt := q.FieldByName('Entrega').AsString;
+        C.Mont := q.FieldByName('Monto').AsCurrency;
+        C.Situ := q.FieldByName('Situacion').AsInteger;
+        C.FeIS := q.FieldByName('FechaIS').AsDateTime;
+      end;
+      q.Close;
+    finally
+      q.Free;
+    end;
+  end;
+end;
+
+function GetDatosEnt(IdEnt, IdSuc: Integer; TEnt: SmallInt; Var C: TDatos_Ent): Boolean;
+var
+  q: TMDOQuery;
+begin
+  Result := False;
+  FillChar(C, SizeOf(TDatos_Ent), 0);
+  q := TMDOQuery.Create(nil);
+  q.Database := dmGestion.dbGestion;
+  q.Transaction := dmGestion.trProc;
+  Case TEnt of
+    1: begin //Clientes
+         q.SQL.Text := Clientes+' Where (C.IdCliente = :IdCliente) And (C.IdSucursal = :IdSucursal) ';
+         q.ParamByName('IdCliente').AsInteger := IdEnt;
+         q.ParamByName('IdSucursal').AsInteger := IdSuc;
+         try
+           q.Open;
+           if not q.IsEmpty then
+           begin
+             Result := True;
+             C.TipoEnt := TEnt;
+             C.IdEnt := q.FieldByName('IdCliente').AsInteger;
+             C.IdSuc := q.FieldByName('IdSucursal').AsInteger;
+             C.Nombre := q.FieldByName('Nombre').AsString;
+             C.Autorizado := '';
+             C.Direccion := q.FieldByName('Direccion').AsString;
+             C.Localidad := q.FieldByName('Localidad').AsString;
+             C.Provincia := q.FieldByName('Provincia').AsString;
+             C.Telefono := q.FieldByName('Telefonos').AsString;
+             C.CodPostal := q.FieldByName('CodPostal').AsString;
+             C.Documento := q.FieldByName('Documento').AsString;
+             C.IngBrutos := q.FieldByName('IngBrutos').AsString;
+             C.TipoDoc := q.FieldByName('TipoDoc').AsInteger;
+             C.TipoIva := q.FieldByName('TipoIva').AsInteger;
+             C.Tarea := 0;
+             C.DetDoc := q.FieldByName('DetDoc').AsString;
+             C.DetIva := q.FieldByName('DetIva').AsString;
+             C.Tipo_Per := q.FieldByName('TipoCli').AsInteger;
+             C.PassW := '';
+           end;
+           q.Close;
+         finally
+           q.Free;
+         end;
+       end;
+    2: begin //Proveedores
+         q.SQL.Text := Supply + ' Where P.IdProveedor =:IdProveedor And P.IdSucursal =:IdSucursal ';
+         q.ParamByName('IdProveedor').AsInteger := IdEnt;
+         q.ParamByName('IdSucursal').AsInteger := IdSuc;
+         try
+           q.Open;
+           if not q.IsEmpty then
+           begin
+             Result := True;
+             C.TipoEnt := TEnt;
+             C.IdEnt := q.FieldByName('IdProveedor').AsInteger;
+             C.Nombre := q.FieldByName('Nombre').AsString;
+             C.NomFan := q.FieldByName('NombreFantasia').AsString;
+             C.Autorizado  := q.FieldByName('Autorizado').AsString +' '+q.FieldByName('DocAutor').AsString;
+             C.Direccion := q.FieldByName('Direccion').AsString;
+             C.Localidad := q.FieldByName('Localidad').AsString;
+             C.Provincia := q.FieldByName('Provincia').AsString;
+             C.CodPostal := q.FieldByName('CodPostal').AsString;
+             C.Telefono := q.FieldByName('Telefonos').AsString;
+             C.Documento := q.FieldByName('Documento').AsString;
+             C.IngBrutos := q.FieldByName('IngBrutos').AsString;
+             C.TipoDoc := q.FieldByName('TipoDoc').AsInteger;
+             C.TipoIva := q.FieldByName('TipoIva').AsInteger;
+             C.Tarea := 0;
+             C.DetDoc := q.FieldByName('DetDoc').AsString;
+             C.DetIva := q.FieldByName('DetIva').AsString;
+             C.Tipo_Per := 0;
+             C.PassW := '';
+             C.ConValorDolar := (q.FieldByName('FACTURAENDOLAR').AsInteger = Verdadero);
+             C.PERCEPCIONES := (q.FieldByName('PERCEPCIONES').AsInteger = Verdadero);
+             C.NROREGPERCP := q.FieldByName('NROREGPERCP').AsString;
+
+             C.NORETENCION_I := (q.FieldByName('NORETENCION_I').AsInteger = Verdadero);
+             C.NROREGRETEN_I := q.FieldByName('NROREGRETEN_I').AsString;
+             C.MONTORETENCION_I := q.FieldByName('MONTORETENCION_I').AsCurrency;
+             C.VALIEDEZNORET_I := q.FieldByName('VALIDEZNORET_I').AsDateTime;
+             C.PRCRETENCION_I := q.FieldByName('PRCRETENCION_I').AsFloat;
+
+             C.NORETENCION_G := (q.FieldByName('NORETENCION_G').AsInteger = Verdadero);
+             C.NROREGRETEN_G := q.FieldByName('NROREGRETEN_G').AsString;
+             C.MONTORETENCION_G := q.FieldByName('MONTORETENCION_G').AsCurrency;
+             C.VALIEDEZNORET_G := q.FieldByName('VALIDEZNORET_G').AsDateTime;
+             C.PRCRETENCION_G := q.FieldByName('PRCRETENCION_G').AsFloat;
+             C.DETRETENCION_G := q.FieldByName('DETREGIMEN_G').AsString;
+
+             C.MONTORETENCION_B := q.FieldByName('MONTORETENCION_B').AsCurrency;
+             C.PRCRETENCION_B1 := q.FieldByName('PRCRETENCION_B1').AsFloat;
+             C.PRCRETENCION_B2 := q.FieldByName('PRCRETENCION_B2').AsFloat;
+             C.PROVSERVICIOS := (q.FieldByName('PROVSERVICIOS').AsInteger = Verdadero);
+             C.MONTORETENCION_S := q.FieldByName('MTORETENCION_SS').AsCurrency;
+           end;
+           q.Close;
+         finally
+           q.Free;
+         end;
+       end;
+  end;
+end;
+
+function GetDatosEmp(IdEnt: Integer; PassW: St04; TEnt: SmallInt; Var C: TDatos_Ent): Boolean;
+var
+  q: TMDOQuery;
+begin
+  Result := False;
+  FillChar(C, SizeOf(TDatos_Ent), 0);
+  q := TMDOQuery.Create(nil);
+  q.Database := dmGestion.dbGestion;
+  q.Transaction := dmGestion.trProc;
+  case TEnt of
+   3: begin
+        q.SQL.Text := Vendor+' Where E.IdEmpleado =:IdEmpleado ';
+        q.ParamByName('IdEmpleado').AsInteger := IdEnt;
+      end;
+   4: begin
+        q.SQL.Text := Vendor+' Where E.PassW =:PassW ';
+        q.ParamByName('PassW').AsString := PassW;
+      end;
+  end;
+
+  try
+    q.Open;
+    if not q.IsEmpty then
+    begin
+      C.TipoEnt := TEnt;
+      C.IdEnt := q.FieldByName('IdEmpleado').AsInteger;
+      C.IdSuc := q.FieldByName('IdSucAsignada').AsInteger;
+      C.Nombre := q.FieldByName('Nombre').AsString;
+      C.Autorizado := q.FieldByName('Funcion').AsString;
+      C.Direccion := q.FieldByName('Direccion').AsString;
+      C.Localidad := q.FieldByName('Localidad').AsString;
+      C.Provincia := q.FieldByName('Provincia').AsString;
+      C.Telefono := q.FieldByName('Telefonos').AsString;
+      C.CodPostal := q.FieldByName('CodPostal').AsString;
+      C.Documento := q.FieldByName('Documento').AsString;
+      C.IngBrutos := Vacio;
+      C.TipoDoc := q.FieldByName('TipoDoc').AsInteger;
+      C.TipoIva := q.FieldByName('TipoIva').AsInteger;
+      C.Tarea := q.FieldByName('IdTareaFuncion').AsInteger;
+      C.DetDoc := q.FieldByName('DetDoc').AsString;
+      C.DetIva := q.FieldByName('DetIva').AsString;
+      C.PassW := q.FieldByName('PassW').AsString;
+      C.Activo := (q.FieldByName('Activo').AsInteger = Verdadero);
+      C.TipoEnt := q.FieldByName('TipoE').AsInteger;
+      Result := True;
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+end;
+
+function CheckDocEnt(TEntidad: Integer; TipDoc: SmallInt; Documento: St13): Integer;
+var
+  q: TMDOQuery;
+begin
+  Result := NoEncontrado;
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    Case TEntidad of
+      1: begin //Clientes
+           q.SQL.Add('Select IdCliente From Clientes ');
+           q.SQL.Add('Where TipoDoc =:T And Documento =:D ');
+           q.ParamByName('T').AsSmallInt := TipDoc;
+           q.ParamByName('D').AsString := Documento;
+           q.Open;
+           if not q.IsEmpty then
+             Result := q.FieldByName('IdCliente').AsInteger;
+         end;
+      2: begin //Proveedor
+           q.SQL.Add('Select IdProveedor From Proveedores ');
+           q.SQL.Add('Where TipoDoc =:T And Documento =:D ');
+           q.ParamByName('T').AsSmallInt := TipDoc;
+           q.ParamByName('D').AsString := Documento;
+           q.Open;
+           if not q.IsEmpty then
+             Result := q.FieldByName('IdProveedor').AsInteger;
+         end;
+      3: begin //Empleado
+           q.SQL.Add('Select IdEmpleado From Empleados ');
+           q.SQL.Add('Where TipoDoc =:T And Documento =:D ');
+           q.ParamByName('T').AsSmallInt := TipDoc;
+           q.ParamByName('D').AsString := Documento;
+           q.Open;
+           if not q.IsEmpty then
+             Result := q.FieldByName('IdEmpleado').AsInteger;
+         end;
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+end;
+
+//-------------------------------- OFERTAS --------------------------------
+procedure Check_Oferta;
+var
+  q: TMDOQuery;
+begin
+  try
+    if not dmGestion.trProc.InTransaction then
+      dmGestion.trProc.StartTransaction;
+
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    q.SQL.Add('UpDate Articulos A ');
+    q.SQL.Add('Set A.Oferta = 0, ');
+    q.SQL.Add('    A.DurOferta = null ');
+    q.SQL.Add('Where A.IdArticulo in ( ');
+    q.SQL.Add('  Select F.IdArticulo ');
+    q.SQL.Add('  From ArtOfertas F ');
+    q.SQL.Add('  Where F.FechaFin between :Fec1 and :Fec2) ');
+    q.ParamByName('Fec1').AsDate := Date-5;
+    q.ParamByName('Fec2').AsDate := Date-1;
+    try
+      q.ExecSQL;
+      dmGestion.trProc.Commit;
+    except
+      on E:Exception do
+      begin
+        dmGestion.trProc.Rollback;
+        raise EUsuario.Create(E.Message);
+      end;
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+
+  try
+    if not dmGestion.trProc.InTransaction then
+      dmGestion.trProc.StartTransaction;
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    q.SQL.Add('Delete From ArtOfertas ');
+    q.SQL.Add('Where (FechaFin between :Fec1 And :Fec2) ');
+    q.ParamByName('Fec1').AsDate := Date-5;
+    q.ParamByName('Fec2').AsDate := Date-1;
+    try
+      q.ExecSQL;
+      dmGestion.trProc.Commit;
+    except
+      on E:Exception do
+      begin
+        dmGestion.trProc.Rollback;
+        raise EUsuario.Create(E.Message);
+      end;
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+   // Borrando Ofertas vencidas
+  try
+    if not dmGestion.trProc.InTransaction then
+      dmGestion.trProc.StartTransaction;
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    q.SQL.Add('Delete From ArtOfertas ');
+    q.SQL.Add('Where (CantAut > 0) And ');
+    q.SQL.Add('      (CantVen >= CantAut) ');
+    try
+      q.ExecSQL;
+      dmGestion.trProc.Commit;
+    except
+      on E:Exception do
+      begin
+        dmGestion.trProc.Rollback;
+        raise EUsuario.Create(E.Message);
+      end;
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+
+  // Borrando Precios Especiales Vencidos
+  try
+    if not dmGestion.trProc.InTransaction then
+      dmGestion.trProc.StartTransaction;
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    q.SQL.Add('Delete From ArtPreEsp ');
+    q.SQL.Add('Where Duracion <= :Hasta ');
+    q.ParamByName('Hasta').AsDate := Date;
+    try
+      q.ExecSQL;
+      dmGestion.trProc.Commit;
+    except
+      on E:Exception do
+      begin
+        dmGestion.trProc.Rollback;
+        raise EUsuario.Create(E.Message);
+      end;
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+end;
+
+function GetPrecio(Articulo, IdCard: Integer; CantCtas: SmallInt;
+                   PrecioActual, Descuento, CoefTarj, Contado: Currency;
+                   Cant: Double; Var Precio: TPrecios): Currency;
+var
+  MtNeto, AuxIva, MtoExt, Descto, PFinal, POriginal,
+  ValorCta, CftIva, AuxCII, PrecCant, PrecOfer: Currency;
+  VaOferta: Boolean;
+  q: TMDOQuery;
+begin
+  Result := 0;
+  FillChar(Precio, SizeOf(TPrecios), 0);
+  MtNeto := 0;
+  AuxIva := 0;
+  CftIva := 0;
+  AuxCII := 0;
+  MtoExt := 0;
+  Descto  := 0;
+  PFinal := 0;
+  PrecCant := 0;
+  PrecOfer := 0;
+  POriginal := 0;
+  ValorCta := 0;
+  VaOferta := False;
+
+  if GetDatosArt(Articulo, Vacio, Datos_Art) then
+  begin
+    POriginal:= Datos_Art.Precio;
+    VaOferta := False;
+    if PrecioActual > Datos_Art.Precio then  // Se acepta modificacion
+      PrecCant := (PrecioActual * Cant)      // de precio solo para arriba
+    else
+      PrecCant := (Datos_Art.Precio * Cant);
+
+    if Datos_Art.Oferta = Verdadero then     // Chequear Precio Oferta
+    begin
+      try
+        q := TMDOQuery.Create(nil);
+        q.Database := dmGestion.dbGestion;
+        q.Transaction := dmGestion.trProc;
+        q.SQL.Add('Select FechaFin, IdSucursal, ');
+        q.SQL.Add('       ValorCtas, Precio ');
+        q.SQL.Add('From ArtOfertas ');
+        q.SQL.Add('Where (IdArticulo = :A) And ');
+        q.SQL.Add('      (CantCtas = :C) And ');
+        q.SQL.Add('      ((IdSucursal = 0) or ');
+        q.SQL.Add('       (IdSucursal = :S)) And ');
+        q.SQL.Add('      (FechaFin >= :D) ');
+        q.ParamByName('A').AsInteger := Articulo;
+        q.ParamByName('C').AsInteger := CantCtas;
+        q.ParamByName('S').AsInteger := IdBranch;
+        q.ParamByName('D').AsDate := Date;
+        q.Open;
+        if not (q.IsEmpty) then
+        begin
+          VaOferta := True;
+          ValorCta := q.FieldByName('ValorCtas').AsCurrency * Cant;
+          PrecOfer := q.FieldByName('Precio').AsCurrency * Cant;
+        end
+        else begin
+          VaOferta := False;
+          ValorCta := 0;
+          PrecOfer := 0;
+        end;
+        q.Close;
+      finally
+        q.Free;
+      end;
+    end;
+
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := dmGestion.dbGestion;
+      q.Transaction := dmGestion.trProc;
+      q.SQL.Add('Select Count(IdRegla) as Existe, ');
+      q.SQL.Add('       CoefTar ');
+      q.SQL.Add('From Ofertas_Esp ');
+      q.SQL.Add('Where (NroCtas = :C) And ');
+      q.SQL.Add('      ((IdSucur = 0) or ');
+      q.SQL.Add('      (IdSucur = :S)) And ');
+      q.SQL.Add('      (IdArea = :A) And ');
+      q.SQL.Add('      (IdGrupo = :G) And ');
+      q.SQL.Add('      (IdSubGr = :R) And ');
+      q.SQL.Add('      (IdTarjeta = :T) ');
+      q.SQL.Add('Group By CoefTar ');
+      q.ParamByName('C').AsInteger := CantCtas;
+      q.ParamByName('S').AsInteger := IdBranch;
+      q.ParamByName('A').AsInteger := Datos_Art.IdArea;
+      q.ParamByName('G').AsInteger := Datos_Art.IdGrupo;
+      q.ParamByName('R').AsInteger := Datos_Art.IdSubGrupo;
+      q.ParamByName('T').AsInteger := IdCard;
+      q.Open;
+      if not (q.IsEmpty) then
+      begin
+        if (q.FieldByName('Existe').AsInteger > 0) then
+          CoefTarj := q.FieldByName('CoefTar').AsFloat;
+      end;
+      q.Close;
+    finally
+      q.Free;
+    end;
+
+    try
+      if CoefTarj <> 0.00000 then
+      begin
+        if VaOferta then
+        begin
+          if ValorCta > 0 then
+            PFinal := (PrecOfer - Contado)
+          else
+            PFinal := (PrecOfer - Contado) * CoefTarj * CantCtas;
+        end
+        else begin
+          if ((POriginal-Contado) * CoefTarj * CantCtas * Cant) > (PrecCant - Contado) then
+            PFinal := ((POriginal - Contado) * CoefTarj * CantCtas)*Cant
+          else
+            PFinal := (PrecCant - Contado);
+        end;
+        if CantCtas > 0 then
+        begin
+          if not VaOferta then
+          begin
+            try
+              ValorCta := PFinal / CantCtas;
+            except
+              ValorCta := 0;
+            end;
+          end;
+        end
+        else begin
+          if not VaOferta then
+            ValorCta := 0;
+        end;
+      end
+      else begin
+        if VaOferta then
+          PFinal := (PrecOfer - Contado)
+        else
+          PFinal := (PrecCant - Contado);
+
+        if CantCtas > 0 then
+        begin
+          if not VaOferta then
+          begin
+            try
+              ValorCta := PFinal / CantCtas;
+            except
+              ValorCta := 0;
+            end;
+          end;
+        end
+        else begin
+          if not VaOferta then
+             ValorCta := 0;
+        end;
+      end;
+      PFinal := PFinal + Contado;
+      if PFinal <= 0 then
+        PFinal := POriginal;
+    except
+      PFinal := POriginal;
+    end;
+
+    try
+      MtoExt := (PFinal * Datos_Art.Exento)/100;
+      CftIva := (1+(Datos_Art.AlcIva-((Datos_Art.AlcIva * Datos_Art.Exento)/100))/100);
+      try
+        MtNeto := ((PFinal - (Datos_Art.ImpInt + MtoExt)) / CftIva);
+      except
+        MtNeto := (PFinal / 1.21);
+      end;
+
+      if Descuento <> 0 then
+      begin
+        Descto :=  MtNeto - (MtNeto / (1+(Descuento/100)));
+        MtNeto := (MtNeto / (1 + (Descuento/100)))
+      end;
+      AuxIva := (MtNeto * CftIva) - MtNeto;
+
+    finally
+      PFinal := MtNeto + AuxIva + MtoExt + Datos_Art.ImpInt;
+    end;
+
+    if (Datos_Art.ImpInt > 0) and
+       (PFinal > 0) then
+    begin
+      try
+        AuxCII := ((Datos_Art.ImpInt * 100) / PFinal);
+      except
+        AuxCII := 0;
+      end;
+    end;
+
+    Precio.CoefImpInt := AuxCII;
+    Precio.IdAlcIB := Datos_Art.IdAlcB;
+    Precio.IngBto := (((MtNeto + Datos_Art.ImpInt)) * Datos_Art.AlcIBt) / 100;
+    Precio.AlicuotaIB := Datos_Art.AlcIBt;
+    Precio.IdAlcIva := Datos_Art.IdAlcI;
+    Precio.AlicuotaIva := Datos_Art.AlcIva - ((Datos_Art.AlcIva * Datos_Art.Exento) / 100);
+    Precio.Iva1   := Redondeo(AuxIva, CentavosP);
+    Precio.Neto   := Redondeo(MtNeto, CentavosP);
+    Precio.Exento := Redondeo(MtoExt, CentavosP);
+    Precio.ImpInt := Datos_Art.ImpInt;
+    Precio.Descto := Redondeo(Descto, CentavosP);
+    Precio.PFinal := Redondeo(PFinal/Cant, CentavosP);
+    Precio.PLista := Redondeo(POriginal, CentavosP);
+    Precio.Total  := Redondeo(PFinal, CentavosP);
+    Precio.EnOferta := VaOferta;
+    Precio.ValorCuota := ValorCta;
+    Precio.Cantid := Cant;
+    Precio.EntContado := Contado;
+    Precio.MaxBon := Datos_Art.MaxDtoCdo
+  end;
+  Result := PFinal;
+end;
+
+function ChangePrecio(Articulo: Integer; PrcGan: Currency): TPrecios;
+begin
+  FillChar(Result, SizeOf(TPrecios), 0);
+  if GetDatosArt(Articulo, Vacio, Datos_Art) then
+  begin
+    with Result do
+    begin
+      IdAlcIva:= Datos_Art.IdAlcI;
+      IdAlcIB := Datos_Art.IdAlcB;
+      Neto   := Redondeo(Datos_Art.Costo+((Datos_Art.Costo*PrcGan)/100), CentavosP);
+      Exento := Redondeo((Neto * Datos_Art.Exento) / 100, CentavosP);
+      Iva1   := Redondeo(((Neto - Exento) * GetAlcIva(IdAlcIva)) / 100, CentavosP);
+      PFinal := Redondeo(Neto + Iva1 + Datos_Art.ImpInt, CentavosP);
+      AlicuotaIva := Datos_Art.AlcIva;
+      PLista := Datos_Art.Precio;
+      CoefImpInt := 0;
+      IngBto := Redondeo(((Neto + ImpInt) * Datos_Art.AlcIBt) / 100, CentavosP);
+      AlicuotaIB := Datos_Art.AlcIBt;
+    end;
+  end;
+end;
+
+function Precio(PrecioTotal, PrecioFinal, Cantidad, Bonif: Currency; IdProducto, Accion, CantCuotas: Integer): TPrecios;
+var
+  PNeto, AuxIv, CftIva, PUnit, PFinal, Total: Currency;
+  Cant, AlicuotaIva, PrGan, AuxCII: Double;
+  q: TMDOQuery;
+begin
+  FillChar(Result, SizeOf(Result), 0);
+  PNeto := 0;
+  AuxIv := 0;
+  PrGan := 0;
+  AuxCII := 0;
+  CftIva := 0;
+  PUnit := 0;
+  PFinal := 0;
+  Total := 0;
+  Cant  := 0;
+  AlicuotaIva := 0;
+  if GetDatosArt(IdProducto, Vacio, Datos_Art) then
+  begin
+    AlicuotaIva := Datos_Art.AlcIva;
+    AlicuotaIva := Redondeo(AlicuotaIva - ((AlicuotaIva * Datos_Art.Exento) / 100),2);
+    CftIva := 1 + (AlicuotaIva/100);
+
+    Case Accion of
+      1: begin // Se Modifico Cantidad xq' es ingresada por usuario
+        Cant   := Cantidad;
+        PFinal := PrecioFinal;
+        PNeto  := (PFinal - Datos_Art.ImpInt) / CftIva;
+        AuxIv  := PNeto * CftIva;
+        PFinal := PNeto + Datos_Art.ImpInt + AuxIv;
+      end;
+      2: begin // Se Modifica Precio Final xq' se Modifico Total
+        Cant   := Cantidad;
+        PFinal := PrecioTotal / Cant;
+        PNeto  := (PFinal - Datos_Art.ImpInt) / CftIva;
+        AuxIv  := PNeto * CftIva;
+        PFinal := PNeto + Datos_Art.ImpInt + AuxIv;
+      end;
+      3: begin // Modifica Cantidad xq' Ingresa Total
+        PFinal := PrecioFinal;
+        Total  := PrecioTotal;
+        PNeto  := (PFinal - Datos_Art.ImpInt) / CftIva;
+        AuxIv  := PNeto * CftIva;
+        PFinal := PNeto + Datos_Art.ImpInt + AuxIv;
+        Cant   := RoundTo(Total / PFinal, -2)
+      end;
+    end;
+
+    if (Datos_Art.ImpInt > 0) and
+       (PFinal > 0) then
+    begin
+      try
+        AuxCII := ((Datos_Art.ImpInt * 100) / PFinal);
+      except
+        AuxCII := 0;
+      end;
+    end;
+    Result.CoefImpInt := AuxCII;
+    Result.Descto := 0;
+    Result.IdAlcIva := Datos_Art.IdAlcI;
+    Result.AlicuotaIva := Datos_Art.AlcIva;
+    Result.Cantid := Cant;
+    Result.Iva1   := Redondeo(AuxIv*Cant , CentavosP);
+    Result.ImpInt := Redondeo(Datos_Art.ImpInt*Cant, CentavosP);
+    Result.Neto   := Redondeo(PNeto*Cant , CentavosP);
+    Result.Exento := 0;
+    Result.PFinal := Redondeo(PFinal, CentavosP);
+    Result.Total  := Redondeo(PFinal*Cant , CentavosP);
+    if CantCuotas > 0 then
+      Result.ValorCuota := Redondeo((PFinal*Cant)/CantCuotas, CentavosP)
+    else
+      Result.ValorCuota := 0;
+    Result.IdAlcIB := Datos_Art.IdAlcB;
+    Result.AlicuotaIB := Datos_Art.AlcIBt;
+    Result.IngBto := ((((PNeto + Datos_Art.ImpInt) * Cant) * Datos_Art.AlcIBt) / 100);
+  end;
+end;
+
+function Descuento(PrecioTotal, PrecioFinal, Contado, ImpInt, Bonificacion,
+                   PrcExento, Cantidad: Currency; Alc_Iva, AlcIB, CantCuotas: Integer): TPrecios;
+var
+  PNetoF, AuxIvF, AuxExF, AlcIva,
+  FinalF, TotalF, TDscto, AuxCII,
+  PNetoC, AuxIvC, AuxExC, FinalC,
+  TotalC, PrcDto: Currency;
+begin
+  PNetoF := 0;
+  AuxIvF := 0;
+  AuxExF := 0;
+  AlcIva := 0;
+  FinalF := 0;
+  TotalF := 0;
+  TDscto := 0;
+  AuxCII := 0;
+  PNetoC := 0;
+  AuxIvC := 0;
+  AuxExC := 0;
+  FinalC := 0;
+  TotalC := 0;
+  PrcDto := 0;
+  FillChar(Result, SizeOf(Result), 0);
+
+  AlcIva := 1 + (GetAlcIva(Alc_Iva) - ((GetAlcIva(Alc_Iva) * PrcExento) / 100)) / 100;
+  (*
+  if Contado > 0 then
+  begin
+    FinalC := Contado / Cantidad;
+    AuxExC := ((FinalC-ImpInt) * PrcExento) / 100;
+    PNetoC := (FinalC-ImpInt) / AlcIva;
+    AuxIvC := PNetoC * AlcIva;
+    FinalC := PNetoC + ImpInt + AuxExC + AuxIvC;
+    TotalC := FinalC * Cantidad;
+  end;
+
+  FinalF := (PrecioTotal - Contado) / Cantidad;
+  AuxExF := ((FinalF - ImpInt) * PrcExento) / 100;
+  PNetoF := (FinalF - ImpInt) / AlcIva;
+
+  // Calculo Bonificación
+  TDscto := 0.00;
+  if Bonificacion <> 0 then
+  begin
+    if (ImpInt > 0) then
+    begin
+      ImpInt := ImpInt - ((ImpInt * Bonificacion) /100);
+      PrcDto := Bonificacion
+    end
+    else
+      PrcDto := Bonificacion;
+    TDscto := ((PNetoF * PrcDto) /100)
+  end;
+  PNetoF := PNetoF - TDscto;
+
+  // Recalculo por Bonificación
+  AuxIvF := (PNetoF * GetAlcIva(Alc_Iva)) / 100;
+  FinalF := PNetoF + ImpInt + AuxExF + AuxIvF;
+  TotalF := FinalF * Cantidad;
+
+  Result.IdAlcIB := AlcIB;
+  Result.AlicuotaIB := GetAlcIBt(AlcIB);
+  Result.IngBto := ((((PNetoF + PNetoC) + ImpInt) * Cantidad) * Result.AlicuotaIB) / 100;
+  if (ImpInt > 0) and ((FinalF+FinalC) > 0) then
+  begin
+    try
+      AuxCII := ((ImpInt*100) / (FinalF + FinalC));
+    except
+      AuxCII := 0;
+    end;
+  end;
+  *)
+
+
+  // Calculo Bonificación
+  TDscto := 0.00;
+  if Bonificacion <> 0 then
+  begin
+    if (ImpInt > 0) then
+      ImpInt := ImpInt - ((ImpInt * Bonificacion) /100);
+    PrcDto := Bonificacion;
+    TDscto := ((PrecioTotal * PrcDto)/100);
+    FinalF := (PrecioTotal - TDscto) / Cantidad;
+    AuxExF := ((FinalF - ImpInt) * PrcExento) / 100;
+    PNetoF := (FinalF - ImpInt) / AlcIva;
+  end;
+
+  // Recalculo por Bonificación
+  AuxIvF := (PNetoF * GetAlcIva(Alc_Iva)) / 100;
+  FinalF := PNetoF + ImpInt + AuxExF + AuxIvF;
+  TotalF := FinalF * Cantidad;
+  Result.IdAlcIB := AlcIB;
+  Result.AlicuotaIB := GetAlcIBt(AlcIB);
+  Result.IngBto := ((((PNetoF + PNetoC) + ImpInt) * Cantidad) * Result.AlicuotaIB) / 100;
+  if (ImpInt > 0) and ((FinalF+FinalC) > 0) then
+  begin
+    try
+      AuxCII := ((ImpInt*100) / (FinalF + FinalC));
+    except
+      AuxCII := 0;
+    end;
+  end;
+
+  Result.CoefImpInt := AuxCII;
+  Result.Iva1   := Redondeo((AuxIvF + AuxIvC) * Cantidad, CentavosP);
+  Result.ImpInt := Redondeo(ImpInt * Cantidad, CentavosP);
+  Result.Neto   := Redondeo((PNetoF + PNetoC) * Cantidad, CentavosP);
+  Result.Exento := Redondeo((AuxExF + AuxExC) * Cantidad, CentavosP);
+  Result.Descto := Redondeo(TDscto, CentavosP);
+  Result.PrcDto := PrcDto;
+  Result.PFinal := Redondeo((FinalF + FinalC), CentavosP);
+  Result.Total  := Redondeo((TotalF + TotalC), CentavosP);
+  if CantCuotas > 0 then
+    Result.ValorCuota := Redondeo(TotalF / CantCuotas, CentavosP)
+  else
+    Result.ValorCuota := 0;
+  Result.Cantid := Cantidad;
+  Result.IdAlcIva := Alc_Iva;
+  Result.AlicuotaIva := GetAlcIva(Alc_Iva);
+end;
+
+function GetAlcIva(IdAlc: Integer): Double;
+var
+  q: TMDOQuery;
+begin
+  Result := 0;
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trGestion;
+    q.SQL.Add('Select CoefAlicuota ');
+    q.SQL.Add('From Alicuotas ');
+    q.SQL.Add('Where IdAlicuota =:IdAlc ');
+    q.ParamByName('IdAlc').AsInteger := IdAlc;
+    try
+      q.Open;
+      Result := q.FieldByName('CoefAlicuota').AsFloat;
+    except
+      Result := 0;
+    end;
+  finally
+    q.Free;
+  end;
+end;
+
+function GetAlcIBt(IdAlc: Integer): Double;
+var
+  q: TMDOQuery;
+begin
+  Result := 0;
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trGestion;
+    q.SQL.Add('Select CoefIB ');
+    q.SQL.Add('From IngBruto ');
+    q.SQL.Add('Where IdIngBru =:IdAlc ');
+    q.ParamByName('IdAlc').AsInteger := IdAlc;
+    q.Open;
+    Result := q.FieldByName('CoefIB').AsFloat;
+  finally
+    q.Free;
+  end;
+end;
+
+function GetTextTalle(ElTalle: Integer): string;
+var
+  q: TMDOQuery;
+begin
+  Result := ' ';
+  if Control_Talles then
+  begin
+    if (ElTalle = SIN_DETALLE_TALLE) or
+       (ElTalle = 0) then
+      Result := ' '
+    else begin
+      if (ElTalle > MinValorTalleStr) then
+      begin
+        try
+          q := TMDOQuery.Create(nil);
+          q.Database := dmGestion.dbGestion;
+          q.Transaction := dmGestion.trProc;
+          q.SQL.Add('Select DESCRIPCION ');
+          q.SQL.Add('From DetTalles ');
+          q.SQL.Add('Where IDVALORTALLE = :E ');
+          q.ParamByName('E').AsInteger := ElTalle;
+          if not dmGestion.trProc.InTransaction then
+            dmGestion.trProc.StartTransaction;
+          q.Open;
+          try
+            if (not q.IsEmpty) then
+              Result := q.Fields[0].AsString
+            else
+              Result := IntToStr(ElTalle);
+          except
+            Result := 'Err'
+          end;
+          dmGestion.trProc.Commit;
+        finally
+          q.Free;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function Get_Stock(IdArt, IdStk, Talle: Integer; TT: Boolean): Integer;
+Const
+   S_Talle = 'Select Actual as Total '+
+             'From StockArtTalles '+
+             'Where IdArticulo=:Artic And IdStock=:IdStk And Talle=:Talle';
+
+   S_Gral =  'Select Actual as Total '+
+             'From StockArt '+
+             'Where IdArticulo=:Artic And IdStock=:IdStk';
+
+   S_Total = 'Select Actual as Total '+
+             'From StockArt '+
+             'Where IdArticulo=:Artic ';
+var
+  q :TMDOQuery;
+begin
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction :=  dmGestion.trProc;
+    q.SQL.Clear;
+    if TT and Control_Talles then
+    begin
+      q.SQL.Text := S_Talle;
+      q.ParamByName('Artic').AsInteger := IdArt;
+      q.ParamByName('IdStk').AsInteger := IdStk;
+      q.ParamByName('Talle').AsInteger := Talle;
+    end
+    else begin
+      if IdStk > 0 then
+      begin
+        q.SQL.Text := S_Gral;
+        q.ParamByName('Artic').AsInteger := IdArt;
+        q.ParamByName('IdStk').AsInteger := IdStk;
+      end
+      else begin
+        q.SQL.Text := S_Total;
+        q.ParamByName('Artic').AsInteger := IdArt;
+      end;
+    end;
+    try
+      q.Open;
+      Result := q.FieldByName('Total').AsInteger;
+    except
+      Result := 0;
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+end;
+
+function Get_Stock_AFecha(IdArt, IdStk: Integer; Desde, Hasta: TDate): Integer;
+Const
+   S_AFecha = 'Select Sum(A_Inv + SdoStk) as Actual '+
+              'From Productos_MovByArt(:P, :S, :D, :H, 1)';
+var
+  q :TMDOQuery;
+begin
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction :=  dmGestion.trProc;
+    q.SQL.Clear;
+    q.SQL.Text := S_AFecha;
+    q.ParamByName('P').AsInteger := IdArt;
+    q.ParamByName('S').AsInteger := IdStk;
+    q.ParamByName('D').AsDate := Desde;
+    q.ParamByName('H').AsDate := Hasta;
+    try
+      q.Open;
+      Result := q.FieldByName('Actual').AsInteger;
+    except
+      Result := 0;
+    end;
+    q.Close;
+  finally
+    q.Free;
+  end;
+end;
+
+function SetTextTalle(ElTalle: String): Integer;
+var
+  q: TMDOQuery;
+begin
+  Result := SIN_DETALLE_TALLE;
+  if (Control_Talles) then
+  begin
+    if Trim(ElTalle) > Vacio then
+    begin
+      try
+        ElTalle := Trim(ElTalle);
+        try
+          q := TMDOQuery.Create(nil);
+          q.Database := dmGestion.dbGestion;
+          q.Transaction := dmGestion.trProc;
+          q.SQL.Add('Select IDVALORTALLE ');
+          q.SQL.Add('From DetTalles ');
+          q.SQL.Add('Where DESCRIPCION = :E ');
+          q.ParamByName('E').AsString := UpperCase(ElTalle);
+          if not dmGestion.trProc.InTransaction then
+            dmGestion.trProc.StartTransaction;
+          q.Open;
+          if (not q.IsEmpty) then
+            Result := q.Fields[0].AsInteger
+          else
+            Result := StrToInt(ElTalle);
+          dmGestion.trProc.Commit;
+        finally
+          q.Free;
+        end;
+      except
+        Result := SIN_DETALLE_TALLE;
+      end;
+    end;
+  end;
+end;
+
+function Redondeo(X: Currency; Centavos: Byte): Currency;
+begin
+  try
+    Result := RoundTo(X, -Centavos)
+  except
+    Result := 0;
+  end;
+end;
+
+function Inc_NComp(NC: St13): String;
+Var
+  Num: LongInt;
+  Err: Integer;
+  S_2: String[8];
+  N_C: St13;
+begin
+  try
+    N_C := NC;
+    Result := NC;
+    S_2:= Copy(NC, 6, 8);
+    Val(S_2, Num, Err);
+    if Err = 0 then
+    begin
+      Num := Num + 1;
+      S_2 := #0;
+      Str(Num, S_2);
+      While Length(S_2) < 8 do
+        Insert('0', S_2, 1);
+      Insert(S_2, N_C, 6)
+    end
+  finally
+    Result := N_C;
+  end;
+end;
+
+function Inc_NCert(NC: String):String;
+Var
+  Num: LongInt;
+  Ano: Integer;
+  Err: Integer;
+  S1: String[4];
+  S2: String[6];
+begin
+  (* '0000-0000-000000' *)
+  try
+    S1 := Copy(NC, 6, 4);
+    Val(S1, Ano, Err);
+    if Err = 0 then
+    begin
+      if Ano < CurrentYear then
+        Result := Format('%.4d-%.4d-%.6d',[0,CurrentYear,1])
+      else begin
+        S2 := Copy(NC,11, 6);
+        Val(S2, Num, Err);
+        if Err = 0 then
+        begin
+          Inc(Num);
+          Result := Format('%.4d-%.4d-%.6d',[0,Ano,Num])
+        end
+      end;
+    end;
+  except
+    Result := Format('%.4d-%.4d-%.6d',[0,CurrentYear,1]);
+  end;
+end;
+
+function Validate_Documento_Fiscal(C: St13): Boolean;
+Var i,j: Byte;                   //  CCCCCCCCCCV
+    s,r,dv,d: Word;              //  XXXXXXXXXX
+    AuxSt: String[1];            //  5432765432
+    err,p: integer;              //  ++++++++++ = / 11
+    Ok: Boolean;                 //  11-Resto = DV
+begin
+  AuxSt := C[13];
+  Val(AuxSt,d,err);
+  if err = 0 then
+  begin
+    Delete(C,Pos('-',C),1);
+    Delete(C,Pos('-',C),1);
+    j := 2;
+    s := 0;
+    for i := 10 downto 1 do
+    begin
+      Val(C[i],p,err);
+      if err = 0 then
+      begin
+        s := (p*j) + s;
+        if j < 7 then
+          Inc(j)
+        else
+          j := 2;
+      end;
+    end;
+    r := (s mod 11);
+    dv := 11 - r;
+    if (dv > 9) and (d = 0) then
+      Ok := True
+    else begin
+      if d = dv then
+        Ok := True
+      else
+        Ok := False;
+    end;
+  end
+  else
+    Ok := False;
+  Result := Ok;
+end;
+
+Procedure N_A_L(StrMoneda: St30; R: Double; Largo: Byte; Relleno: Char; Var Parte1,Parte2: St80);
+Const Unidades: array [ 0 .. 15 ] of String[16] =
+                ('','UNO','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO',
+                 'NUEVE','DIEZ','ONCE','DOCE','TRECE','CATORCE','QUINCE');
+
+   Function Hasta99(I : Integer; Sigue : Boolean): String;
+   Const Decenas: array [1 .. 9] of String[16] =
+                  ('DIECI','VEINTI','TREINTA','CUARENTA','CINCUENTA',
+                   'SESENTA','SETENTA','OCHENTA','NOVENTA');
+   Var D,u: Integer; auxs: String;
+   begin
+     if i <= 15 then Hasta99:= Unidades[i] else if i = 20 then Hasta99:= 'VEINTE'
+     else begin
+       D:= i div 10; u:= i mod 10; auxs:= Decenas[d];
+       If u > 0 then begin
+         If d > 2 then auxs:= auxs + ' Y ';
+         If ((u <> 1) or (not Sigue)) then auxs:= auxs+Unidades[u] else auxs:=auxs+'UN'
+       end;
+       Hasta99:= auxs
+     end
+   end;
+
+   Function Hasta999(I: Integer; Sigue: Boolean): String;
+   Const Centenas: array [ 0 .. 9 ] of String[16] =
+                   ('','CIENTO','DOSCIENTOS','TRESCIENTOS','CUATROCIENTOS',
+                    'QUINIENTOS','SEISCIENTOS','SETECIENTOS','OCHOCIENTOS','NOVECIENTOS');
+   Var c,Du: Integer; auxs: String;
+   begin
+     If i = 100 then Hasta999:= 'CIEN' else begin
+       c:= (i div 100); DU:= (i mod 100); auxs:= Centenas[c];
+       if du > 0 then begin
+         If c > 0 then auxs:= auxs + ' '; auxs:= auxs + Hasta99(DU,Sigue)
+       end;
+       Hasta999:= auxs
+     end
+   end;
+
+Var Millones,Miles,Pucho,Centavos,j: Integer; auxs: String; CentStr: String[16];
+begin
+  R:= R + 0.0001;                  Millones:= Trunc(R/1000000.0);
+  R:= R - 1000000.0 * Millones;    Miles:= Trunc(R/1000.0);
+  R:= R - 1000.0 * Miles;          Pucho:= Trunc(R);
+  Centavos:= Trunc(100.0*Frac(R)); Auxs:= StrMoneda;
+  if AuxS > Cero then AuxS:= AuxS + ' ';
+  if Millones = 1 then auxs:= Auxs + 'UN MILLON'
+  else if Millones > 1 then auxs:= Auxs + Hasta999(Millones,True) + ' MILLONES';
+  if Miles > 0 then begin
+    if auxs > Cero then auxs:= auxs + ' ';
+    If Miles = 1 then auxs:= auxs + 'MIL'
+    else auxs:= auxs + Hasta999(Miles,True) + ' MIL'
+  end;
+  if Pucho > 0 then begin
+    if auxs > Cero then auxs:= auxs + ' '; auxs:= auxs+Hasta999(Pucho,False)
+  end;
+  if Centavos > 0 then begin
+    if auxs > Cero then auxs:= auxs + ' CON ';
+    Str(Centavos,CentStr);
+    If Length(CentStr) = 1 then CentStr:= '0' + CentStr;
+    auxs:= auxs + CentStr + '/100'
+  end;
+  Parte1:= auxs + ' ';
+  Parte2:= Cero;
+  if Length(Parte1) > Largo then begin
+    j:= Largo+1;
+    While (j > 0) and (Parte1[j] <> ' ') do Dec(j);
+    Parte2:= Copy(Parte1,j+1,255) + ' ';
+    Parte1:= Copy(Parte1,1,j);
+    While Length(Parte2) < Largo do Parte2:= Parte2 + Relleno;
+  end;
+  While Length(Parte1) < Largo do Parte1:= Parte1 + Relleno;
+end;
+
+function ExisteForm(Cual: String): Boolean;
+var
+  i: integer;
+  Encontre: Boolean;
+begin
+  Encontre := False;
+  for i := 0 to Screen.FormCount - 1 do
+    if Screen.Forms[i].ClassName = Cual then
+    begin
+      Encontre := True;
+      Break;
+    end;
+  Result := Encontre;
+end;
+
+function Up_Case(S: String): String;
+var
+  c: Char;
+  i: Integer;
+begin
+  for i := 1 to Length(S) do
+  begin
+    c := S[i];
+    Case c of
+      'Á': c:= 'A';
+      'É': c:= 'E';
+      'Í': c:= 'I';
+      'Ó': c:= 'O';
+      'Ú': c:= 'U';
+      'á': c:= 'A';
+      'é': c:= 'E';
+      'í': c:= 'I';
+      'ó': c:= 'O';
+      'ú': c:= 'U';
+      'ü': c:= 'U';
+      'Ü': c:= 'U';
+      'ñ': c:= 'Ñ';
+      'Ñ': c:= 'Ñ';
+      '[': c:= '[';
+      ']': c:= ']';
+      '.': c:= '.';
+      '/': c:= '/';
+      '*': c:= '*';
+      '+': c:= '+';
+      '-': c:= '-';
+      '_': c:= '_';
+      'ª': c:= 'ª';
+      '¼': c:= '¼';
+      '½': c:= '½';
+      '"': c:= '"';
+      '$': c:= '$';
+      '%': c:= '%';
+      '&': c:= '&';
+      '(': c:= '(';
+      ')': c:= ')';
+      '\': c:= '\';
+      '=': c:= '=';
+      ':': c:= ':';
+      ';': c:= ';';
+      ',': c:= ',';
+      'º': c:= 'º';
+      ' ': c:= ' ';
+      '#': c:= '#';
+      'a' .. 'z': c:= UpCase(c);
+      'A' .. 'Z': c:= c;
+      '0' .. '9': c:= UpCase(c)
+      else c := ' '
+    end;
+    S[i] := c;
+  end;
+  Result := S
+end;
+
+function Up_CaseCF(S: String): String;
+var
+  c: Char;
+  i: Integer;
+begin
+  for i := 1 to Length(S) do
+  begin
+    c := S[i];
+    Case c of
+      'Á': c:= 'A';
+      'É': c:= 'E';
+      'Í': c:= 'I';
+      'Ó': c:= 'O';
+      'Ú': c:= 'U';
+      'á': c:= 'A';
+      'é': c:= 'E';
+      'í': c:= 'I';
+      'ó': c:= 'O';
+      'ú': c:= 'U';
+      'ü': c:= 'U';
+      'Ü': c:= 'U';
+      'ñ': c:= 'N';
+      'Ñ': c:= 'N';
+      '[': c:= '[';
+      ']': c:= ']';
+      '.': c:= '.';
+      '/': c:= '/';
+      '*': c:= '*';
+      '+': c:= '+';
+      '-': c:= '-';
+      '_': c:= '_';
+      'ª': c:= ' ';
+      '¼': c:= ' ';
+      '½': c:= ' ';
+      '"': c:= ' ';
+      '$': c:= ' ';
+      '%': c:= ' ';
+      '&': c:= ' ';
+      '(': c:= '(';
+      ')': c:= ')';
+      '\': c:= '\';
+      '=': c:= '=';
+      ':': c:= ':';
+      ';': c:= ';';
+      ',': c:= ',';
+      'º': c:= ' ';
+      ' ': c:= ' ';
+      '#': c:= '#';
+      'a' .. 'z': c:= UpCase(c);
+      'A' .. 'Z': c:= c;
+      '0' .. '9': c:= UpCase(c)
+      else c:= ' '
+    end;
+    S[i] := c;
+  end;
+  Result := S
+end;
+
+function HexToInt(HexValue: String): Integer;
+var
+  i, Largo: Integer;
+  Aux: Extended;
+begin
+  Aux := 0;
+  Largo := Length(HexValue);
+  for i := 1 to Largo do
+  begin
+    case HexValue[i] of
+      '0','1',
+      '2','3',
+      '4','5',
+      '6','7',
+      '8','9': Aux := Aux + (StrToInt(HexValue[i]) * Power(16, Largo-i));
+      'A','a': Aux := Aux + (10 * Power(16, Largo-i));
+      'B','b': Aux := Aux + (11 * Power(16, Largo-i));
+      'C','c': Aux := Aux + (12 * Power(16, Largo-i));
+      'D','d': Aux := Aux + (13 * Power(16, Largo-i));
+      'E','e': Aux := Aux + (14 * Power(16, Largo-i));
+      'F','f': Aux := Aux + (16 * Power(16, Largo-i));
+      else raise Exception.Create('Valor no válido como Hexadecimal');
+    end;
+  end;
+  Result := Trunc(Aux);
+end;
+
+function GetText_Comprobante(T: Integer; Corta: SmallInt): String;
+var
+  q: TMDOQuery;
+begin
+  Result := 'All';
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    Case Corta of
+      1: q.SQL.Text := 'Select DESCRIPCION From TIPOSCOMP Where IDCOMPROBANTE =:T ';
+      2: q.SQL.Text := 'Select DESCCORTA From TIPOSCOMP Where IDCOMPROBANTE =:T '
+    End;
+    q.ParamByName('T').AsInteger := T;
+    q.Open;
+    Result := q.Fields[0].AsString;
+  finally
+    q.Free;
+  end;
+end;
+
+function Get_DetEmp(E: Integer): String;
+var
+  q: TMDOQuery;
+begin
+  Result := 'Sin Empresa';
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    q.SQL.Text := 'Select NombreEmpresa From DatosSis Where IDEMPRESA =:E ';
+    q.ParamByName('E').AsInteger := E;
+    q.Open;
+    Result := q.Fields[0].AsString;
+  finally
+    q.Free;
+  end;
+end;
+
+function Get_DetSuc(S: Integer; Cual: SmallInt): String;
+var
+  q: TMDOQuery;
+begin
+  Result := 'Todas';
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trProc;
+    Case Cual of
+      1: q.SQL.Text := 'Select NombreSuc From Sucursales Where IdSucursal =:S ';
+      2: q.SQL.Text := 'Select DetSuc From Sucursales Where IdSucursal =:S ';
+    End;
+    q.ParamByName('S').AsInteger := S;
+    q.Open;
+    Result := q.Fields[0].AsString;
+  finally
+    q.Free;
+  end;
+end;
+
+function DeleteAlphaChars(Source: String): String;
+var
+  i: Integer;
+begin
+  i := 1;
+  while i < Length(Source) do
+  begin
+    if not (Source[i] in ['1','2','3','4','5','6','7','8','9','0']) then
+      Delete(Source, i, 1)
+    else
+      Inc(i);
+  end;
+  Result := Source;
+end;
+
+procedure LoadListView(lv: TListView; Datos: TDataSet; CampoCaption, CampoIndice: String);
+
+  procedure DoColumns;
+  var
+    Columna: TListColumn;
+    j: Integer;
+  begin
+    for j := 0 to Datos.FieldCount-1 do
+    begin
+      if Datos.Fields[j].Visible then
+      begin
+        Columna := lv.Columns.Add;
+        Columna.Caption := Datos.Fields[j].DisplayName;
+        Columna.Width := Datos.Fields[j].DisplayWidth * lv.Canvas.TextWidth('O');
+        Columna.Alignment := Datos.Fields[j].Alignment;
+      end;
+    end;
+  end;
+
+var
+  Item: TListItem;
+  i: Integer;
+begin
+  if not Assigned(lv) then
+    Exit;
+  try
+    lv.Items.BeginUpdate;
+    if lv.Columns.Count <= 0 then
+      DoColumns;
+    lv.Items.Clear;
+    Datos.First;
+    while not Datos.Eof do
+    begin
+      Item := lv.Items.Add;
+      for i := 0 to Datos.FieldCount-1 do
+      begin
+        if (CampoIndice <> '')and(Datos.Fields[i].FieldName = CampoIndice) then
+          Item.Data := PInteger(Datos.Fields[i].AsInteger);
+        if Datos.Fields[i].Visible then
+        begin
+          if Datos.Fields[i].FieldName = CampoCaption then
+          begin
+            if Assigned(Datos.Fields[i].OnGetText) then
+              Item.Caption := Datos.FieldByName(CampoCaption).Value
+            else
+              Item.Caption := Datos.FieldByName(CampoCaption).AsString;{Datos.Fields[i].AsString}
+          end
+          else begin
+            if (Datos.Fields[i].DataType = ftCurrency)or
+               ((Datos.Fields[i].DataType = ftBCD)and(TMDOBCDField(Datos.Fields[i]).Currency = True)) then
+              Item.SubItems.Add(Format('%m', [Datos.Fields[i].AsCurrency]))
+            else
+              Item.SubItems.Add(Datos.Fields[i].AsString);
+          end;
+        end;
+      end;
+      Datos.Next;
+    end;
+  finally
+    lv.Items.EndUpdate;
+  end;
+end;
+
+Procedure Calculadora(Handle: THandle);
+begin
+  ShellExecute(Handle, 'Open', PChar(PasoWin + 'Calc.Exe'), nil, nil, sw_ShowNormal);
+end;
+
+function GetOS: String;
+//--------------------------------------------------------------------------
+// *** Information about Win32CSDVersion ***
+// In the Win 9x family, Win32CSDVersion detects Win 95 OSR2 and Win 98 SE
+// In the Win NT family, Win32CSDVersion detects Service Pack information
+// CSD is an acronym for Corrective Service Disk
+//--------------------------------------------------------------------------
+var
+  PlatformId, VersionNumber: string;
+  CSDVersion: String;
+begin
+  CSDVersion := '';
+
+  // Detect platform
+  case Win32Platform of
+    // Test for the Windows 95 product family
+    VER_PLATFORM_WIN32_WINDOWS:
+    begin
+      if Win32MajorVersion = 4 then
+        case Win32MinorVersion of
+          0:  if (Length(Win32CSDVersion) > 0) and
+                 (Win32CSDVersion[1] in ['B', 'C']) then
+                PlatformId := '95 OSR2'
+              else
+                PlatformId := '95';
+          10: if (Length(Win32CSDVersion) > 0) and
+                 (Win32CSDVersion[1] = 'A') then
+                PlatformId := '98 SE'
+              else
+                PlatformId := '98';
+          90: PlatformId := 'ME';
+        end
+      else
+        PlatformId := '9x version (unknown)';
+    end;
+    // Test for the Windows NT product family
+    VER_PLATFORM_WIN32_NT:
+    begin
+      if Length(Win32CSDVersion) > 0 then CSDVersion := Win32CSDVersion;
+      if Win32MajorVersion <= 4 then
+        PlatformId := 'NT'
+      else
+        if Win32MajorVersion = 5 then
+          case Win32MinorVersion of
+            0: PlatformId := '2000';
+            1: PlatformId := 'XP';
+            2: PlatformId := 'Server 2003';
+          else
+            PlatformId := 'Future Windows version (unknown)';
+          end
+        else
+          PlatformId := 'Future Windows version (unknown)';
+    end;
+  end;
+  VersionNumber := Format(' Version %d.%d Build %d %s', [Win32MajorVersion, Win32MinorVersion, Win32BuildNumber, CSDVersion]);
+  Result := 'Microsoft Windows ' + PlatformId + VersionNumber;
+end;
+
+procedure Rz_KeyDown(Key: Word; MYForm: TCustomForm);
+var
+   CtlDir: Word;
+begin
+  if (Key = VK_UP) or (Key = VK_DOWN) then
+  begin
+    MYForm := GetParentForm(MYForm);
+    if Key = VK_UP then
+      CtlDir := 1
+    else
+      CtlDir := 0;
+    if not (MYForm = nil ) then
+      SendMessage(MYForm.Handle, WM_NEXTDLGCTL, CtlDir, 0);
+  end;
+  if (Key = VK_LEFT) or (Key = VK_RIGHT) then
+  begin
+    MYForm := GetParentForm(MYForm);
+    if Key = VK_UP then
+      CtlDir := 1
+    else
+      CtlDir := 0;
+    if not (MYForm = nil) then
+      SendMessage(MYForm.Handle, WM_NEXTDLGCTL, CtlDir, 0);
+  end;
+  if Key = VK_F5 then
+    Calculadora(MYForm.Handle)
+end;
+
+
+function Tree_GetFieldList(FieldList: TStringList; Lista: String; DataSet: TDataSet): TStringList;
+var
+  AuxStr: String;
+begin
+  if Lista <> '' then
+  begin
+    FieldList.clear;
+    repeat
+      if Pos(';', Lista) > 0 then
+      begin
+        AuxStr := Copy(Lista, 1, Pos(';', Lista)-1);
+        Delete(Lista, 1, Pos(';', Lista));
+      end
+      else begin
+        AuxStr := Copy(Lista, 1, Length(Lista));
+        Lista := '';
+      end;
+      FieldList.add(DataSet.FieldByName(AuxStr).AsString);
+    until Lista = '';
+    Result := FieldList;
+  end;
+end;
+
+procedure Print_PCL_TM(IdF, IdS, IdP: Integer);
+Const
+  M_PCL = 'Select F.IDFACTURA, F.IDSUCURSAL, F.IDPUNTOVENTA, F.PERIODO, '+
+          '       F.TIPOFACTURA, F.FECHAF, F.NROFACTURA, F.IDCOMPREF, '+
+          '       F.PROVEEDOR, F.CANTARTIC, F.PRCBONIF, F.NETO, '+
+          '       F.BONIFICACION, F.EXENTO, F.NOCOMPUTABLES, F.IDEMPRESA, '+
+          '       F.ALCPERCEPCION, F.COMISION, F.RETIVA, F.RETGAN, '+
+          '       F.RETIBTO, F.RETLH, F.IVAALICUOTA1, F.IVAALICUOTA2, '+
+          '       F.IVAOTALC, F.TOTAL, F.USUARIO, F.STATE, F.IDENTTARMUT, '+
+          '       F.FECPRELIQDESDE, F.FECPRELIQHASTA, F.DETALLE, '+
+          '       F.IDNUMEROLIQ, F.IDPERIODO, Y.NombreEmpresa, '+
+          '       C.Descripcion as TipoFacStr, P.Nombre, P.Documento, '+
+          '       E.Nombre as NomUsuario, T.Tarjeta, K.NombreSuc  '+
+          'From FacCom F '+
+          'Join DatosSis Y '+
+          '  on Y.IdEmpresa = F.IdEmpresa '+
+          'Left Outer Join Proveedores P '+
+          '  on P.IdProveedor = F.Proveedor '+
+          'Join TiposComp C '+
+          '  on C.IdComprobante = F.TipoFactura '+
+          'Left Outer Join Empleados E '+
+          '  on E.IdEmpleado = F.Usuario '+
+          'Join Tarjetas T '+
+          '  on T.IdTarjeta = F.IDENTTARMUT '+
+          'Join Sucursales K '+
+          '  on K.IdSucursal = F.IDCOMPREF '+
+          'Where (F.STATE = 0) And (F.TipoFactura in (54,55,56)) And '+
+          '      (F.IdFactura = :IdF) And (F.IdSucursal = :IdS) And (F.IdPuntoVenta = :IdP) ';
+
+  I_PCL = 'Select I.IDITEM, I.TALLE, I.DESCUENTO, I.CANTIDAD, '+
+          '       I.PRECIOFINAL, I.IDALCIVA, I.SECTOR, C.Nombre, '+
+          '       F.FechaF, F.NroFactura, K.NroCuota '+
+          'From ItemsFC I '+
+          'Join Clientes C '+
+          '  on C.IdCliente = I.IDALCIVA And '+
+          '     C.IdSucursal = I.SECTOR '+
+          'Join FacVen F '+
+          '  on F.IdFactura = Cast(I.EXENTO as Integer) And '+
+          '     F.IdSucursal = Cast(I.MTOIVA as Integer) And '+
+          '     F.IdPuntoVenta = Cast(I.IMPINT as Integer) And '+
+          '     F.Cliente = I.IDALCIVA '+
+          'Join MovTar K '+
+          '  on K.IdMov = I.Talle And '+
+          '     K.IdSucursal = I.SECTOR '+
+          'Where (I.State = 0) And (I.IdFactura = :IdF) And '+
+          '      (I.IdSucursal = :IdS) And (I.IdPuntoVenta = :IdP) ';
+var
+  Actual, IdArt: Integer;
+  qPrn_MovPCL, qPrn_ItmPCL: TMDOQuery;
+begin
+  try
+    if dmSaveFile.trVerComp.InTransaction then
+      dmSaveFile.trVerComp.Commit;
+  except
+    on E:Exception do
+      raise EUsuario.Create(E.Message);
+  end;
+  try
+    qPrn_MovPCL := TMDOQuery.Create(nil);
+    qPrn_MovPCL.Close;
+    qPrn_MovPCL.Database := dmGestion.dbGestion;
+    qPrn_MovPCL.Transaction := dmSaveFile.trVerComp;
+    qPrn_MovPCL.SQL.Text := M_PCL;
+    qPrn_MovPCL.ParamByName('IdF').AsInteger := IdF;
+    qPrn_MovPCL.ParamByName('IdS').AsInteger := IdS;
+    qPrn_MovPCL.ParamByName('IdP').AsInteger := IdP;
+    qPrn_MovPCL.Open;
+    if not qPrn_MovPCL.IsEmpty then
+    begin
+      try
+        qPrn_ItmPCL := TMDOQuery.Create(nil);
+        qPrn_ItmPCL.Close;
+        qPrn_ItmPCL.Database := dmGestion.dbGestion;
+        qPrn_ItmPCL.Transaction := dmSaveFile.trVerComp;
+        qPrn_ItmPCL.SQL.Text := I_PCL;
+        qPrn_ItmPCL.ParamByName('IdF').AsInteger := IdF;
+        qPrn_ItmPCL.ParamByName('IdS').AsInteger := IdS;
+        qPrn_ItmPCL.ParamByName('IdP').AsInteger := IdP;
+        qPrn_ItmPCL.Open;
+        if qPrn_ItmPCL.IsEmpty then
+          raise EUsuario.Create('No se encontraron los items.- ');
+        FillChar(Factura, SizeOf(TFactura), 0);
+        FillChar(ItemsFiscal, SizeOf(TBody_Fiscal), 0);
+        if (GetDatosEnt(qPrn_MovPCL.FieldByName('Proveedor').AsInteger,
+                                               IdBranch, 2, Datos_Ent)) then
+        begin
+          with Factura do
+          begin
+            TipoOp := uTools.Cobros;
+            TipoOper := fcLiqPre;
+            TipoFacStr := GetText_Comprobante(qPrn_MovPCL.FieldByName('TipoFactura').AsInteger, 1);
+            TipoFactura:= qPrn_MovPCL.FieldByName('TipoFactura').AsInteger;
+            NroFactura := qPrn_MovPCL.FieldByName('NROFACTURA').AsString;
+            IdSucursal:= qPrn_MovPCL.FieldByName('IdSucursal').AsInteger;
+            IdFactura := qPrn_MovPCL.FieldByName('IdFactura').AsInteger;
+            IdPuntoVenta := qPrn_MovPCL.FieldByName('IdPuntoVenta').AsInteger;
+            IdEmpresa := qPrn_MovPCL.FieldByName('IdEmpresa').AsInteger;
+            DtEmpresa := qPrn_MovPCL.FieldByName('NombreEmpresa').AsString;
+            DepOrigen := qPrn_MovPCL.FieldByName('Tarjeta').AsString;
+            DepDestino:= qPrn_MovPCL.FieldByName('NombreSuc').AsString;
+            Entidad := Datos_Ent.IdEnt;
+            NombreEnt := Datos_Ent.Nombre;
+            Direccion := Datos_Ent.Direccion;
+            Localidad := Datos_Ent.Localidad;
+            Provincia := Datos_Ent.Provincia;
+            CodPostal := Datos_Ent.CodPostal;
+            Telefono := Datos_Ent.Telefono;
+            NroDocumento := Datos_Ent.Documento;
+            TipoDocStr := Datos_Ent.DetDoc;
+            TipoIva := Datos_Ent.TipoIva;
+            TipoIvaStr := Datos_Ent.DetIva;
+            IdTarjeta := qPrn_MovPCL.FieldByName('IdEntTarMut').AsInteger;
+            IdCompRef := qPrn_MovPCL.FieldByName('IdCompRef').AsInteger;
+            Periodo := qPrn_MovPCL.FieldByName('Periodo').AsDateTime;
+            FechaF  := qPrn_MovPCL.FieldByName('FechaF').AsDateTime;
+            FechaLD := qPrn_MovPCL.FieldByName('FecPreLiqDesde').AsDateTime;
+            FechaLH := qPrn_MovPCL.FieldByName('FecPreLiqHasta').AsDateTime;
+            EntregarA:= Format('Periodo %s al %s ',
+                               [DateToStr(qPrn_MovPCL.FieldByName('FecPreLiqDesde').AsDateTime),
+                                DateToStr(qPrn_MovPCL.FieldByName('FecPreLiqHasta').AsDateTime)]);
+            NoComputables:= qPrn_MovPCL.FieldByName('NoComputables').AsCurrency;
+            IvaAlicuota1 := qPrn_MovPCL.FieldByName('IvaAlicuota1').AsCurrency;
+            IvaAlicuota2 := qPrn_MovPCL.FieldByName('IvaAlicuota2').AsCurrency;
+            IvaOtAlc := qPrn_MovPCL.FieldByName('IvaOTAlc').AsCurrency;
+            Neto  := qPrn_MovPCL.FieldByName('Neto').AsCurrency;
+            Total := qPrn_MovPCL.FieldByName('Bonificacion').AsCurrency;
+            Comision := qPrn_MovPCL.FieldByName('Comision').AsCurrency;
+            AlcPercep:= qPrn_MovPCL.FieldByName('AlcPercepcion').AsCurrency;
+            PPCuenta := qPrn_MovPCL.FieldByName('RetIva').AsCurrency;
+            PrcDscto := qPrn_MovPCL.FieldByName('PrcBonif').AsInteger;
+            Descuento:= qPrn_MovPCL.FieldByName('Total').AsCurrency;
+            RetGan := qPrn_MovPCL.FieldByName('RetGan').AsCurrency;
+            RetIBt := qPrn_MovPCL.FieldByName('RetIBto').AsCurrency;
+            RetLH  := qPrn_MovPCL.FieldByName('RetLH').AsCurrency;
+            Detalle:= qPrn_MovPCL.FieldByName('Detalle').AsString;
+            CantArtic:= qPrn_MovPCL.FieldByName('CantArtic').AsInteger;
+            Empleado := qPrn_MovPCL.FieldByName('Usuario').AsInteger;
+            NombreEmpleado := qPrn_MovPCL.FieldByName('NomUsuario').AsString;
+            NroLiquidacion := qPrn_MovPCL.FieldByName('IdNumeroLiq').AsInteger;
+            Imprimir_Totales := True;
+          end;
+
+          qPrn_ItmPCL.First;
+          Actual := 0;
+          While not qPrn_ItmPCL.Eof do
+          begin
+            Inc(Actual);
+            try
+              with ItemsFiscal[Actual] do
+              begin
+                IdItem := Actual;
+                IdSucursal := Factura.IdSucursal;
+                IdPuntoVenta := Factura.IdPuntoVenta;
+                IdProducto := qPrn_ItmPCL.FieldByName('Talle').AsInteger;           // Id Credito
+                CodProd := IntToStr(qPrn_ItmPCL.FieldByName('IdAlcIva').AsInteger); // Cliente
+                IdSector := qPrn_ItmPCL.FieldByName('Sector').AsInteger;
+                if Factura.TipoFactura = PresentacionTM then
+                  Marca := 'En Cobro'
+                else
+                  Marca := 'Cobrada';
+                Detalle := qPrn_ItmPCL.FieldByName('Nombre').AsString;
+                Color := qPrn_ItmPCL.FieldByName('NroFactura').AsString;
+                SubDet := DateToStr(qPrn_ItmPCL.FieldByName('FechaF').AsDateTime);
+                Cantidad := qPrn_ItmPCL.FieldByName('Cantidad').AsInteger;          // IdCuota
+                PrecioNetoU := qPrn_ItmPCL.FieldByName('NroCuota').AsInteger;       // Cant Cuotas
+                Cuota := qPrn_ItmPCL.FieldByName('Descuento').AsInteger;            // Estado
+                PrecioFinal := qPrn_ItmPCL.FieldByName('PrecioFinal').AsCurrency;
+              end;
+            except
+              on E:Exception do
+              begin
+                raise EUsuario.Create(E.Message);
+              end;
+            end;
+            qPrn_ItmPCL.Next;
+          end;
+        end;
+        qPrn_ItmPCL.Close;
+      finally
+        qPrn_ItmPCL.Free;
+        if Actual <> Factura.CantArtic then
+          ShowMessage(Format('Leidos %d - Grabados %d ', [Actual, Factura.CantArtic]));
+      end;
+
+      try
+        Print_Form(Factura, ItemsFiscal);
+      except
+        on E:Exception do
+          raise EUsuario.Create('Error: No se puede imprimir el comprobante '+E.Message);
+      end;
+    end;
+    qPrn_MovPCL.Close
+  finally
+    qPrn_MovPCL.Free;
+  end;
+{
+
+Select F.IDFACTURA, F.IDSUCURSAL, F.IDPUNTOVENTA, F.PERIODO, 
+       F.TIPOFACTURA, F.FECHAF, F.NROFACTURA, F.IDCOMPREF, 
+       F.PROVEEDOR, F.CANTARTIC, F.PRCBONIF, F.NETO, 
+       F.BONIFICACION, F.EXENTO, F.NOCOMPUTABLES, F.IDEMPRESA, 
+       F.ALCPERCEPCION, F.COMISION, F.RETIVA, F.RETGAN, 
+       F.RETIBTO, F.RETLH, F.IVAALICUOTA1, F.IVAALICUOTA2, 
+       F.IVAOTALC, F.TOTAL, F.USUARIO, F.STATE, F.IDENTTARMUT, 
+       F.FECPRELIQDESDE, F.FECPRELIQHASTA, F.DETALLE, 
+       F.IDNUMEROLIQ, F.IDPERIODO, O.NroCompOP, 
+       C.Descripcion as TipoFacStr, P.Nombre, P.Documento, 
+       E.Nombre as NomUsuario, T.Tarjeta, K.NombreSuc
+From FACCOM F 
+Left Outer Join ItemsOP I 
+  on I.IdFactura = F.IdFactura And 
+     I.IdSucursal = F.IdSucursal And 
+     I.Entidad = F.Proveedor 
+Left Outer Join Ordenes O 
+  on O.IdOrden = I.IdOrdPago And 
+     O.Entidad = F.Proveedor 
+Left Outer Join Proveedores P 
+  on P.IdProveedor = F.Proveedor 
+Left Outer Join TiposComp C 
+  on C.IdComprobante = F.TipoFactura 
+Left Outer Join Empleados E 
+  on E.IdEmpleado = F.Usuario 
+Left Outer Join Tarjetas T 
+  on T.IdTarjeta = F.IDENTTARMUT 
+Left Outer Join Sucursales K 
+  on K.IdSucursal = F.IDCOMPREF 
+Where (F.STATE = 0) And (F.TipoFactura in (54,55,56)) And 
+      (F.IdFactura = :IdF) And (F.IdSucursal = :IdS) And (F.IdPuntoVenta = :IdP) 
+
+Select I.IDITEM, I.TALLE, I.DESCUENTO, I.FECHAF, I.CANTIDAD,
+       I.PRECIOFINAL, I.IDALCIVA, I.SECTOR, C.Nombre, M.Estado,
+       F.FechaF as FechaC, F.NroFactura
+From ItemsFC I
+Join Clientes C
+  on C.IdCliente = I.IDALCIVA And
+     C.IdSucursal = I.SECTOR
+Join FacVen F
+  on F.IdFactura = Cast(I.EXENTO as Integer) And
+     F.IdSucursal = Cast(I.IMPINT as Integer) And
+     F.IdPuntoVenta = Cast(I.MTOIVA as Integer) And
+     F.Cliente = I.IDALCIVA
+Left Outer Join EstadosMov M
+  on M.IdEstado = Cast(I.Descuento as Integer)
+Where (I.State = 0) And (I.IdFactura =:IdF) And
+      (I.IdSucursal =:IdS) And (I.IdPuntoVenta =:IdP)
+}
+
+end;
+
+initialization
+  Date_Old := EncodeDate(1980, 1, 1);
+  Ano_2000 := EncodeDate(2000, 1, 1);
+  Ano_2012 := EncodeDate(2012,10, 1);
+  Ano_2007 := EncodeDate(2007, 1, 1);
+  Ano_2025 := EncodeDate(2025,12,31);
+  ModoTest := False;
+  AutorDto := NoEncontrado;
+  CodChars := ['a'..'z', 'A'..'Z', '0'..'9', '.', ',', 'ñ', 'Ñ', ' ', '-'];
+  Anulando_BcoProp := False;
+  ConSubDep:= False;
+end.

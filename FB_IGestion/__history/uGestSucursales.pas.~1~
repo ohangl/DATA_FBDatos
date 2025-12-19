@@ -1,0 +1,1862 @@
+unit uGestSucursales;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, XPMenu, DB, StdCtrls, wwdbdatetimepicker, Mask, Buttons,
+  wwdblook, wwdbedit, Wwdotdot, Wwdbcomb, ComCtrls, Grids, Wwdbigrd, Wwdbgrid,
+  ExtCtrls, RzButton, wwcheckbox, RzPanel, MDODatabase, MDOQuery, MDOCustomDataSet,
+  MDOTable, MDOStoredProc, MDOScript, RzCmboBx, RzShellCtrls, RzEdit, RzCommon,
+  RzBorder, DateUtils;
+
+type
+  TfrmGestSucursales = class(TForm)
+    cbSuc_A_Trabajar: TRzComboBox;
+    lblSuc: TLabel;
+    pnlCounters: TRzPanel;
+    gbWhere: TRzGroupBox;
+    lblDatos: TLabel;
+    btnAceptar: TRzBitBtn;
+    btnCancelar: TRzBitBtn;
+    gbEnvRec: TRzGroupBox;
+    pnlFootEnvRec: TRzPanel;
+    btnCerrar: TRzBitBtn;
+    pnlFoot: TRzPanel;
+
+    dbSucursales: TMDODataBase;
+
+    qArticulos: TMDOQuery;
+    qArticulosIDARTICULO: TIntegerField;
+    qArticulosIDGRUPO: TIntegerField;
+    qArticulosIDSUBGRUPO: TIntegerField;
+    qArticulosMARCA: TMDOStringField;
+    qArticulosDETALLE: TMDOStringField;
+    qArticulosCODBARRA: TMDOStringField;
+    qArticulosIDCOLOR: TIntegerField;
+    qArticulosACTIVO: TSmallintField;
+    qArticulosTIENETALLE: TSmallintField;
+    qArticulosOFERTA: TSmallintField;
+    qArticulosDUROFERTA: TDateField;
+    qArticulosESTILOFAC: TIntegerField;
+    qArticulosTSINSTOCK: TSmallintField;
+    qArticulosSERVICIO: TSmallintField;
+    qArticulosCOSTO: TMDOBCDField;
+    qArticulosCOSTOANT: TMDOBCDField;
+    qArticulosPNETO: TMDOBCDField;
+    qArticulosPBASE: TMDOBCDField;
+    qArticulosGANANCIA: TMDOBCDField;
+    qArticulosPRECIO: TMDOBCDField;
+    qArticulosPRECIOANT: TMDOBCDField;
+    qArticulosALCIVA: TIntegerField;
+    qArticulosALCIB: TIntegerField;
+    qArticulosIMPINT: TMDOBCDField;
+    qArticulosEXENTO: TMDOBCDField;
+    qArticulosFECHAALTA: TDateField;
+    qArticulosIDMARKUP: TIntegerField;
+    qArticulosUSUARIO: TIntegerField;
+    qArticulosESKIT: TIntegerField;
+    qArticulosFECHAMOD: TDateField;
+    qArticulosIDAREA: TIntegerField;
+
+    tSucursales: TMDOTransaction;
+    spUpdateInsertArt: TMDOStoredProc;
+    qUpdFecMod: TMDOQuery;
+    spUpDateInsertFacItm: TMDOStoredProc;
+    qSendSuc: TMDOQuery;
+
+    qSaveStk: TMDOQuery;
+
+    qUpDateStkV: TMDOQuery;
+    qUpDateStkVIDARTICULO: TIntegerField;
+    qUpDateStkVIDSUCURSAL: TIntegerField;
+    qUpDateStkVCANTIDAD: TMDOBCDField;
+    qUpDateStkVTALLE: TIntegerField;
+    qUpDateStkVIDGRUPO: TIntegerField;
+    qUpDateStkVIDSUBGRUPO: TIntegerField;
+    qUpDateStkVTIPOFACTURA: TSmallintField;
+    qUpDateStkVSERVICIO: TSmallintField;
+    qUpDateStkVESKIT: TIntegerField;
+
+    qUnCheck: TMDOQuery;
+
+    qSucur: TMDOQuery;
+    qSucurNOMBRESUC: TMDOStringField;
+    qSucurIDSUCURSAL: TIntegerField;
+    qSucurHOSTNAME: TMDOStringField;
+
+    qOrganizacion: TMDOQuery;
+
+    qUpDateStkT: TMDOQuery;
+    qUpDateStkTTIPOFACTURA: TSmallintField;
+    qUpDateStkTIDSTORIGEN: TIntegerField;
+    qUpDateStkTIDSTDESTINO: TIntegerField;
+    qUpDateStkTIDARTICULO: TIntegerField;
+    qUpDateStkTCANTIDAD: TMDOBCDField;
+    qUpDateStkTTALLE: TIntegerField;
+    qUpDateStkTTIPOAJ: TSmallintField;
+
+    qGet_Liq: TMDOQuery;
+    qGet_LiqIDMOVCRED: TIntegerField;
+    qGet_LiqIDSUCURSAL: TIntegerField;
+    qGet_LiqNROCUOTA: TSmallintField;
+    qGet_LiqNRORECPAGO: TMDOStringField;
+    qGet_LiqFECHAP: TDateField;
+    qGet_LiqIDCLIENTE: TIntegerField;
+    qGet_LiqIDRECIBO: TIntegerField;
+    qGet_LiqIDSUCREC: TIntegerField;
+    qGet_LiqIDPUNTOREC: TIntegerField;
+    qGet_LiqESTADO: TIntegerField;
+    qGet_LiqIDTARJETA: TIntegerField;
+    qGet_LiqTIPOENT: TSmallintField;
+    qGet_LiqTIPOFACTURA: TSmallintField;
+    qGet_LiqNROFACTURA: TMDOStringField;
+    qGet_LiqFECHAF: TDateField;
+    qGet_LiqPROVEEDOR: TIntegerField;
+    qGet_LiqNOMBRE: TMDOStringField;
+    qGet_LiqDIRECCION: TMDOStringField;
+    qGet_LiqLOCALIDAD: TMDOStringField;
+    qGet_LiqPROVINCIA: TMDOStringField;
+    qGet_LiqTIPOIVA: TSmallintField;
+    qGet_LiqTIPODOC: TSmallintField;
+    qGet_LiqDOCUMENTO: TMDOStringField;
+    qGet_LiqMONTOCUOTA: TMDOBCDField;
+
+    qMark_EnSuc: TMDOStoredProc;
+
+    edtDirectorio: TRzEdit;
+    mmSucursal: TPopupMenu;
+    Precios: TMenuItem;
+    VentasSuc: TMenuItem;
+    DesmarcarEnvio: TMenuItem;
+    Salir: TMenuItem;
+    btnMenuSuc: TRzMenuButton;
+    btSucGest: TRzBorder;
+    xpmSucur: TXPMenu;
+    btnSalirSuc: TRzBitBtn;
+    pnlBtnDuracion: TRzPanel;
+    edtDesdeR: TRzDateTimeEdit;
+    edtHastaR: TRzDateTimeEdit;
+    btnDesmarcar: TRzBitBtn;
+    lblDesdeR: TLabel;
+    lblHastaR: TLabel;
+    ReLeer_Datos: TMenuItem;
+
+    lblDesdeRL: TLabel;
+    edtDesdeRL: TRzDateTimeEdit;
+
+    procedure SalirClick(Sender: TObject);
+
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnAceptarClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure DesmarcarEnvioClick(Sender: TObject);
+    procedure btnCerrarClick(Sender: TObject);
+    procedure cbSuc_A_TrabajarChange(Sender: TObject);
+    procedure cbSuc_A_TrabajarExit(Sender: TObject);
+    procedure PreciosClick(Sender: TObject);
+    procedure VentasSucClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnSalirSucClick(Sender: TObject);
+    procedure btnDesmarcarClick(Sender: TObject);
+    procedure gbEnvRecEnter(Sender: TObject);
+    procedure ReLeer_DatosClick(Sender: TObject);
+  private
+    { Private declarations }
+    Entrando: Boolean;
+    procedure Llenar_ComboSuc;
+    procedure Recibir_Operaciones_De_Sucursal(SucDir: String; Fec_Desde: TDate);
+    procedure Recibir_Productos_De_Central;
+    procedure Recibir_Organizacion_De_Central(Con_Show: Boolean);
+    procedure Recibir_Transferencias(Con_Show: Boolean; Fec_Desde: TDate);
+    procedure Recibir_LiquidacionesTM(Con_Show: Boolean; Fec_Desde: TDate);
+    procedure Actualizador(IdSucRemota: Integer);
+    procedure Get_Ofertas(IdSucRemota: Integer);
+    procedure Eligio_Suc;
+    procedure Desmarcar(D, H: TDate);
+  public
+    { Public declarations }
+  end;
+
+  procedure UpDater_Prod(IdSuc: Integer);
+  procedure UpDater_POff(IdSuc: Integer);
+
+var
+  frmGestSucursales: TfrmGestSucursales;
+  Que_Hago,Id_Sucur: Integer;
+
+implementation
+
+uses udmGestion, udmSaveFile, uTools, uNewPrec;
+
+{$R *.dfm}
+
+procedure UpDater_Prod(IdSuc: Integer);
+begin
+  try
+    frmGestSucursales := TfrmGestSucursales.Create(nil);
+    try
+      frmGestSucursales.Actualizador(IdSuc);
+    except
+      on E:Exception do
+      begin
+        raise EUsuario.Create('No se pudo actualizar precios. Error: '+E.Message);
+      end;
+    end;
+  finally
+    frmGestSucursales.Close;
+  end;
+end;
+
+procedure UpDater_POff(IdSuc: Integer);
+begin
+  try
+    frmGestSucursales := TfrmGestSucursales.Create(nil);
+    try
+      frmGestSucursales.Get_Ofertas(IdSuc);
+    except
+      on E:Exception do
+      begin
+        raise EUsuario.Create('No se pudo actualizar Ofertas. Error: '+E.Message);
+      end;
+    end;
+  finally
+    frmGestSucursales.Close;
+  end;
+end;
+
+procedure TfrmGestSucursales.Llenar_ComboSuc;
+begin
+  qSucur.Close;
+  qSucur.Open;
+  cbSuc_A_Trabajar.Items.Clear;
+  qSucur.First;
+  while not qSucur.Eof do
+  begin
+    cbSuc_A_Trabajar.Items.AddObject(qSucurNombreSuc.AsString, TObject(qSucurIdSucursal.AsInteger));
+    qSucur.Next;
+  end;
+  cbSuc_A_Trabajar.ItemIndex := cbSuc_A_Trabajar.Items.IndexOfName(NameBranch);
+end;
+
+procedure TfrmGestSucursales.Eligio_Suc;
+begin
+  if IdBranch = 1 then
+  begin
+    edtDirectorio.Text := Cero;
+    Id_Sucur := 0;
+    if (btnCancelar.Focused) or (Entrando) then
+      Exit;
+    try
+      Id_Sucur := Integer(cbSuc_A_Trabajar.Items.Objects[cbSuc_A_Trabajar.ItemIndex]);
+    except
+      Id_Sucur := 0;
+    end;
+
+    if Id_Sucur > 0 then
+    begin
+      if qSucur.Locate(qSucurIdSucursal.FieldName, Id_Sucur, []) then
+        edtDirectorio.Text := qSucurHostName.AsString
+      else
+        ShowMessage('datos de Sucursal no definidos.-');
+    end
+    else begin
+      edtDirectorio.Text := Vacio;
+      if cbSuc_A_Trabajar.CanFocus then
+      begin
+        cbSuc_A_Trabajar.SetFocus;
+        ShowMessage('Debe elegir una sucursal.-');
+      end;
+    end;
+  end
+  else begin
+    if IdBranch > 0 then
+    begin
+      Id_Sucur := IdBranch;
+      if qSucur.Locate(qSucurIdSucursal.FieldName, Id_Sucur, []) then
+      begin
+        cbSuc_A_Trabajar.Text :=  qSucurNOMBRESUC.AsString;
+        edtDirectorio.Text := qSucurHostName.AsString
+      end
+      else
+        ShowMessage('datos de Sucursal no definidos.-');
+    end
+  end;
+end;
+
+procedure TfrmGestSucursales.FormCreate(Sender: TObject);
+begin
+  gbEnvRec.Visible := False;
+  Que_Hago := 0;
+  Id_Sucur := 0;
+  dbSucursales.Connected := False;
+end;
+
+procedure TfrmGestSucursales.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  dbSucursales.Connected := False;
+  Action := caFree;
+  frmGestSucursales := nil;
+end;
+
+procedure TfrmGestSucursales.FormShow(Sender: TObject);
+begin
+  if IdBranch > 1 then
+  begin
+    VentasSuc.Enabled := False;
+    ReLeer_Datos.Enabled := False;
+  end;
+
+  if IdBranch = 1 then
+  begin
+    Precios.Enabled := False;
+    DesmarcarEnvio.Enabled := False;
+  end;
+end;
+
+procedure TfrmGestSucursales.cbSuc_A_TrabajarChange(Sender: TObject);
+begin
+  Eligio_Suc;
+end;
+
+procedure TfrmGestSucursales.cbSuc_A_TrabajarExit(Sender: TObject);
+begin
+  Eligio_Suc;
+end;
+
+procedure TfrmGestSucursales.btnAceptarClick(Sender: TObject);
+begin
+  if (Trim(edtDirectorio.Text) > Vacio) and
+     (Id_Sucur > 0) then
+  begin
+    try
+      Screen.Cursor := crHourGlass;
+      case Que_Hago of
+        1: Recibir_Operaciones_De_Sucursal(edtDirectorio.Text, Ano_2007);
+        2: Recibir_Productos_De_Central;
+        3: Recibir_Operaciones_De_Sucursal(edtDirectorio.Text, edtDesdeRL.Date);
+      end;
+    finally
+      gbWhere.Visible := False;
+      Screen.Cursor := crDefault;
+    end;
+  end;
+end;
+
+procedure TfrmGestSucursales.Recibir_Operaciones_De_Sucursal(SucDir: String; Fec_Desde: TDate);
+var
+  Actual, i: Integer;
+begin
+  if IdBranch > 1 then
+    Exit;
+  try
+    if (Trim(SucDir) > Vacio) and
+       (Id_Sucur > 0) then
+    begin
+      pnlBtnDuracion.Caption := 'Inicio: '+TimeToStr(Time);
+      pnlFoot.Caption := 'Conectando...';
+      Application.ProcessMessages;
+      qSendSuc.Close;
+      try
+        dbSucursales.Connected := False;
+        dbSucursales.DatabaseName := SucDir;
+        dbSucursales.Connected := True;
+      except
+        on E:Exception do
+        begin
+          pnlFoot.Caption := 'Sin Conexión...';
+          Application.ProcessMessages;
+          raise EUsuario.Create('sin conección a la sucursal. '+E.Message);
+        end;
+      end;
+
+      // Facturas
+      pnlFoot.Caption := 'Leyendo ventas...';
+      Application.ProcessMessages;
+
+      qSendSuc.SQL.Clear;
+      qSendSuc.SQL.Add('Select * From SEND_FACVEN(:FEC_DESDE) ');
+      qSendSuc.Prepare;
+      qSendSuc.ParamByName('FEC_DESDE').AsDate := Fec_Desde;
+      try
+        qSendSuc.Open;
+      except
+        on E:Exception do
+          raise EUsuario.Create('Error leyendo ventas. '+E.Message);
+      end;
+
+      if qSendSuc.IsEmpty then
+      begin
+        dbSucursales.Connected := False;
+        pnlFoot.Caption := 'No hay operaciones (FV) a actualizar';
+        Application.ProcessMessages;
+      end
+      else begin
+        spUpDateInsertFacItm.StoredProcName := 'PUT_FACVEN';
+        spUpDateInsertFacItm.Prepare;
+        qSendSuc.First;
+        try
+          while not qSendSuc.Eof do
+          begin
+            For i:= 0 to qSendSuc.FieldCount-1 do
+              if spUpDateInsertFacItm.Params.FindParam(qSendSuc.Fields[i].FieldName) <> nil then
+                spUpDateInsertFacItm.ParamByName(qSendSuc.Fields[i].FieldName).Value := qSendSuc.Fields[i].Value;
+            try
+              if not dmGestion.trUpDateArt.InTransaction then
+                dmGestion.trUpDateArt.StartTransaction;
+              spUpDateInsertFacItm.ExecProc;
+              dmGestion.trUpDateArt.Commit;
+            except
+              on E:Exception do
+              begin
+                dmGestion.trUpDateArt.Rollback;
+                raise EUsuario.Create('Error '+E.Message);
+              end;
+            end;
+            Inc(Actual);
+            qSendSuc.Next;
+          end;
+        except
+          on E:Exception do
+            raise EUsuario.Create('Error grabando Facturas. '+E.Message);
+        end;
+        qSendSuc.Close;
+
+        // Clientes
+        pnlFoot.Caption := 'Leyendo Clientes...';
+        Application.ProcessMessages;
+        qSendSuc.SQL.Clear;
+        qSendSuc.SQL.Add('Select * From SEND_CLIENTES');
+        qSendSuc.Prepare;
+        try
+          qSendSuc.Open;
+        except
+          on E:Exception do
+            raise EUsuario.Create('Error leyendo clientes. '+E.Message);
+        end;
+
+        if not qSendSuc.IsEmpty then
+        begin
+          spUpDateInsertFacItm.StoredProcName := 'PUT_CLIENTES';
+          spUpDateInsertFacItm.Prepare;
+          qSendSuc.First;
+          try
+            While not qSendSuc.Eof do
+            begin
+              For i:= 0 to qSendSuc.FieldCount-1 do
+                if spUpDateInsertFacItm.Params.FindParam(qSendSuc.Fields[i].FieldName) <> nil then
+                  spUpDateInsertFacItm.ParamByName(qSendSuc.Fields[i].FieldName).Value := qSendSuc.Fields[i].Value;
+              try
+                if not dmGestion.trUpDateArt.InTransaction then
+                  dmGestion.trUpDateArt.StartTransaction;
+                spUpDateInsertFacItm.ExecProc;
+                dmGestion.trUpDateArt.Commit;
+              except
+                on E:Exception do
+                begin
+                  dmGestion.trUpDateArt.Rollback;
+                  raise EUsuario.Create('Error '+E.Message);
+                end;
+              end;
+              qSendSuc.Next;
+            end;
+          except
+            on E:Exception do
+              raise EUsuario.Create('Error grabando Clientes. '+E.Message);
+          end;
+        end;
+
+        // Items FV
+        pnlFoot.Caption := 'Leyendo productos vendidos...';
+        Application.ProcessMessages;
+        qSendSuc.SQL.Clear;
+        qSendSuc.SQL.Add('Select * From SEND_ITEMSFV(:FEC_DESDE)');
+        qSendSuc.Prepare;
+        qSendSuc.ParamByName('FEC_DESDE').AsDate := Fec_Desde;
+        try
+          qSendSuc.Open;
+        except
+          on E:Exception do
+            raise EUsuario.Create('Error leyendo items. '+E.Message);
+        end;
+
+        if not qSendSuc.IsEmpty then
+        begin
+          spUpDateInsertFacItm.StoredProcName := 'PUT_ITEMSFV';
+          spUpDateInsertFacItm.Prepare;
+          qSendSuc.First;
+          try
+            While not qSendSuc.Eof do
+            begin
+              For i:= 0 to qSendSuc.FieldCount-1 do
+                if spUpDateInsertFacItm.Params.FindParam(qSendSuc.Fields[i].FieldName) <> nil then
+                  spUpDateInsertFacItm.ParamByName(qSendSuc.Fields[i].FieldName).Value := qSendSuc.Fields[i].Value;
+              try
+                if not dmGestion.trUpDateArt.InTransaction then
+                  dmGestion.trUpDateArt.StartTransaction;
+                spUpDateInsertFacItm.ExecProc;
+                dmGestion.trUpDateArt.Commit;
+              except
+                on E:Exception do
+                begin
+                  dmGestion.trUpDateArt.Rollback;
+                  raise EUsuario.Create('Error '+E.Message);
+                end;
+              end;
+              qSendSuc.Next;
+            end;
+          except
+            on E:Exception do
+              raise EUsuario.Create('Error grabando Items. '+E.Message);
+          end;
+        end;
+      end;
+
+      // Tarjetas, creditos y mutuales
+      Actual := 0;
+      pnlFoot.Caption := 'Leyendo Tarjetas, creditos y mutuales...';
+      Application.ProcessMessages;
+      qSendSuc.SQL.Clear;
+      qSendSuc.SQL.Add('Select * From SEND_MOVTAR(:FEC_DESDE)');
+      qSendSuc.Prepare;
+      qSendSuc.ParamByName('FEC_DESDE').AsDate := Fec_Desde;
+      try
+        qSendSuc.Open;
+      except
+        on E:Exception do
+          raise EUsuario.Create('Error abriendo tarjetas. '+E.Message);
+      end;
+
+      if not qSendSuc.IsEmpty then
+      begin
+        spUpDateInsertFacItm.StoredProcName := 'PUT_MOVTAR';
+        spUpDateInsertFacItm.Prepare;
+        qSendSuc.First;
+        try
+          While not qSendSuc.Eof do
+          begin
+            For i:= 0 to qSendSuc.FieldCount-1 do
+              if spUpDateInsertFacItm.Params.FindParam(qSendSuc.Fields[i].FieldName) <> nil then
+                spUpDateInsertFacItm.ParamByName(qSendSuc.Fields[i].FieldName).Value := qSendSuc.Fields[i].Value;
+            try
+              if not dmGestion.trUpDateArt.InTransaction then
+                dmGestion.trUpDateArt.StartTransaction;
+              spUpDateInsertFacItm.ExecProc;
+              dmGestion.trUpDateArt.Commit;
+            except
+              on E:Exception do
+              begin
+                dmGestion.trUpDateArt.Rollback;
+                raise EUsuario.Create('Error '+E.Message);
+              end;
+            end;
+            Inc(Actual);
+            qSendSuc.Next;
+          end;
+        except
+          on E:Exception do
+            raise EUsuario.Create('Error grabando Tarjetas '+E.Message);
+        end;
+      end;
+
+      // Cuotas
+      Actual := 0;
+      pnlFoot.Caption := 'Leyendo movimiento de cuotas ingresadas...';
+      Application.ProcessMessages;
+      qSendSuc.SQL.Clear;
+      qSendSuc.SQL.Add('Select * From SEND_MOVCTA(:FEC_DESDE)');
+      qSendSuc.Prepare;
+      qSendSuc.ParamByName('FEC_DESDE').AsDate := Fec_Desde;
+      try
+        qSendSuc.Open;
+      except
+        on E:Exception do
+          raise EUsuario.Create('Error abriendo items tarjetas. '+E.Message);
+      end;
+
+      if not qSendSuc.IsEmpty then
+      begin
+        spUpDateInsertFacItm.StoredProcName := 'PUT_CUOTAS';
+        spUpDateInsertFacItm.Prepare;
+        qSendSuc.First;
+        try
+          While not qSendSuc.Eof do
+          begin
+            For i:= 0 to qSendSuc.FieldCount-1 do
+              if spUpDateInsertFacItm.Params.FindParam(qSendSuc.Fields[i].FieldName) <> nil then
+                spUpDateInsertFacItm.ParamByName(qSendSuc.Fields[i].FieldName).Value := qSendSuc.Fields[i].Value;
+            try
+              if not dmGestion.trUpDateArt.InTransaction then
+                dmGestion.trUpDateArt.StartTransaction;
+              spUpDateInsertFacItm.ExecProc;
+              dmGestion.trUpDateArt.Commit;
+            except
+              on E:Exception do
+              begin
+                dmGestion.trUpDateArt.Rollback;
+                raise EUsuario.Create('Error '+E.Message);
+              end;
+            end;
+            Inc(Actual);
+            qSendSuc.Next;
+          end;
+        except
+          on E:Exception do
+            raise EUsuario.Create('Error grabando cuotas. '+E.Message);
+        end;
+      end;
+
+      // Cheques
+      Actual := 0;
+      pnlFoot.Caption := 'Leyendo Cheques ingresados...';
+      Application.ProcessMessages;
+      qSendSuc.SQL.Clear;
+      qSendSuc.SQL.Add('Select * From SEND_BCOTER(:FEC_DESDE)');
+      qSendSuc.Prepare;
+      qSendSuc.ParamByName('FEC_DESDE').AsDate := Fec_Desde;
+      try
+        qSendSuc.Open;
+      except
+        on E:Exception do
+          raise EUsuario.Create('Error abriendo chq3º. '+E.Message);
+      end;
+
+      if not qSendSuc.IsEmpty then
+      begin
+        spUpDateInsertFacItm.StoredProcName := 'PUT_BCOTER';
+        spUpDateInsertFacItm.Prepare;
+        qSendSuc.First;
+        While not qSendSuc.Eof do
+        begin
+          For i:= 0 to qSendSuc.FieldCount-1 do
+            if spUpDateInsertFacItm.Params.FindParam(qSendSuc.Fields[i].FieldName) <> nil then
+              spUpDateInsertFacItm.ParamByName(qSendSuc.Fields[i].FieldName).Value := qSendSuc.Fields[i].Value;
+          try
+            if not dmGestion.trUpDateArt.InTransaction then
+              dmGestion.trUpDateArt.StartTransaction;
+            spUpDateInsertFacItm.ExecProc;
+            dmGestion.trUpDateArt.Commit;
+          except
+            on E:Exception do
+            begin
+              dmGestion.trUpDateArt.Rollback;
+              raise EUsuario.Create('Error '+E.Message);
+            end;
+          end;
+          Inc(Actual);
+          qSendSuc.Next;
+        end;
+      end;
+
+      // Rendiciones
+      Actual := 0;
+      pnlFoot.Caption := 'Leyendo Rendiciones de Caja...';
+      Application.ProcessMessages;
+      qSendSuc.SQL.Clear;
+      qSendSuc.SQL.Add('Select * From SEND_RENDCJ(:FEC_DESDE)');
+      qSendSuc.Prepare;
+      qSendSuc.ParamByName('FEC_DESDE').AsDate := Fec_Desde;
+      try
+        qSendSuc.Open;
+      except
+        on E:Exception do
+          raise EUsuario.Create('Error leyendo rendiciones. '+E.Message);
+      end;
+
+      if not qSendSuc.IsEmpty then
+      begin
+        spUpDateInsertFacItm.StoredProcName := 'PUT_RENDCJ';
+        spUpDateInsertFacItm.Prepare;
+        qSendSuc.First;
+        While not qSendSuc.Eof do
+        begin
+          For i:= 0 to qSendSuc.FieldCount-1 do
+            if spUpDateInsertFacItm.Params.FindParam(qSendSuc.Fields[i].FieldName) <> nil then
+              spUpDateInsertFacItm.ParamByName(qSendSuc.Fields[i].FieldName).Value := qSendSuc.Fields[i].Value;
+          try
+            if not dmGestion.trUpDateArt.InTransaction then
+              dmGestion.trUpDateArt.StartTransaction;
+            spUpDateInsertFacItm.ExecProc;
+            dmGestion.trUpDateArt.Commit;
+          except
+            on E:Exception do
+            begin
+              dmGestion.trUpDateArt.Rollback;
+              raise EUsuario.Create('Error '+E.Message);
+            end;
+          end;
+          Inc(Actual);
+          qSendSuc.Next;
+        end;
+      end;
+
+      pnlFoot.Caption := 'Marcando en sucursal lecturas...  ';
+      Application.ProcessMessages;
+      try
+        if not qMark_EnSuc.Transaction.InTransaction then
+          qMark_EnSuc.Transaction.StartTransaction;
+        qMark_EnSuc.Close;
+        qMark_EnSuc.StoredProcName := 'SETEAR_LECTURAS(:FECHA_LEC)';
+        qMark_EnSuc.Prepare;
+        qMark_EnSuc.ParamByName('FECHA_LEC').AsDate:= Date;
+        qMark_EnSuc.ExecProc;
+        qMark_EnSuc.Transaction.Commit;
+      except
+        on E:Exception do
+        begin
+          pnlFoot.Caption := 'Error en marcando operaciones.';
+          Application.ProcessMessages;
+          qMark_EnSuc.Transaction.Rollback;
+          raise EUsuario.Create('Error marcando lecturas. '+E.Message);
+        end;
+      end;
+
+      Recibir_Transferencias(True, Fec_Desde);
+      Recibir_LiquidacionesTM(True, Fec_Desde);
+
+      pnlFoot.Caption := 'Finalizado.';
+      Application.ProcessMessages;
+    end;
+  finally
+    pnlBtnDuracion.Caption := pnlBtnDuracion.Caption + '    Fin: '+TimeToStr(Time);
+    if dbSucursales.Connected then
+      dbSucursales.Connected := False;
+  end;
+end;
+
+procedure TfrmGestSucursales.Recibir_LiquidacionesTM(Con_Show: Boolean; Fec_Desde: TDate);
+var
+  Actual, i,
+  IdRecibido,
+  IdProducto: Integer;
+begin
+  // Liquidaciones
+  if Con_Show then
+  begin
+    pnlFoot.Caption := ' - ';
+    pnlCounters.Caption := 'Leyendo Liquidaciones...';
+    Application.ProcessMessages;
+  end;
+  IdProducto := 0;
+  qGet_Liq.Prepare;
+  qGet_Liq.ParamByName('ID_EMPRESA').AsInteger := Id_Cia;
+  qGet_Liq.ParamByName('ID_SUCURSAL').AsInteger := Id_Sucur;
+  try
+    qGet_Liq.Open;
+  except
+    on E:Exception do
+      raise EUsuario.Create('Leyendo Liquidaciones TM. '+E.Message);
+  end;
+
+  Actual := 0;
+  if qGet_Liq.IsEmpty then
+  begin
+    dbSucursales.Connected := False;
+    if Con_Show then
+    begin
+      pnlCounters.Caption := 'sin Liquidaciones...';
+      Application.ProcessMessages;
+    end;
+    Exit;
+  end
+  else begin
+    if dmGestion.Empresas.Locate(dmGestion.EmpresasIDEMPRESA.FieldName, Id_Cia, []) then
+    begin
+      GetDatosArt(dmGestion.EmpresasIDARTCUOTA.AsInteger, '', Datos_Art);
+      IdProducto := Datos_Art.IdArticulo
+    end;
+    try
+      try
+        if not dmGestion.trUpDateArt.InTransaction then
+          dmGestion.trUpDateArt.StartTransaction;
+        FillChar(DatosPago, SizeOf(TDatosPagos), 0);
+        FillChar(ItemsFiscal, SizeOf(ItemsFiscal), 0);
+        qGet_Liq.First;
+        i := 1;
+        Repeat
+          begin
+            IdRecibido := qGet_LiqIDRECIBO.AsInteger;
+            DatosPago.TipoOperacion := Cobros;
+            DatosPago.IdEntidad := qGet_LiqPROVEEDOR.AsInteger;
+            DatosPago.IdSucursal := qGet_LiqIDSUCURSAL.AsInteger;
+            DatosPago.IdPuntoVenta := qGet_LiqIdPuntoRec.AsInteger;
+            DatosPago.IdEmpresa := Id_Cia;
+            DatosPago.IdCompRef := qGet_LiqIdTarjeta.AsInteger;
+            DatosPago.IdMovTar := qGet_LiqIdMovCred.AsInteger;
+            DatosPago.FechaOp := qGet_LiqFechaP.AsDateTime;
+            DatosPago.FechaOr := qGet_LiqFechaP.AsDateTime;
+            DatosPago.NomEntidad := '';
+            DatosPago.NroComprobante := qGet_LiqNroRecPago.AsString;
+            DatosPago.TipoComprobante := Liquidacion;
+            DatosPago.CompReferencia := '0000-00000000';
+            DatosPago.Coeficiente := 0;
+            DatosPago.IdTarjeta := 0;
+            DatosPago.CuotasPagadas := i;
+            DatosPago.IdVendedor := Usuario;
+            DatosPago.PagosDebitos := 0;
+            DatosPago.PagosBonif.TotalBonif := 0;
+            DatosPago.TotalPagos := DatosPago.TotalPagos + qGet_LiqMONTOCUOTA.AsCurrency;
+            DatosPago.IdCliente := qGet_LiqPROVEEDOR.AsInteger;
+            DatosPago.IdSucCli := qGet_LiqIDSUCREC.AsInteger;
+            DatosPago.NombreCli := qGet_LiqNOMBRE.AsString;
+            DatosPago.Direccion := qGet_LiqDIRECCION.AsString;
+            DatosPago.Localidad := qGet_LiqLOCALIDAD.AsString;
+            DatosPago.Provincia := qGet_LiqPROVINCIA.AsString;
+            DatosPago.TipoIva := qGet_LiqTIPOIVA.AsInteger;
+            DatosPago.TipoDoc := qGet_LiqTIPODOC.AsInteger;
+            DatosPago.Documento := qGet_LiqDOCUMENTO.AsString;
+
+            ItemsFiscal[i].IdProducto := IdProducto;
+            ItemsFiscal[i].IdSucursal := qGet_LiqIDSUCURSAL.AsInteger;
+            ItemsFiscal[i].IdPuntoVenta := qGet_LiqIdPuntoRec.AsInteger;
+            ItemsFiscal[i].IdItem := i;
+            ItemsFiscal[i].TIvaEnt := 0;
+            ItemsFiscal[i].IdMarkUp := 0;
+            ItemsFiscal[i].Talle := qGet_LiqIdMovCred.AsInteger;
+            ItemsFiscal[i].IdSector := qGet_LiqIdSucRec.AsInteger;
+            ItemsFiscal[i].TipoAj := qGet_LiqTIPOENT.AsInteger;
+            ItemsFiscal[i].FechaF := qGet_LiqFechaP.AsDateTime;
+            ItemsFiscal[i].VtoSte := qGet_LiqFechaP.AsDateTime;
+            ItemsFiscal[i].EnOferta := True; // Pago Total
+            ItemsFiscal[i].Consignacion := False;
+            ItemsFiscal[i].Combustible := False;
+            ItemsFiscal[i].EnRemito := Falso;
+            ItemsFiscal[i].EnPedido := Falso;
+            ItemsFiscal[i].Servicio := True;
+            ItemsFiscal[i].EsKit := False;
+            ItemsFiscal[i].DetalleExtendido := False;
+            ItemsFiscal[i].PrecioCosto := 0;
+            ItemsFiscal[i].PrecioTotal := qGet_LiqMONTOCUOTA.AsCurrency;
+            ItemsFiscal[i].PrecioLista := 0;
+            ItemsFiscal[i].PrecioFinal := 0;
+            ItemsFiscal[i].PrecioNetoU := 0;
+            ItemsFiscal[i].PrecioNetoT := 0;
+            ItemsFiscal[i].PrecioPublico := 0;
+            ItemsFiscal[i].PrecioActual := 0;
+            ItemsFiscal[i].Servicio := True;
+            ItemsFiscal[i].NoComputable := 0;
+            ItemsFiscal[i].Exento := 0;
+            ItemsFiscal[i].MtoIva := 0;
+            ItemsFiscal[i].IngBto := 0;
+            ItemsFiscal[i].Bonificacion := 0;
+            ItemsFiscal[i].Cantidad := 1;
+            ItemsFiscal[i].CoefImpInt := 0;
+            ItemsFiscal[i].CoefMarkUp := 0;
+            ItemsFiscal[i].AlicuotaIva := 0;
+            ItemsFiscal[i].AlicuotaIB := 0;
+            ItemsFiscal[i].IdAlcIva := qGet_LiqIDSUCREC.AsInteger;
+            ItemsFiscal[i].IdAlcIB := qGet_LiqIDTARJETA.AsInteger;
+            ItemsFiscal[i].Cuota := qGet_LiqNROCUOTA.AsInteger;
+            ItemsFiscal[i].IdSucSalida := qGet_LiqIDSUCREC.AsInteger;
+            ItemsFiscal[i].IdSucDomRem := qGet_LiqIDCLIENTE.AsInteger;
+            qGet_Liq.Next;
+            Inc(i);
+            If (IdRecibido <> qGet_LiqIDRECIBO.AsInteger) or
+               (qGet_Liq.Eof) then
+            begin
+              if dmSaveFile.DoPagoCuota(DatosPago, ItemsFiscal) then
+              begin
+                Inc(Actual);
+                FillChar(DatosPago, SizeOf(TDatosPagos), 0);
+                FillChar(ItemsFiscal, SizeOf(ItemsFiscal), 0);
+              end;
+              IdRecibido := qGet_LiqIDRECIBO.AsInteger;
+              i := 1;
+            end;
+          end
+        Until qGet_Liq.Eof;
+
+        if Actual > 0 then
+        begin
+          if Con_Show then
+          begin
+            pnlCounters.Caption := Format('Marcando en Central %s - %d liquidaciones...  ',[cbSuc_A_Trabajar.Text, Actual]);
+            Application.ProcessMessages;
+          end;
+          qGet_Liq.First;
+          while not qGet_Liq.Eof do
+          begin
+            try
+              qSendSuc.Close;
+              qSendSuc.SQL.Clear;
+              qSendSuc.SQL.Add('UpDate MovCuotas ');
+              qSendSuc.SQL.Add('   Set FechaIC = :Fec ');
+              qSendSuc.SQL.Add('Where (IdMovCred = :IdM) And ');
+              qSendSuc.SQL.Add('      (IdSucursal = :IdS) And ');
+              qSendSuc.SQL.Add('      (NroCuota = :NrC) And ');
+              qSendSuc.SQL.Add('      (Estado = 1) ');
+              qSendSuc.ParamByName('Fec').AsDate := Date;
+              qSendSuc.ParamByName('IdM').AsInteger := qGet_LiqIDMOVCRED.AsInteger;
+              qSendSuc.ParamByName('IdS').AsInteger := qGet_LiqIDSUCURSAL.AsInteger;
+              qSendSuc.ParamByName('NrC').AsInteger := qGet_LiqNROCUOTA.AsInteger;
+              qSendSuc.ExecSQL;
+            except
+              on E:Exception do
+                raise EUsuario.Create('Error marcando liquidaciones. '+E.Message);
+            end;
+            qGet_Liq.Next;
+          end;
+        end;
+        qGet_Liq.Close;
+        if Con_Show then
+        begin
+          pnlCounters.Caption := '';
+          pnlCounters.Visible := False;
+          pnlFoot.Caption := 'Finalizado liquidaciones de tarjetas y mutuales.-';
+          Application.ProcessMessages;
+        end;
+        dmGestion.trUpDateArt.Commit;
+      except
+        on E:Exception do
+        begin
+          if Con_Show then
+          begin
+            pnlCounters.Caption := '';
+            pnlCounters.Visible := False;
+            pnlFoot.Caption := 'Error en Liquidaciones. '+E.Message;
+            Application.ProcessMessages;
+          end;
+          dmGestion.trUpDateArt.Rollback;
+          raise EUsuario.Create('Error: '+E.Message);;
+        end;
+      end;
+    finally
+      dbSucursales.Connected := False;
+    end;
+  end;
+end;
+
+procedure TfrmGestSucursales.Recibir_Transferencias(Con_Show: Boolean; Fec_Desde: TDate);
+var
+  Actual, i: Integer;
+begin
+  // Transferencias
+  //  ESTADO_TR
+  //  2 En la Central para enviar
+  //  1 para traer de sucursales
+
+  if Con_Show then
+  begin
+    pnlFoot.Caption := ' - ';
+    pnlCounters.Caption := 'Leyendo transferencias...';
+    Application.ProcessMessages;
+  end;
+
+  spUpDateInsertFacItm.StoredProcName := 'PUT_TRASPASO';
+  spUpDateInsertFacItm.Prepare;
+  qSendSuc.Close;
+  qSendSuc.SQL.Clear;
+  qSendSuc.SQL.Add('Select * From SEND_TRASPASO(:ID_SUCURSAL, :ESTADO_TR, :FEC_DESDE)');
+  qSendSuc.Prepare;
+  qSendSuc.ParamByName('ID_SUCURSAL').AsInteger := Id_Sucur;
+  if IdBranch = 1 then
+    qSendSuc.ParamByName('ESTADO_TR').AsInteger := 1  // leer transfencias de sucursal
+  else
+    qSendSuc.ParamByName('ESTADO_TR').AsInteger := 2; // leer transfencias de central
+  qSendSuc.ParamByName('FEC_DESDE').asDate := Fec_Desde;
+
+  try
+    qSendSuc.Open;
+  except
+    on E:Exception do
+      raise EUsuario.Create('Leyendo transferencias. '+E.Message);
+  end;
+
+  if qSendSuc.IsEmpty then
+  begin
+    dbSucursales.Connected := False;
+    if Con_Show then
+    begin
+      pnlCounters.Caption := 'sin transferencias...';
+      Application.ProcessMessages;
+    end;
+    Exit;
+  end
+  else begin
+    try
+      spUpDateInsertFacItm.StoredProcName := 'PUT_TRASPASO';
+      spUpDateInsertFacItm.Prepare;
+      qSendSuc.First;
+      while not qSendSuc.Eof do
+      begin
+        For i := 0 to qSendSuc.FieldCount-1 do
+        begin
+          if spUpDateInsertFacItm.Params.FindParam(qSendSuc.Fields[i].FieldName) <> nil then
+          begin
+            if UpperCase(qSendSuc.Fields[i].FieldName) = 'FECHAENV' then
+              spUpDateInsertFacItm.ParamByName(qSendSuc.Fields[i].FieldName).Value := Date
+            else
+              spUpDateInsertFacItm.ParamByName(qSendSuc.Fields[i].FieldName).Value := qSendSuc.Fields[i].Value;
+          end;
+        end;
+
+        try
+          if not dmGestion.trUpDateArt.InTransaction then
+            dmGestion.trUpDateArt.StartTransaction;
+          spUpDateInsertFacItm.ExecProc;
+          dmGestion.trUpDateArt.Commit;
+        except
+          on E:Exception do
+          begin
+            dmGestion.trUpDateArt.Rollback;
+            if Con_Show then
+            begin
+              pnlCounters.Visible := False;
+              pnlFoot.Caption := 'Error en Transferencias. ';
+              Application.ProcessMessages;
+            end;
+            raise EUsuario.Create(E.Message);
+          end;
+        end;
+        Inc(Actual);
+        qSendSuc.Next;
+      end;
+      qSendSuc.Close;
+
+      // Items TR
+      if Con_Show then
+      begin
+        pnlCounters.Caption := 'Leyendo productos transferidos...';
+        Application.ProcessMessages;
+      end;
+
+      qSendSuc.SQL.Clear;
+      qSendSuc.SQL.Add('Select * From SEND_ITEMSTR(:ID_SUCURSAL, :ESTADO_TR, :FEC_DESDE)');
+      qSendSuc.Prepare;
+      qSendSuc.ParamByName('ID_SUCURSAL').AsInteger := Id_Sucur;
+      if IdBranch = 1 then
+        qSendSuc.ParamByName('ESTADO_TR').AsInteger := 1  // leer transfencias de sucursal
+      else
+        qSendSuc.ParamByName('ESTADO_TR').AsInteger := 2; // leer transfencias de central
+      qSendSuc.ParamByName('FEC_DESDE').asDate := Fec_Desde;
+      try
+        qSendSuc.Open;
+      except
+        on E:Exception do
+          raise EUsuario.Create('Error leyendo items TR. '+E.Message);
+      end;
+
+      if not qSendSuc.IsEmpty then
+      begin
+        spUpDateInsertFacItm.StoredProcName := 'PUT_ITEMSTR';
+        spUpDateInsertFacItm.Prepare;
+        qSendSuc.First;
+        While not qSendSuc.Eof do
+        begin
+          For i:= 0 to qSendSuc.FieldCount-1 do
+            if spUpDateInsertFacItm.Params.FindParam(qSendSuc.Fields[i].FieldName) <> nil then
+              spUpDateInsertFacItm.ParamByName(qSendSuc.Fields[i].FieldName).Value := qSendSuc.Fields[i].Value;
+          try
+            if not dmGestion.trUpDateArt.InTransaction then
+              dmGestion.trUpDateArt.StartTransaction;
+            spUpDateInsertFacItm.ExecProc;
+            dmGestion.trUpDateArt.Commit;
+          except
+            on E:Exception do
+            begin
+              dmGestion.trUpDateArt.Rollback;
+              if Con_Show then
+              begin
+                pnlCounters.Visible := False;
+                pnlFoot.Caption := 'Error en items Transferidos. ';
+                Application.ProcessMessages;
+              end;
+              raise EUsuario.Create(E.Message);
+            end;
+          end;
+          qSendSuc.Next;
+        end;
+      end;
+
+      try
+        if not qMark_EnSuc.Transaction.InTransaction then
+          qMark_EnSuc.Transaction.StartTransaction;
+        qMark_EnSuc.Close;
+        qMark_EnSuc.StoredProcName := 'SETEAR_TRANSF(:Fecha_Lec, :Id_Suc, :Est_TR)';
+        qMark_EnSuc.Prepare;
+        qMark_EnSuc.ParamByName('Fecha_Lec').AsDate:= Date;
+        qMark_EnSuc.ParamByName('Id_Suc').AsInteger := Id_Sucur;
+        if IdBranch = 1 then
+          qMark_EnSuc.ParamByName('Est_TR').AsInteger := 1  // MARCAR transfencias de sucursal
+        else
+          qMark_EnSuc.ParamByName('Est_TR').AsInteger := 2; // MARCAR transfencias de central
+        qMark_EnSuc.ExecProc;
+        qMark_EnSuc.Transaction.Commit;
+      except
+        on E:Exception do
+        begin
+          qMark_EnSuc.Transaction.Rollback;
+          raise EUsuario.Create('Error marcando lecturas. '+E.Message);
+        end;
+      end;
+
+      if Con_Show then
+      begin
+        pnlCounters.Visible := False;
+        pnlFoot.Caption := 'Finalizado transferencias de productos.-';
+        Application.ProcessMessages;
+      end;
+    finally
+      dbSucursales.Connected := False;
+    end;
+  end;
+end;
+
+procedure TfrmGestSucursales.SalirClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmGestSucursales.Recibir_Organizacion_De_Central(Con_Show: Boolean);
+Const
+  AR = 'Select * From GET_AREA_ACTUALIZAR(:Fec_Desde)';
+  GR = 'Select * From GET_GRUPO_ACTUALIZAR(:Fec_Desde)';
+  SG = 'Select * From GET_SUBGR_ACTUALIZAR(:Fec_Desde)';
+  AO = 'Select * From GET_ARTOF_ACTUALIZAR(:Id_Sucursal)';
+  TJ = 'Select * From GET_TARJ_ACTUALIZAR(:Fec_Desde)';
+  TP = 'Select * From GET_PLAN_ACTUALIZAR(:Id_Sucursal)';
+  EM = 'Select * From GET_EMPLEADOS(:Fec_Desde)';
+  DS = 'Select * From GET_DATOS_SISTEMA(:Id_Empresa)';
+  PE = 'Select * From GET_ARTPE_ACTUALIZAR(:Id_Sucursal)';
+  OE = 'Select * From GET_ARTOE_ACTUALIZAR(:Id_Sucursal)';
+var
+  i,
+  j: Integer;
+  q: TMDOQuery;
+  Ult_Act: TDate;
+  Status: String;
+begin
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.dbGestion;
+    q.Transaction := dmGestion.trGestion;
+    q.SQL.Add('Select Ultima_Act_Org As U ');
+    q.SQL.Add('From Sucursales ');
+    q.SQL.Add('Where IdSucursal = :IdSuc ');
+    q.ParamByName('IdSuc').AsInteger := Id_Sucur;
+    q.Open;
+    if not q.FieldByName('U').IsNull then
+      Ult_Act := q.FieldByName('U').AsDateTime
+    else
+      Ult_Act := EncodeDate(YearOf(Date), MonthOf(Date), 1);
+    q.Close;
+  finally
+    q.Free;
+  end;
+  if Con_Show then
+  begin
+    pnlCounters.Caption := 'Actualizando Datos operativos.- ';
+    Application.ProcessMessages;
+  end;
+
+  For j := 1 to 10 do
+  begin
+    try
+      qOrganizacion.Close;
+      qOrganizacion.SQL.Clear;
+      Case j of
+         1: begin qOrganizacion.SQL.Text := AR; Status := 'AREAS '; end;
+         2: begin qOrganizacion.SQL.Text := GR; Status := 'GRUPOS '; end;
+         3: begin qOrganizacion.SQL.Text := SG; Status := 'SUBGRUPOS'; end;
+         4: begin qOrganizacion.SQL.Text := AO; Status := 'OFERTAS'; end;
+         5: begin qOrganizacion.SQL.Text := TJ; Status := 'TARJETAS'; end;
+         6: begin qOrganizacion.SQL.Text := TP; Status := 'PLANES';end;
+         7: begin qOrganizacion.SQL.Text := EM; Status := 'EMPLEADOS'; end;
+         8: begin qOrganizacion.SQL.Text := DS; Status := 'SISTEMA'; end;
+         9: begin qOrganizacion.SQL.Text := PE; Status := 'PRECIOS ESP.'; end;
+        10: begin qOrganizacion.SQL.Text := OE; Status := 'OFERTAS ESP.'; end;
+      end;
+
+      if Con_Show then
+      begin
+        pnlCounters.Caption := Format(' %d - Actualizando %s - %s ', [j, Status, DateToStr(Ult_Act)]);
+        Application.ProcessMessages;
+      end;
+
+      if j = 8 then
+        qOrganizacion.ParamByName('Id_Empresa').AsInteger := Id_Cia
+      else begin
+        if (j in [4, 6, 9, 10]) then
+          qOrganizacion.ParamByName('Id_Sucursal').AsInteger := Id_Sucur
+        else
+          qOrganizacion.ParamByName('Fec_Desde').AsDate := Ult_Act;
+      end;
+
+      try
+        qOrganizacion.Prepare;
+        qOrganizacion.Open;
+        if not qOrganizacion.IsEmpty then
+        begin
+          Case j of
+            1: spUpdateInsertArt.StoredProcName := 'UPD_INS_AREA';
+            2: spUpdateInsertArt.StoredProcName := 'UPD_INS_GRUPO';
+            3: spUpdateInsertArt.StoredProcName := 'UPD_INS_SUBGR';
+            4: spUpdateInsertArt.StoredProcName := 'UPD_INS_ARTOF';
+            5: spUpdateInsertArt.StoredProcName := 'UPD_INS_TARJETAS';
+            6: spUpdateInsertArt.StoredProcName := 'UPD_INS_TARPLAN';
+            7: spUpdateInsertArt.StoredProcName := 'UPD_INS_EMPLEADOS';
+            8: spUpdateInsertArt.StoredProcName := 'UPD_DATOS_SISTEMA';
+            9: spUpdateInsertArt.StoredProcName := 'UPD_INS_ARTPE';
+            10:spUpdateInsertArt.StoredProcName := 'UPD_INS_ARTOE';
+          end;
+          spUpdateInsertArt.Prepare;
+          If j = 8 then
+            spUpdateInsertArt.ParamByName('ID_EMPRESA').AsInteger := Id_Cia;
+
+          qOrganizacion.First;
+          while not qOrganizacion.Eof do
+          begin
+            for i := 0 to qOrganizacion.FieldCount-1 do
+              if spUpdateInsertArt.Params.FindParam(qOrganizacion.Fields[i].FieldName) <> nil then
+                spUpdateInsertArt.ParamByName(qOrganizacion.Fields[i].FieldName).Value := qOrganizacion.Fields[i].Value;
+            try
+              if not dmGestion.trUpDateArt.InTransaction then
+                dmGestion.trUpDateArt.StartTransaction;
+              spUpdateInsertArt.ExecProc;
+              dmGestion.trUpDateArt.Commit;
+            except
+              on E:Exception do
+              begin
+                dmGestion.trUpDateArt.Rollback;
+                raise EUsuario.Create('Error: '+E.Message);
+              end;
+            end;
+            spUpdateInsertArt.UnPrepare;
+            qOrganizacion.Next;
+          end;
+        end;
+      finally
+        qOrganizacion.Close;
+        qOrganizacion.UnPrepare;
+      end;
+    except
+      on E:Exception do
+        Application.MessageBox(PChar(E.Message+' - Proc Nº '+IntToStr(j)),'Error', MB_ICONERROR);
+    end;
+  end;
+  if Con_Show then
+  begin
+    pnlCounters.Caption := 'Fin actualización Datos operativos.- ';
+    Application.ProcessMessages;
+  end;
+end;
+
+procedure TfrmGestSucursales.Recibir_Productos_De_Central;
+var
+  q: TMDOQuery;
+  i, Actual: Integer;
+  Ult_Act: TDate;
+  Error: Boolean;
+begin
+  if (IdBranch = 1) then
+    Exit;
+  try
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := dmGestion.dbGestion;
+      q.Transaction := dmGestion.trGestion;
+      q.SQL.Add('Select Ultima_Act As U ');
+      q.SQL.Add('From Sucursales ');
+      q.SQL.Add('Where IdSucursal = :IdSuc ');
+      q.ParamByName('IdSuc').AsInteger := Id_Sucur;
+      q.Open;
+      if not q.FieldByName('U').IsNull then
+        Ult_Act := q.FieldByName('U').AsDateTime
+      else
+        Ult_Act := EncodeDate(YearOf(Date), MonthOf(Date), 1);
+      q.Close;
+    finally
+      q.Free;
+    end;
+    qArticulos.Close;
+    pnlBtnDuracion.Caption := Format('UAP %s Inicio: %s ',[DateToStr(Ult_Act), TimeToStr(Time)]);
+    pnlFoot.Caption := 'Iniciando Conección...';
+    Application.ProcessMessages;
+    Error := False;
+    if (Trim(edtDirectorio.Text) > Vacio) and
+       (Id_Sucur > 0) then
+    begin
+      try
+        dbSucursales.Connected := False;
+        dbSucursales.DatabaseName := Trim(edtDirectorio.Text);
+        dbSucursales.Connected := True;
+      except
+        pnlFoot.Caption := 'No Conectado...';
+        Application.ProcessMessages;
+        raise EUsuario.Create('sin conexión al servidor de la sucursal.');
+      end;
+
+      pnlFoot.Caption := 'Conectado.';
+      pnlCounters.Visible := True;
+      Application.ProcessMessages;
+      Recibir_Organizacion_De_Central(True);
+
+      pnlCounters.Caption := 'Buscando productos para actualizar... ';
+      Application.ProcessMessages;
+      qArticulos.SQL.Clear;
+      qArticulos.SQL.Text := 'Select * From GET_ART_ACTUALIZAR(:FEC_DESDE) ';
+      qArticulos.ParamByName('FEC_DESDE').AsDate := Ult_Act;
+      try
+        qArticulos.Prepare;
+        try
+          pnlCounters.Caption := Format('Buscando productos para actualizar desde %s... ', [DateToStr(Ult_Act)]);
+          Application.ProcessMessages;
+          qArticulos.Open;
+        except
+          on E:Exception do
+          begin
+            Error := True;
+            pnlCounters.Caption := 'Error Productos ';
+            Application.ProcessMessages;
+            raise EUsuario.Create('Error buscando productos para actualizar: '+E.Message);
+          end;
+        end;
+
+        if qArticulos.IsEmpty then
+        begin
+          pnlCounters.Caption := 'No hay productos a actualizar.- ';
+          Application.ProcessMessages;
+          Exit;
+        end
+        else begin
+          pnlCounters.Caption := 'Actualizando productos... ';
+          Application.ProcessMessages;
+          spUpdateInsertArt.StoredProcName := 'UPD_INS_ART';
+          try
+            spUpdateInsertArt.Prepare;
+            Actual := 0;
+            qArticulos.First;
+            while not qArticulos.Eof do
+            begin
+              try
+                for i := 0 to qArticulos.FieldCount-1 do
+                begin
+                  if spUpdateInsertArt.Params.FindParam(qArticulos.Fields[i].FieldName) <> nil then
+                    spUpdateInsertArt.ParamByName(qArticulos.Fields[i].FieldName).Value := qArticulos.Fields[i].Value;
+                end;
+              except
+                on E:Exception do
+                begin
+                  Error := True;
+                  raise EUsuario.Create('Error al asignar producto: '+qArticulosIdArticulo.AsString+' : '+E.Message);
+                end;
+              end;
+
+              try
+                if not dmGestion.trUpDateArt.InTransaction then
+                  dmGestion.trUpDateArt.StartTransaction;
+                spUpdateInsertArt.ExecProc;
+                dmGestion.trUpDateArt.Commit;
+              except
+                on E:Exception do
+                begin
+                  dmGestion.trUpDateArt.Rollback;
+                  Error := True;
+                  raise EUsuario.Create('Error al procesar producto: '+qArticulosIdArticulo.AsString+' : '+E.Message);
+                end;
+              end;
+              Inc(Actual);
+              pnlCounters.Caption := Format('Act: %d %d %s %s', [Actual, qArticulosIdArticulo.AsInteger, qArticulosMarca.AsString, qArticulosDetalle.AsString]);
+              Application.ProcessMessages;
+              qArticulos.Next;
+            end;
+          finally
+            pnlCounters.Caption := Format('Se actualizaron %d productos',[Actual]);
+            Application.ProcessMessages;
+            spUpdateInsertArt.UnPrepare;
+          end;
+
+          try
+            if not qUpdFecMod.Transaction.InTransaction then
+              qUpdFecMod.Transaction.StartTransaction;
+            pnlCounters.Caption := 'Actualizando datos de referencia en Central';
+            Application.ProcessMessages;
+            qUpdFecMod.ParamByName('FECHA').AsDate := Date;
+            qUpdFecMod.ParamByName('SUCURSAL').AsInteger := Id_Sucur;
+            qUpdFecMod.ExecSQL;
+            qUpdFecMod.Transaction.Commit;
+          except
+            on E:Exception do
+            begin
+              qUpdFecMod.Transaction.Rollback;
+              Error := True;
+              raise EUsuario.Create('Error al actualizar datos de referencia: '+E.Message);
+            end;
+          end;
+        end;
+      finally
+        qArticulos.Close;
+        qArticulos.UnPrepare;
+      end;
+    end;
+  finally
+    if not Error then
+    begin
+      Recibir_Transferencias(True, Ult_Act);
+      Recibir_LiquidacionesTM(True, Ult_Act);
+      try
+        if not dmGestion.trGestion.InTransaction then
+          dmGestion.trGestion.StartTransaction;
+        try
+          q := TMDOQuery.Create(nil);
+          q.Database := dmGestion.dbGestion;
+          q.Transaction := dmGestion.trGestion;
+          q.SQL.Add('UpDate DatosSis ');
+          q.SQL.Add('   Set UltimaActDatos = :T ');
+          q.SQL.Add('Where IdEmpresa = :E ');
+          q.ParamByName('T').AsDateTime := Now;
+          q.ParamByName('E').AsInteger  := Id_Cia;
+          q.ExecSQL;
+        finally
+          q.Free;
+        end;
+
+        try
+          q := TMDOQuery.Create(nil);
+          q.Database := dmGestion.dbGestion;
+          q.Transaction := dmGestion.trGestion;
+          q.SQL.Add('UpDate Sucursales ');
+          q.SQL.Add('  Set Ultima_Act = :UlAct, ');
+          q.SQL.Add('  Ultima_Act_Org = :UlAct ');
+          q.SQL.Add('Where IdSucursal = :IdSuc ');
+          q.ParamByName('UlAct').AsDate := Date;
+          q.ParamByName('IdSuc').AsInteger := Id_Sucur;
+          q.ExecSQL;
+          q.Close;
+        finally
+          q.Free;
+        end;
+        dmGestion.trGestion.Commit;
+      except
+        on E:Exception do
+        begin
+          dmGestion.trGestion.RollBack;
+          raise EUsuario.Create(E.Message);
+        end;
+      end;
+      dmGestion.AbrirGestion;
+      pnlCounters.Visible := False;
+      pnlFoot.Caption := 'Finalizado...';
+      pnlBtnDuracion.Caption := pnlBtnDuracion.Caption + ' Fin: '+TimeToStr(Time);
+      Application.ProcessMessages;
+      if Actual > 0 then
+        Ver_PreciosNuevos(Ult_Act)
+      else begin
+        pnlFoot.Caption := 'Sin actualizaciones...';
+        Application.ProcessMessages;
+      end;
+    end
+    else begin
+      pnlBtnDuracion.Caption := 'Error';
+      Application.ProcessMessages;
+    end;
+  end;
+end;
+
+procedure TfrmGestSucursales.Get_Ofertas(IdSucRemota: Integer);
+var
+  i: Integer;
+begin
+  if IdBranch = 1 then
+    Exit;
+  if (IdSucRemota <= 0) then
+    Exit;
+  if not qSucur.Active then
+    qSucur.Open;
+  if qSucur.Locate(qSucurIdSucursal.FieldName, IdSucRemota, []) then
+  begin
+    if (Trim(qSucurHostName.AsString) > Vacio) and
+       (IdSucRemota > 0) then
+    begin
+      try
+        try
+          dbSucursales.Connected := False;
+          dbSucursales.DatabaseName := Trim(qSucurHostName.AsString);
+          dbSucursales.Connected := True;
+        except
+          on E:Exception do
+            raise EUsuario.Create('sin conexión al servidor de la sucursal. Error '+E.Message);
+        end;
+
+        qOrganizacion.Close;
+        qOrganizacion.SQL.Clear;
+        qOrganizacion.SQL.Text := 'Select * From GET_ARTOF_ACTUALIZAR(:ID_SUCURSAL)';
+        qOrganizacion.ParamByName('ID_SUCURSAL').AsInteger := IdSucRemota;
+        try
+          qOrganizacion.Prepare;
+          qOrganizacion.Open;
+          if not qOrganizacion.IsEmpty then
+          begin
+            spUpdateInsertArt.StoredProcName := 'UPD_INS_ARTOF';
+            spUpdateInsertArt.Prepare;
+            qOrganizacion.First;
+            while not qOrganizacion.Eof do
+            begin
+              for i := 0 to qOrganizacion.FieldCount-1 do
+              begin
+                if spUpdateInsertArt.Params.FindParam(qOrganizacion.Fields[i].FieldName) <> nil then
+                  spUpdateInsertArt.ParamByName(qOrganizacion.Fields[i].FieldName).Value := qOrganizacion.Fields[i].Value;
+              end;
+              try
+                if not dmGestion.trUpDateArt.InTransaction then
+                  dmGestion.trUpDateArt.StartTransaction;
+                spUpdateInsertArt.ExecProc;
+                dmGestion.trUpDateArt.Commit;
+              except
+                on E:Exception do
+                begin
+                  dmGestion.trUpDateArt.Rollback;
+                  raise EUsuario.Create('Error Ofertas: '+E.Message);
+                end
+              end;
+              spUpdateInsertArt.UnPrepare;
+              qOrganizacion.Next;
+            end;
+          end;
+        finally
+          qOrganizacion.UnPrepare;
+          qOrganizacion.Close;
+        end;
+      finally
+        dbSucursales.Connected := False;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmGestSucursales.Actualizador(IdSucRemota: Integer);
+var
+  i, Actual: Integer;
+  Directorio: String;
+  Ult_Act: TDate;
+  q: TMDOQuery;
+begin
+  if IdBranch = 1 then
+    Exit;
+  Actual := 0;
+  if not qSucur.Active then
+    qSucur.Open;
+  if qSucur.Locate(qSucurIdSucursal.FieldName, IdSucRemota, []) then
+    Directorio := qSucurHostName.AsString;
+  if (Trim(Directorio) > Vacio) and
+     (IdSucRemota > 0) then
+  begin
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := dmGestion.dbGestion;
+      q.Transaction := dmGestion.trGestion;
+      q.SQL.Add('Select Ultima_Act As U ');
+      q.SQL.Add('From Sucursales ');
+      q.SQL.Add('Where IdSucursal = :IdSuc ');
+      q.ParamByName('IdSuc').AsInteger := Id_Sucur;
+      q.Open;
+      if not q.FieldByName('U').IsNull then
+        Ult_Act := q.FieldByName('U').AsDateTime
+      else
+        Ult_Act := EncodeDate(YearOf(Date), MonthOf(Date), 1);
+      q.Close;
+    finally
+      q.Free;
+    end;
+
+    qArticulos.Close;
+    try
+      dbSucursales.Connected := False;
+      dbSucursales.DatabaseName := Directorio;
+      dbSucursales.Connected := True;
+    except
+      on E:Exception do
+        raise EUsuario.Create('sin conexión al servidor de la sucursal. Error '+E.Message);
+    end;
+    Recibir_Organizacion_De_Central(False);
+    qArticulos.SQL.Clear;
+    qArticulos.SQL.Text := 'Select * From GET_ART_ACTUALIZAR(:FEC_DESDE) ';
+    qArticulos.ParamByName('FEC_DESDE').AsDate := Ult_Act;
+    try
+      qArticulos.Prepare;
+      qArticulos.Open;
+      if qArticulos.IsEmpty then
+      begin
+        Application.MessageBox('No hay productos a actualizar', 'Actualización de productos', MB_ICONEXCLAMATION);
+        Exit;
+      end;
+
+      Screen.Cursor := crSQLWait;
+      Actual := 0;
+      qArticulos.First;
+      spUpdateInsertArt.StoredProcName := 'UPD_INS_ART';
+      spUpdateInsertArt.Prepare;
+      while not qArticulos.Eof do
+      begin
+        for i := 0 to qArticulos.FieldCount-1 do
+        begin
+          if spUpdateInsertArt.Params.FindParam(qArticulos.Fields[i].FieldName) <> nil then
+            spUpdateInsertArt.ParamByName(qArticulos.Fields[i].FieldName).Value := qArticulos.Fields[i].Value;
+        end;
+        try
+          if not dmGestion.trUpDateArt.InTransaction then
+            dmGestion.trUpDateArt.StartTransaction;
+          spUpdateInsertArt.ExecProc;
+          dmGestion.trUpDateArt.Commit;
+        except
+          on E:Exception do
+          begin
+            dmGestion.trUpDateArt.Rollback;
+            raise EUsuario.Create('Error al procesar producto: '+qArticulosIdArticulo.AsString+' : '+E.Message);
+          end
+        end;
+        Inc(Actual);
+        qArticulos.Next;
+      end;
+
+      try
+        if not qUpdFecMod.Transaction.InTransaction then
+          qUpdFecMod.Transaction.StartTransaction;
+        try
+          qUpdFecMod.ParamByName('FECHA').AsDate := Date;
+          qUpdFecMod.ParamByName('SUCURSAL').AsInteger := Id_Sucur;
+          qUpdFecMod.ExecSQL;
+        finally
+          spUpdateInsertArt.UnPrepare;
+        end;
+        qUpdFecMod.Transaction.Commit;
+      except
+        on E:Exception do
+        begin
+          dmGestion.trUpDateArt.Rollback;
+          Actual := 0;
+          raise EUsuario.Create(E.Message);
+        end;
+      end;
+    finally
+      Screen.Cursor := crDefault;
+      qArticulos.Close;
+      qArticulos.UnPrepare;
+    end;
+    Recibir_Transferencias(False, Ult_Act);
+  end;
+
+  if Actual > 0 then
+  begin
+    Application.MessageBox(PChar(Format('Se actualizaron %d productos desde el %s ',[Actual, DateToStr(Ult_Act)])),
+                           'Actualización', MB_ICONINFORMATION);
+    Ver_PreciosNuevos(Ult_Act);
+  end
+  else begin
+    Application.MessageBox(PChar(Format('No hay productos para actualizar desde el %s ',[DateToStr(Ult_Act)])),
+                           'Actualización', MB_ICONINFORMATION);
+  end;
+end;
+
+procedure TfrmGestSucursales.btnCancelarClick(Sender: TObject);
+begin
+  pnlFoot.Caption := NameBranch;
+  Application.ProcessMessages;
+  gbWhere.Visible := False;
+  Que_Hago := 0;
+end;
+//------------------------------------------------------------------------------
+procedure TfrmGestSucursales.btnCerrarClick(Sender: TObject);
+begin
+  gbEnvRec.Visible := False;
+end;
+
+procedure TfrmGestSucursales.Desmarcar(D, H: TDate);
+begin
+  if (Application.MessageBox('¿Desmarca los datos enviados?',
+      'Reenvio', MB_ICONQUESTION + MB_YESNO + MB_DEFBUTTON2) = ID_YES) then
+  begin
+    if (IdBranch > 1) and
+       (H >= D) then
+    begin
+      try
+        Screen.Cursor := crHourGlass;
+        pnlFoot.Caption := 'Desmarcando Ventas.';
+        Application.ProcessMessages;
+        try
+          if not qUnCheck.Transaction.InTransaction then
+            qUnCheck.Transaction.StartTransaction;
+          qUnCheck.Close;
+          qUnCheck.SQL.Clear;
+          qUnCheck.SQL.Add('UpDate FacVen ');
+          qUnCheck.SQL.Add('   Set FECHAIS = null ');
+          qUnCheck.SQL.Add('Where (FECHAF between :D And :H) Or   ');
+          qUnCheck.SQL.Add('      (FECHAIS between :D And :H) ');
+          qUnCheck.ParamByName('D').AsDate := D;
+          qUnCheck.ParamByName('H').AsDate := H;
+          qUnCheck.ExecSQL;
+
+          pnlFoot.Caption := 'Desmarcando Tarjetas.';
+          Application.ProcessMessages;
+          qUnCheck.Close;
+          qUnCheck.SQL.Clear;
+          qUnCheck.SQL.Add('UpDate MovTar ');
+          qUnCheck.SQL.Add('   Set FECHAIS = null ');
+          qUnCheck.SQL.Add('Where (FECHAOP between :D And :H)  Or   ');
+          qUnCheck.SQL.Add('      (FECHAIS between :D And :H) ');
+          qUnCheck.ParamByName('D').AsDate := D;
+          qUnCheck.ParamByName('H').AsDate := H;
+          qUnCheck.ExecSQL;
+
+          pnlFoot.Caption := 'Desmarcando Cuotas.';
+          Application.ProcessMessages;
+          qUnCheck.Close;
+          qUnCheck.SQL.Clear;
+          qUnCheck.SQL.Add('UpDate MovCuotas ');
+          qUnCheck.SQL.Add('   Set FECHAIS = null' );
+          qUnCheck.SQL.Add('Where FECHAIS between :D And :H ');
+          qUnCheck.ParamByName('D').AsDate := D;
+          qUnCheck.ParamByName('H').AsDate := H;
+          qUnCheck.ExecSQL;
+
+          pnlFoot.Caption := 'Desmarcando Cheques.';
+          Application.ProcessMessages;
+          qUnCheck.Close;
+          qUnCheck.SQL.Clear;
+          qUnCheck.SQL.Add('UpDate BancoTer ');
+          qUnCheck.SQL.Add('   Set FECHAIS = null ');
+          qUnCheck.SQL.Add('Where FECHAIS between :D And :H ');
+          qUnCheck.ParamByName('D').AsDate := D;
+          qUnCheck.ParamByName('H').AsDate := H;
+          qUnCheck.ExecSQL;
+
+          pnlFoot.Caption := 'Desmarcando Rendiciones.';
+          Application.ProcessMessages;
+          qUnCheck.Close;
+          qUnCheck.SQL.Clear;
+          qUnCheck.SQL.Add('UpDate R_Rend ');
+          qUnCheck.SQL.Add('   Set FECHAIS = null ');
+          qUnCheck.SQL.Add('Where (FECHAR between :D And :H) Or ');
+          qUnCheck.SQL.Add('      (FECHAIS between :D And :H) ');
+          qUnCheck.ParamByName('D').AsDate := D;
+          qUnCheck.ParamByName('H').AsDate := H;
+          qUnCheck.ExecSQL;
+          qUnCheck.Transaction.Commit;
+
+        except
+          on E:Exception do
+          begin
+            qUnCheck.Transaction.Rollback;
+            raise EUsuario.Create(E.Message);
+          end;
+        end;
+      finally
+        pnlFoot.Caption := 'Finalizado.';
+        Screen.Cursor := crDefault;
+        Application.ProcessMessages;
+      end;
+    end;
+    Application.MessageBox('Proceso de desmarcación. Finalizado.', 'Reenvio', MB_ICONINFORMATION);
+    pnlFoot.Caption := '';
+    Application.ProcessMessages;
+  end;
+end;
+
+procedure TfrmGestSucursales.gbEnvRecEnter(Sender: TObject);
+begin
+  edtDesdeR.Date := Date;
+  edtHastaR.Date := Date;
+end;
+
+procedure TfrmGestSucursales.btnDesmarcarClick(Sender: TObject);
+begin
+  Desmarcar(edtDesdeR.Date, edtHastaR.Date)
+end;
+
+procedure TfrmGestSucursales.btnSalirSucClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmGestSucursales.DesmarcarEnvioClick(Sender: TObject);
+begin
+  if IdBranch > 1 then
+    gbEnvRec.Visible := True;
+end;
+
+procedure TfrmGestSucursales.ReLeer_DatosClick(Sender: TObject);
+begin
+  try
+    Llenar_ComboSuc;
+    Entrando := True;
+    lblSuc.Visible := True;
+    cbSuc_A_Trabajar.Visible := True;
+    lblDatos.Visible := True;
+    edtDirectorio.Visible := True;
+    edtDesdeRL.Enabled := True;
+    lblDesdeRL.Enabled := True;
+    edtDesdeRL.Date := Date;
+    pnlFoot.Caption := ' ';
+    Que_Hago := 3;
+    gbWhere.Caption := ' Recibir ventas desde Sucursal ';
+    lblDatos.Caption := 'Origen de Datos: ';
+    gbWhere.Color := $00BFD5FF;
+    gbWhere.Visible := True;
+    edtDirectorio.Clear;
+    cbSuc_A_Trabajar.SetFocus;
+    pnlFoot.Caption := 'Actualizar central.';
+    Application.ProcessMessages;
+  finally
+    Entrando := False;
+  end;
+end;
+
+
+procedure TfrmGestSucursales.PreciosClick(Sender: TObject);
+begin
+  try
+    Llenar_ComboSuc;
+    Entrando := True;
+    lblSuc.Visible := True;
+    Eligio_Suc;
+    cbSuc_A_Trabajar.Visible := True;
+    cbSuc_A_Trabajar.ItemIndex := cbSuc_A_Trabajar.Items.IndexOf(NameBranch);
+    lblDatos.Visible := True;
+    edtDirectorio.Visible := True;
+    edtDesdeRL.Enabled := False;
+    lblDesdeRL.Enabled := False;
+    edtDesdeRL.Date := Date;
+
+    pnlFoot.Caption := ' ';
+    Que_Hago := 2;
+    gbWhere.Caption := ' Recibir Productos desde Central ';
+    lblDatos.Caption := 'Origen de Datos: ';
+    gbWhere.Color := $00CFCFE7;
+    gbWhere.Visible := True;
+    cbSuc_A_Trabajar.SetFocus;
+    pnlFoot.Caption := 'Actualizar sucursal.';
+    Application.ProcessMessages;
+  finally
+    Entrando := False;
+  end;
+end;
+
+procedure TfrmGestSucursales.VentasSucClick(Sender: TObject);
+begin
+  try
+    Llenar_ComboSuc;
+    Entrando := True;
+    lblSuc.Visible := True;
+    cbSuc_A_Trabajar.Visible := True;
+    lblDatos.Visible := True;
+    edtDirectorio.Visible := True;
+    edtDesdeRL.Enabled := False;
+    lblDesdeRL.Enabled := False;
+    edtDesdeRL.Date := Date;
+    pnlFoot.Caption := ' ';
+    Que_Hago := 1;
+    gbWhere.Caption := ' Recibir ventas desde Sucursal ';
+    lblDatos.Caption := 'Origen de Datos: ';
+    gbWhere.Color := $00BFD5FF;
+    gbWhere.Visible := True;
+    edtDirectorio.Clear;
+    cbSuc_A_Trabajar.SetFocus;
+    pnlFoot.Caption := 'Actualizar central.';
+    Application.ProcessMessages;
+  finally
+    Entrando := False;
+  end;
+end;
+
+end.

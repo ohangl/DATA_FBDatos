@@ -1,0 +1,14 @@
+apn: wap.ctimovil.com.ar
+pagina inicio: http://portalwap.ctimovil.com.ar:8582/WapClaro/claro.jsp
+ip:
+gateway : 170.51.255.240
+puerto:9201
+user: ctigprs
+pass: ctigprs999
+
+
+
+proxy :
+
+habilitar proxy 
+puerto: 8080

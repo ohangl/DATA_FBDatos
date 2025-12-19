@@ -1,0 +1,3670 @@
+unit uConfiguracion;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  Db, DBCtrls, StdCtrls, Buttons, ExtCtrls, Mask, wwcheckbox,
+  wwdbdatetimepicker, ComCtrls, wwdbedit, Wwdbspin, Grids, MDOQuery,
+  Wwdotdot, wwdblook, Wwdbcomb, wwclearbuttongroup, wwradiogroup, Printers,
+  RzButton, RzPanel, RzRadGrp, wwSpeedButton, wwDBNavigator, wwclearpanel,
+  MDOCustomDataSet, DBClient, Provider, RzRadChk, RzDBChk, Variants, RzTabs,
+  Wwdbigrd, Wwdbgrid, MDOTable, RzSplit, ppParameter, ppModule, Registry,
+  daDataModule, ppBands, ppReport, ppStrtch, ppSubRpt, ppDB, ppVar, uTools,
+  ppBarCod, ppCtrls, ppPrnabl, ppClass, ppCache, ppProd, ppRelatv,
+  ppDBPipe, ppComm, ppEndUsr, ppViewr, RzDBNav, Menus, DateUtils, RzEdit,
+  RzCmboBx, RzDBRGrp, MDOStoredProc;
+
+type
+  TfrmConfiguracion = class(TForm)
+    dsTerminales: TDataSource;
+    pnlFootCfg: TRzPanel;
+    btnAceptar: TRzBitBtn;
+    qTerminales: TMDOQuery;
+
+    prTerminales: TDataSetProvider;
+    Terminales: TClientDataSet;
+    TerminalesIDEMPRESA: TIntegerField;
+    TerminalesIDSUCURSAL: TIntegerField;
+    TerminalesIDPUNTOVENTA: TSmallintField;
+    TerminalesSECTOR: TIntegerField;
+    TerminalesFANTASY1: TMDOStringField;
+    TerminalesFANTASY2: TMDOStringField;
+    TerminalesDIRECCION: TMDOStringField;
+    TerminalesLOCALIDAD: TMDOStringField;
+    TerminalesPROVINCIA: TMDOStringField;
+    TerminalesCODPOSTAL: TMDOStringField;
+    TerminalesTELEFONO: TMDOStringField;
+    TerminalesMAILWEB: TMDOStringField;
+    TerminalesPIECOMPROBANTE: TMDOStringField;
+    TerminalesCENTAVOS: TSmallintField;
+    TerminalesCENTAVOSPRECIOS: TSmallintField;
+    TerminalesCONTROLSTOCK: TSmallintField;
+    TerminalesCONTROLADOR_IMPRESORA: TSmallintField;
+    TerminalesIMPRIMEENCONTROLADOR: TSmallintField;
+    TerminalesCAJONDINERO: TSmallintField;
+    TerminalesCIERREAUTOMATICO: TSmallintField;
+    TerminalesSERVIDORFISCAL: TSmallintField;
+    TerminalesTIEMPOFISCAL: TIntegerField;
+    TerminalesHORACIERRE: TTimeField;
+    TerminalesIMPRIMEENLINEA: TSmallintField;
+    TerminalesCONTROLADORLOCAL: TSmallintField;
+    TerminalesPUERTOCONTROLADOR: TSmallintField;
+    TerminalesVELOCIDADCONTROLADOR: TMDOStringField;
+    TerminalesMARCACONTROLADOR: TMDOStringField;
+    TerminalesMODELOCONTROLADOR: TSmallintField;
+    TerminalesTIPOCONTROLADOR: TSmallintField;
+    TerminalesCONTROLADORCONLOGO: TSmallintField;
+    TerminalesNROPTOVTACONTROLADOR: TMDOStringField;
+    TerminalesAVISARSTOCKMINIMO: TSmallintField;
+    TerminalesPEDIRVENDEDOR: TSmallintField;
+    TerminalesPEDIRDESCUENTO: TSmallintField;
+    TerminalesPEDIRLISTAPRECIO: TSmallintField;
+    TerminalesLISTAPRECIOSOFERTAS: TIntegerField;
+    TerminalesHACERNOTACREDITO: TSmallintField;
+    TerminalesCONTROL_TALLES: TSmallintField;
+    TerminalesMOSTRARSALDOSCC: TSmallintField;
+    TerminalesPEDIRSUBDET: TSmallintField;
+    TerminalesHACERREMITOS: TSmallintField;
+    TerminalesCONTROLREMITOS: TSmallintField;
+    TerminalesNFCTACTE: TSmallintField;
+    TerminalesNFTARJETA: TSmallintField;
+    TerminalesNFCHEQUE: TSmallintField;
+    TerminalesNFPENDIENTE: TSmallintField;
+    TerminalesNFCREDITO: TSmallintField;
+    TerminalesCOMPA: TMDOStringField;
+    TerminalesNOTCREDA: TMDOStringField;
+    TerminalesCOMPB: TMDOStringField;
+    TerminalesNOTCREDB: TMDOStringField;
+    TerminalesCOMPT: TMDOStringField;
+    TerminalesRECX: TMDOStringField;
+    TerminalesREMX: TMDOStringField;
+    TerminalesREMITOT: TMDOStringField;
+    TerminalesPRESUPUESTO: TMDOStringField;
+    TerminalesNOTAPEDIDO: TMDOStringField;
+    TerminalesDNOFS: TMDOStringField;
+    TerminalesDOCINTERNOS: TMDOStringField;
+    TerminalesINVERTIRCANTIDAD: TSmallintField;
+    TerminalesMODIFICARIMPERSONAL: TSmallintField;
+    TerminalesCANTIDADPRODUCTOS: TSmallintField;
+    TerminalesIMPRIMIRMARCO: TSmallintField;
+    TerminalesIMPRIMIRTRIPLICADO: TSmallintField;
+    TerminalesCONTROLCOMPROBANTES: TSmallintField;
+    TerminalesPTOISSERVER: TSmallintField;
+    TerminalesMODIMPRESORA: TIntegerField;
+    TerminalesULTIMOSPRECIOS: TDateField;
+    TerminalesESTADO: TSmallintField;
+    TerminalesUENTRADA: TDateTimeField;
+    TerminalesUSALIDA: TDateTimeField;
+    TerminalesUSUARIO: TIntegerField;
+    TerminalesNOMUSR: TStringField;
+
+    pcConfiguracionSistema: TRzPageControl;
+    tsPuntos: TRzTabSheet;
+    tsDatosSis: TRzTabSheet;
+    gbDatosPunto: TRzGroupBox;
+    lblFantasy1: TLabel;
+    lblFantasy2: TLabel;
+    lblPieComp: TLabel;
+    lblDirLocal: TLabel;
+    lblLocalidad: TLabel;
+    lblCodPostal: TLabel;
+    lblMail: TLabel;
+    lblTelLocal: TLabel;
+    lblProvincia: TLabel;
+    gbControlStock: TRzGroupBox;
+    lblStock: TLabel;
+    lblPtoRed: TLabel;
+    cbSucursal: TwwDBLookupCombo;
+    edtIdPtoVta: TwwDBEdit;
+    rgTipoFacturacion: TRzDBRadioGroup;
+    gbNOFiscales: TRzGroupBox;
+    chNFTC: TRzDBCheckBox;
+    cbxSubDet: TRzDBCheckBox;
+    edtNombreCF1: TwwDBEdit;
+    edtNombreCF2: TwwDBEdit;
+    edtPieComp: TwwDBEdit;
+    gbCentavos: TRzGroupBox;
+    lblCentavos: TLabel;
+    lblUltCentPrec: TLabel;
+    edtCentavos: TwwDBSpinEdit;
+    edtCentavosPrecio: TwwDBSpinEdit;
+    edtCodPostal: TwwDBEdit;
+    edtLocalidad: TwwDBEdit;
+    edtDireccion: TwwDBEdit;
+    edtMail: TwwDBEdit;
+    edtTelefono: TwwDBEdit;
+    edtProvincia: TwwDBEdit;
+    gbEstadoTerm: TRzGroupBox;
+    gbControlador: TRzGroupBox;
+    gbModelo: TRzGroupBox;
+    cbModeloControlador: TwwDBLookupCombo;
+    edtPuertoCF: TwwDBSpinEdit;
+    rgTipo_CFiscal: TRzDBRadioGroup;
+    gbNumeradores: TRzGroupBox;
+    lblUltA: TLabel;
+    lblUltB: TLabel;
+    lblUltT: TLabel;
+    lblUltR: TLabel;
+    lblUltRto: TLabel;
+    lblUltNdeCA: TLabel;
+    lblNdeCB: TLabel;
+    lblPtoVta: TLabel;
+    btnActualizar_Numeracion: TRzBitBtn;
+    edtRecX: TwwDBEdit;
+    edtNurTkt: TwwDBEdit;
+    edtNurFB: TwwDBEdit;
+    edtNurFA: TwwDBEdit;
+    edtRemX: TwwDBEdit;
+    edtNdeCA: TwwDBEdit;
+    edtUltNdeCB: TwwDBEdit;
+    edtNroPunto: TwwDBEdit;
+    pcDatosSys: TRzPageControl;
+    tsGeneral: TRzTabSheet;
+    tsMotivos: TRzTabSheet;
+    lblMotAjustes: TLabel;
+    lblMotNC: TLabel;
+    lblEstChq3: TLabel;
+    lblMotDel: TLabel;
+    gAjustes: TwwDBGrid;
+    gMotNC: TwwDBGrid;
+    gMovBancos: TwwDBGrid;
+    gMotDel: TwwDBGrid;
+    tsLugares: TRzTabSheet;
+    gbProvincias: TRzGroupBox;
+    gProvincias: TwwDBGrid;
+    gbDepartamentos: TRzGroupBox;
+    gDptos: TwwDBGrid;
+    gbSubDep: TRzGroupBox;
+    gSubDep: TwwDBGrid;
+    cbSucursales: TwwDBLookupCombo;
+    dsDatosSis: TDataSource;
+    SubDep: TMDOTable;
+    SubDepIDSUBDEP: TIntegerField;
+    SubDepDETSUBDEP: TMDOStringField;
+    SubDepIDSUCURSAL: TIntegerField;
+    dsSubDep: TDataSource;
+    iIyC: TImage;
+    tsFormularios: TRzTabSheet;
+    ppdIyC: TppDesigner;
+    ppDefComp: TppDBPipeline;
+    ppCodeBar: TppReport;
+    hbCodBar: TppColumnHeaderBand;
+    dbCodeBar: TppDetailBand;
+    shpEtqPrc: TppShape;
+    lblDescripcion: TppDBText;
+    lblMarca: TppDBText;
+    lblGrupoSubGrupo: TppDBText;
+    lblIdArticulo: TppDBText;
+    lblPrecio: TppDBText;
+    lblCodBarra: TppDBBarCode;
+    lblFecha: TppSystemVariable;
+    lblTalleCB: TppDBText;
+    lblPresentacion: TppDBText;
+    lblCodArt: TppDBText;
+    fbCodBar: TppColumnFooterBand;
+    ppDBItems: TppDBPipeline;
+    lbllIdItem: TppField;
+    lblLCPro: TppField;
+    lblLCBar: TppField;
+    lblLCan: TppField;
+    lblLMar: TppField;
+    lblLDet: TppField;
+    lblLCol: TppField;
+    lblLMed: TppField;
+    lblLSDt: TppField;
+    lblLPNeto: TppField;
+    lblLNUnit: TppField;
+    lblLBon: TppField;
+    lblLDes: TppField;
+    lblLPTot: TppField;
+    lblLPFin: TppField;
+    lblLGSG: TppField;
+    ppEtiquetas: TppReport;
+    hbEtq: TppColumnHeaderBand;
+    dbEtq: TppDetailBand;
+    ppShapeEtq: TppShape;
+    lblDetArt: TppDBText;
+    lblMarArt: TppDBText;
+    lblGrSubGr: TppDBText;
+    lblIdArt: TppDBText;
+    lblPreArt: TppDBText;
+    lblFechaTr: TppSystemVariable;
+    lblColorArt: TppDBText;
+    lblTalleEtq: TppDBText;
+    lblCodBarraE: TppDBText;
+    fbEtq: TppColumnFooterBand;
+
+    dsDefComp: TDataSource;
+    tFormulario: TClientDataSet;
+    tFormularioIdFactura: TIntegerField;
+    tFormularioTipoComp: TStringField;
+    tFormularioNroComp: TStringField;
+    tFormularioLugar_Fecha: TStringField;
+    tFormularioNomCliente: TStringField;
+    tFormularioFanCliente: TStringField;
+    tFormularioDomicilio: TStringField;
+    tFormularioLocProv: TStringField;
+    tFormularioDocumento: TStringField;
+    tFormularioTipoIva: TStringField;
+    tFormularioNroCliente: TIntegerField;
+    tFormularioListaPre: TStringField;
+    tFormularioNroVend: TIntegerField;
+    tFormularioAlcIva1: TFloatField;
+    tFormularioAlcIva2: TFloatField;
+    tFormularioTNeto: TCurrencyField;
+    tFormularioTImpInt: TCurrencyField;
+    tFormularioTExento: TCurrencyField;
+    tFormularioTAlcIva1: TCurrencyField;
+    tFormularioTAlcIva2: TCurrencyField;
+    tFormularioTotalF: TCurrencyField;
+    tFormularioNomVendedor: TStringField;
+    tFormularioDepOrg: TStringField;
+    tFormularioDepDest: TStringField;
+    tFormularioDetMovilidad: TStringField;
+    tFormularioDescuento: TCurrencyField;
+    tFormularioDetSuc: TStringField;
+    dsFormulario: TDataSource;
+
+    tDetExtItem: TClientDataSet;
+    tDetExtItemIdItem: TIntegerField;
+    tDetExtItemIdDetalle: TIntegerField;
+    tDetExtItemDetalle: TStringField;
+    dsDetExt: TDataSource;
+
+    tItemsForm: TClientDataSet;
+    tItemsFormIdItem: TAutoIncField;
+    tItemsFormCodProd: TStringField;
+    tItemsFormCodBarra: TStringField;
+    tItemsFormCant: TFloatField;
+    tItemsFormMarca: TStringField;
+    tItemsFormDescripcion: TStringField;
+    tItemsFormColor: TStringField;
+    tItemsFormTalle: TIntegerField;
+    tItemsFormSubDet: TStringField;
+    tItemsFormPNeto: TCurrencyField;
+    tItemsFormNetoUnit: TCurrencyField;
+    tItemsFormBonif: TFloatField;
+    tItemsFormDescuento: TCurrencyField;
+    tItemsFormPTotal: TCurrencyField;
+    tItemsFormPFinal: TCurrencyField;
+    tItemsFormGrupoSubGrupo: TStringField;
+    dsItemsForm: TDataSource;
+
+    lstFormulario: TppReport;
+    ppTitulo: TppHeaderBand;
+    spBordeCabecera: TppShape;
+    lblNroComp: TppDBText;
+    lblTipoCmp: TppDBText;
+    lblLugarFecha: TppDBText;
+    lblNomCli: TppDBText;
+    lblFanCli: TppDBText;
+    lblDom: TppDBText;
+    lblLocProv: TppDBText;
+    lblDocumento: TppDBText;
+    lblTipoIva: TppDBText;
+    lblListaPre: TppDBText;
+    lblDepOrg: TppDBText;
+    lblDepDest: TppDBText;
+    lblNroCli: TppDBText;
+    lblNroVend: TppDBText;
+    lblNomVend: TppDBText;
+    lblDetSuc: TppDBText;
+    ppSystemVariable1: TppSystemVariable;
+    ppCuerpo: TppDetailBand;
+    ppItems: TppSubReport;
+    ppChildReport1: TppChildReport;
+    dbLineaItems: TppDetailBand;
+    spBordeItems: TppShape;
+    lblCod: TppDBText;
+    lblCant: TppDBText;
+    lblDesc: TppDBText;
+    lblUnidad: TppDBText;
+    lblNetoItem: TppDBText;
+    lblBonifArt: TppDBText;
+    lblPreTotal: TppDBText;
+    lblPreFinal: TppDBText;
+    lblCodBarraArt: TppDBText;
+    lblNetoUnit: TppDBText;
+    srDetExt: TppSubReport;
+    chrDetItems: TppChildReport;
+    dbDetItems: TppDetailBand;
+    lblDetItems: TppDBText;
+    lblAMarca: TppDBText;
+    ppPie: TppFooterBand;
+    spBordePie: TppShape;
+    lblNetoPie: TppDBText;
+    lblImpIntPie: TppDBText;
+    lblExentoPie: TppDBText;
+    lblAlcIva1Pie: TppDBText;
+    lblAlcIva2Pie: TppDBText;
+    lblIva2Pie: TppDBText;
+    lblIva1Pie: TppDBText;
+    lblTotalFPie: TppDBText;
+    ppSumario: TppSummaryBand;
+    spBordeSumario: TppShape;
+    lblNetoSumario: TppDBText;
+    lblImpIntSumario: TppDBText;
+    lblExentoSumario: TppDBText;
+    lblAlcIva1Sumario: TppDBText;
+    lblAlcIva2Sumario: TppDBText;
+    lblIva2Sumario: TppDBText;
+    lblIva1Sumario: TppDBText;
+    lblTotalFSumario: TppDBText;
+    daDataModule1: TdaDataModule;
+    ppParameterList1: TppParameterList;
+
+    ppFormulario: TppDBPipeline;
+    ppFormularioppField1: TppField;
+    ppFormularioppField2: TppField;
+    ppFormularioppField3: TppField;
+    ppFormularioppField4: TppField;
+    ppFormularioppField5: TppField;
+    ppFormularioppField6: TppField;
+    ppFormularioppField7: TppField;
+    ppFormularioppField8: TppField;
+    ppFormularioppField9: TppField;
+    ppFormularioppField10: TppField;
+    ppFormularioppField11: TppField;
+    ppFormularioppField12: TppField;
+    ppFormularioppField13: TppField;
+    ppFormularioppField14: TppField;
+    ppFormularioppField15: TppField;
+    ppFormularioppField16: TppField;
+    ppFormularioppField17: TppField;
+    ppFormularioppField18: TppField;
+    ppFormularioppField19: TppField;
+    ppFormularioppField20: TppField;
+    ppFormularioppField21: TppField;
+    MemoFac: TppField;
+    ppFormularioppField23: TppField;
+    ppFormularioppField24: TppField;
+    ppFormularioppField25: TppField;
+    ppFormularioppField26: TppField;
+    ppFormularioppField27: TppField;
+    ppItemsForm: TppDBPipeline;
+    ppItemsFormppField1: TppField;
+    ppItemsFormppField2: TppField;
+    ppItemsFormppField3: TppField;
+    ppItemsFormppField4: TppField;
+    ppItemsFormppField5: TppField;
+    ppItemsFormppField6: TppField;
+    ppItemsFormppField7: TppField;
+    ppItemsFormppField8: TppField;
+    ppItemsFormppField9: TppField;
+    ppItemsFormppField10: TppField;
+    ppItemsFormppField11: TppField;
+    ppItemsFormppField12: TppField;
+    ppItemsFormppField13: TppField;
+    ppItemsFormppField14: TppField;
+    ppDetExt: TppDBPipeline;
+    gbHeader: TRzGroupBox;
+    lblTipoComp: TLabel;
+    lblMSup: TLabel;
+    lblMDer: TLabel;
+    lblMIzq: TLabel;
+    lblAnchoHoja: TLabel;
+    lblAlturaHoja: TLabel;
+    lblNCopia: TLabel;
+    lblImpAsigForm: TLabel;
+    lblNroImp: TDBText;
+    lblMargenes: TLabel;
+    lblNComp: TDBText;
+    edtMSup: TwwDBSpinEdit;
+    edtMIzq: TwwDBSpinEdit;
+    edtMDer: TwwDBSpinEdit;
+    cbTipoComp: TwwDBLookupCombo;
+    edtAnchoH: TwwDBSpinEdit;
+    edtAltoH: TwwDBSpinEdit;
+    edtNCopias: TwwDBSpinEdit;
+    btnCopy_Form: TRzBitBtn;
+    btnEditor_Form: TRzBitBtn;
+    cbPrinters: TwwDBComboBox;
+    tsAcercaDe: TRzTabSheet;
+    pnlAcercaDe: TRzGroupBox;
+    bvlPropSis: TBevel;
+    ProgramIcon: TImage;
+    ProductName: TLabel;
+    Version: TLabel;
+    Comments: TLabel;
+    lblFantasyName: TDBText;
+    lblDireccion: TLabel;
+    lblProvPais: TLabel;
+    lblTelefono: TLabel;
+    lblMail_Nosotros: TLabel;
+    IconNos: TImage;
+
+    tDefComp: TMDOTable;
+    tDefCompTIPOCOMP: TIntegerField;
+    tDefCompMODELO_IMPRESORA: TIntegerField;
+    tDefCompPREVISUALIZAR: TSmallintField;
+    tDefCompANCHOHOJA: TMDOBCDField;
+    tDefCompALTURAHOJA: TMDOBCDField;
+    tDefCompMARGENSUPERIOR: TMDOBCDField;
+    tDefCompMARGENDERECHO: TMDOBCDField;
+    tDefCompMARGENIZQUIERDO: TMDOBCDField;
+    tDefCompMARGENINFERIOR: TMDOBCDField;
+    tDefCompCANTCOPIAS: TIntegerField;
+    tDefCompREPNAME: TMDOStringField;
+    tDefCompREPORTE: TBlobField;
+    tDefCompCANTIDAD_ITEMS: TIntegerField;
+
+    dspDefComp: TDataSetProvider;
+    DefComp: TClientDataSet;
+    DefCompTIPOCOMP: TIntegerField;
+    DefCompMODELO_IMPRESORA: TIntegerField;
+    DefCompPREVISUALIZAR: TSmallintField;
+    DefCompANCHOHOJA: TBCDField;
+    DefCompALTURAHOJA: TBCDField;
+    DefCompMARGENSUPERIOR: TBCDField;
+    DefCompMARGENDERECHO: TBCDField;
+    DefCompMARGENIZQUIERDO: TBCDField;
+    DefCompMARGENINFERIOR: TBCDField;
+    DefCompCANTCOPIAS: TIntegerField;
+    DefCompREPNAME: TStringField;
+    DefCompREPORTE: TBlobField;
+    DefCompCANTIDAD_ITEMS: TIntegerField;
+
+    navDatosForm: TRzDBNavigator;
+    lblPreviz: TLabel;
+    cbPreviz: TwwDBComboBox;
+    gbDatosTerm: TRzGroupBox;
+    lblServidor: TLabel;
+    cbIsServer: TwwDBComboBox;
+    lblContMed: TLabel;
+    cbMedidas: TwwDBComboBox;
+    lblCantItem: TLabel;
+    edtCantItems: TwwDBSpinEdit;
+
+    tsEmpleados: TRzTabSheet;
+
+    dsEmpleados: TDataSource;
+    dspqEmpleados: TDataSetProvider;
+    qEmpleados: TMDOQuery;
+    Empleados: TClientDataSet;
+    EmpleadosTIPODOC: TSmallintField;
+    EmpleadosTIPOIVA: TSmallintField;
+    EmpleadosIDEMPLEADO: TIntegerField;
+    EmpleadosNOMBRE: TStringField;
+    EmpleadosDIRECCION: TStringField;
+    EmpleadosLOCALIDAD: TStringField;
+    EmpleadosPROVINCIA: TStringField;
+    EmpleadosCODPOSTAL: TStringField;
+    EmpleadosTELEFONOS: TStringField;
+    EmpleadosDOCUMENTO: TStringField;
+    EmpleadosSALDO: TBCDField;
+    EmpleadosACTIVO: TSmallintField;
+    EmpleadosPASSW: TStringField;
+    EmpleadosAUTORIZADESCUENTO: TSmallintField;
+    EmpleadosIDTAREAFUNCION: TIntegerField;
+    EmpleadosALTAMOD: TDateField;
+    EmpleadosIDSUCASIGNADA: TIntegerField;
+
+    rpEmpleados: TppReport;
+    hbLEmp: TppHeaderBand;
+    shpTitEmp: TppShape;
+    lblTitulo2: TppLabel;
+    lblTitulo1: TppLabel;
+    dbLEmp: TppDetailBand;
+    lblNombre: TppDBText;
+    lblIdEmp: TppDBText;
+    lblEdir: TppDBText;
+    lblELoc: TppDBText;
+    lblEDoc: TppDBText;
+    lblETel: TppDBText;
+    lblNivel: TppDBText;
+    lblClave: TppDBText;
+    dbpEmpleados: TppDBPipeline;
+
+    qViewEmp: TMDOQuery;
+    qViewEmpIDEMPLEADO: TIntegerField;
+    qViewEmpNOMBRE: TMDOStringField;
+    qViewEmpTELEFONOS: TMDOStringField;
+    qViewEmpFUNCION: TMDOStringField;
+    qViewEmpACTIVO: TSmallintField;
+    qViewEmpDETSUC: TMDOStringField;
+    dsqViewEmp: TDataSource;
+    qViewEmpDIRECCION: TMDOStringField;
+    tsAuditoria: TRzTabSheet;
+    pnlBtnAudit: TRzPanel;
+    lblDesdeAudit: TLabel;
+    lblHastaAudit: TLabel;
+    btnCalcularAudit: TRzBitBtn;
+    btnImpAudit: TRzMenuButton;
+    btnExpAudit: TRzMenuButton;
+    pmImprimir: TPopupMenu;
+    ImpVentasConDescuentos: TMenuItem;
+    ImpAjustesDeStock: TMenuItem;
+    ImpModificacionesDePrecios: TMenuItem;
+    ImpVentasSinStock: TMenuItem;
+    ImpPreciosBajoMarkUp: TMenuItem;
+    ImpOrdenesAnuladas: TMenuItem;
+    ImpTodoslosInformes: TMenuItem;
+    pmExportar: TPopupMenu;
+    ExportarVtasConDcto: TMenuItem;
+    ExpAjustes: TMenuItem;
+    ExpModPrc: TMenuItem;
+    ExpVtasSinStock: TMenuItem;
+    ExpPreciosBajoMarkUp: TMenuItem;
+    ExpOrdenesAnuladas: TMenuItem;
+    pcAuditoria: TRzPageControl;
+    tsAuditVentas: TRzTabSheet;
+    gVentas: TwwDBGrid;
+    tsAuditAjustesStk: TRzTabSheet;
+    gAjustesStk: TwwDBGrid;
+    tsAuditModPrc: TRzTabSheet;
+    gModPrc: TwwDBGrid;
+    tsAuditVSStock: TRzTabSheet;
+    gVSinStock: TwwDBGrid;
+    tsAuditBajoMUp: TRzTabSheet;
+    gBajoMUp: TwwDBGrid;
+    tsAuditOrdDel: TRzTabSheet;
+    gOrdenes: TwwDBGrid;
+    rpVentas: TppReport;
+    ppHeaderBand2: TppHeaderBand;
+    lblTituloV: TppLabel;
+    ppLineV1: TppLine;
+    lblSucurV: TppLabel;
+    lblFechaV: TppLabel;
+    lblCodV: TppLabel;
+    lblProdV: TppLabel;
+    lblPFinalV: TppLabel;
+    lblPListaV: TppLabel;
+    lblDescuentoV: TppLabel;
+    lblVend: TppLabel;
+    ppDetailBand3: TppDetailBand;
+    lblSucV: TppDBText;
+    lblFecV: TppDBText;
+    lblCodArtV: TppDBText;
+    lblMarcaV: TppDBText;
+    lblDetArtV: TppDBText;
+    lblPrecioV: TppDBText;
+    lblListaV: TppDBText;
+    lblDctoV: TppDBText;
+    lblVendedor: TppDBText;
+    ppFooterBand2: TppFooterBand;
+    lblEmisionV: TppSystemVariable;
+    lblPaginaV: TppSystemVariable;
+    lblTotPVen: TppDBCalc;
+    lblTotVLis: TppDBCalc;
+    lblTotDto: TppDBCalc;
+    pqVentas: TppDBPipeline;
+    qVentas: TMDOQuery;
+    dsqVentas: TDataSource;
+    qAjustes: TMDOQuery;
+
+    qAjustesSubGrupo: TStringField;
+    qAjustesDetSuc: TStringField;
+    qAjustesFechaF: TDateField;
+    qAjustesIdArticulo: TIntegerField;
+    qAjustesMarca: TStringField;
+    qAjustesDetalle: TStringField;
+    qAjustesTipoAj: TSmallintField;
+    qAjustesNombre: TStringField;
+    qAjustesIdFactura: TIntegerField;
+    qAjustesIdSucursal: TIntegerField;
+    qAjustesIdSucursalD: TIntegerField;
+    qAjustesTMov: TIntegerField;
+    qAjustesCANTIDAD: TMDOBCDField;
+    dsqAjustes: TDataSource;
+    pqAjustes: TppDBPipeline;
+    rpAjustes: TppReport;
+    ppHeaderBand3: TppHeaderBand;
+    lblTituloA: TppLabel;
+    ppLineA1: TppLine;
+    lblSubGrpA: TppLabel;
+    lblSucurA: TppLabel;
+    lblFechaA: TppLabel;
+    lblCodigoA: TppLabel;
+    lblProductoA: TppLabel;
+    lblTipoAj: TppLabel;
+    lblCantA: TppLabel;
+    ppDetailBand4: TppDetailBand;
+    lblSubGrA: TppDBText;
+    lblSucA: TppDBText;
+    lblFecA: TppDBText;
+    lblCodA: TppDBText;
+    lblMarcaA: TppDBText;
+    lblDetArtA: TppDBText;
+    lblTAjusteA: TppDBText;
+    lblCantidadA: TppDBText;
+    lblResponsable: TppDBText;
+    ppFooterBand3: TppFooterBand;
+    lblEmisionA: TppSystemVariable;
+    lblPaginaA: TppSystemVariable;
+    rpModPrc: TppReport;
+    ppHeaderBand4: TppHeaderBand;
+    lblTituloM: TppLabel;
+    ppLineM1: TppLine;
+    lblSubGrpM: TppLabel;
+    lblTCompM: TppLabel;
+    lblFyHM: TppLabel;
+    lblCodArtM: TppLabel;
+    lblProductoM: TppLabel;
+    lblPAnt: TppLabel;
+    lblPNuevo: TppLabel;
+    lblUsrM: TppLabel;
+    ppDetailBand5: TppDetailBand;
+    lblSubGM: TppDBText;
+    lblTCM: TppDBText;
+    lblDiaHoraM: TppDBText;
+    llblCodigoM: TppDBText;
+    lblMarcaM: TppDBText;
+    lblDetalleM: TppDBText;
+    lblPreOld: TppDBText;
+    lblPreNew: TppDBText;
+    lblUsuarioM: TppDBText;
+    lblNroCompM: TppDBText;
+    ppFooterBand4: TppFooterBand;
+    lblEmisionM: TppSystemVariable;
+    lblPaginaM: TppSystemVariable;
+    pqModPrc: TppDBPipeline;
+    qModPrc: TMDOQuery;
+    qModPrcSubGrupo: TStringField;
+    qModPrcDiaHora: TDateTimeField;
+    qModPrcDescCorta: TStringField;
+    qModPrcNroRemito: TStringField;
+    qModPrcIdArticulo: TIntegerField;
+    qModPrcMarca: TStringField;
+    qModPrcDetalle: TStringField;
+    qModPrcNombre: TStringField;
+    qModPrcTipoComp: TSmallintField;
+    qModPrcUsuario: TIntegerField;
+    qModPrcPRECIOOLD: TMDOBCDField;
+    qModPrcPRECIONEW: TMDOBCDField;
+    dsqModPrc: TDataSource;
+    qSinStock: TMDOQuery;
+    qSinStockFechaF: TDateField;
+    qSinStockDetSuc: TStringField;
+    qSinStockIdArticulo: TIntegerField;
+    qSinStockMarca: TStringField;
+    qSinStockDetalle: TStringField;
+    qSinStockIdStock: TIntegerField;
+    qSinStockIdFactura: TIntegerField;
+    qSinStockPRECIOFINAL: TMDOBCDField;
+    dsqSinStock: TDataSource;
+    pqSinStock: TppDBPipeline;
+    rpVtaSinStk: TppReport;
+    ppHeaderBand5: TppHeaderBand;
+    lblTituloS: TppLabel;
+    ppLineS1: TppLine;
+    lblSucurS: TppLabel;
+    lblFechaS: TppLabel;
+    lblCodArtS: TppLabel;
+    lblProdS: TppLabel;
+    lblPrcS: TppLabel;
+    lblCantidad: TppLabel;
+    ppDetailBand6: TppDetailBand;
+    lblDSucS: TppDBText;
+    lblFecS: TppDBText;
+    lblCodigoS: TppDBText;
+    lblMarcaS: TppDBText;
+    lblDetalleS: TppDBText;
+    lblPrecioS: TppDBText;
+    lblCantS: TppDBText;
+    ppFooterBand5: TppFooterBand;
+    lblEmisionS: TppSystemVariable;
+    lblPaginaS: TppSystemVariable;
+    rpBajoMarkUp: TppReport;
+    ppHeaderBand6: TppHeaderBand;
+    lblTituloB: TppLabel;
+    ppLineB1: TppLine;
+    lblSubGrpB: TppLabel;
+    lblFechaB: TppLabel;
+    lblCodArtB: TppLabel;
+    lblProdB: TppLabel;
+    lblCostoB: TppLabel;
+    lblIIB: TppLabel;
+    lblGanancia: TppLabel;
+    lblMarkUpB: TppLabel;
+    lblPrcB: TppLabel;
+    ppDetailBand7: TppDetailBand;
+    lblSubGB: TppDBText;
+    lblFecB: TppDBText;
+    lblCodigoB: TppDBText;
+    lblMarcaB: TppDBText;
+    lblDetalleB: TppDBText;
+    lblPCostoB: TppDBText;
+    lblImpIntB: TppDBText;
+    lblPrecioB: TppDBText;
+    lblGanB: TppDBText;
+    lblCoefMUpB: TppDBText;
+    ppFooterBand6: TppFooterBand;
+    lblEmisionB: TppSystemVariable;
+    lblPaginaB: TppSystemVariable;
+    pqBajoMarkUp: TppDBPipeline;
+    dsqBajoMarkUp: TDataSource;
+    qBajoMarkUp: TMDOQuery;
+    qBajoMarkUpSubGrupo: TStringField;
+    qBajoMarkUpFechaAlta: TDateField;
+    qBajoMarkUpIdArticulo: TIntegerField;
+    qBajoMarkUpMarca: TStringField;
+    qBajoMarkUpDetalle: TStringField;
+    qBajoMarkUpIdGrupo: TIntegerField;
+    qBajoMarkUpIdSubGrupo: TIntegerField;
+    qBajoMarkUpIdMarkUp: TIntegerField;
+    qBajoMarkUpCOSTO: TMDOBCDField;
+    qBajoMarkUpIMPINT: TMDOBCDField;
+    qBajoMarkUpGANANCIA: TMDOBCDField;
+    qBajoMarkUpPRECIO: TMDOBCDField;
+    qBajoMarkUpCOEFMARKUP: TMDOBCDField;
+    qOrdenes: TMDOQuery;
+    qOrdenesIDORDEN: TIntegerField;
+    qOrdenesFECHAOP: TDateField;
+    qOrdenesNROCOMPOP: TMDOStringField;
+    qOrdenesTOTALOP: TMDOBCDField;
+    qOrdenesCONTADO: TMDOBCDField;
+    qOrdenesTICKETS: TMDOBCDField;
+    qOrdenesBANCOPROP: TMDOBCDField;
+    qOrdenesBANCOTER: TMDOBCDField;
+    qOrdenesBONIFPROV: TMDOBCDField;
+    qOrdenesUSUARIO: TIntegerField;
+    qOrdenesNOMBRE: TMDOStringField;
+    dsqOrdenes: TDataSource;
+    pOrdenes: TppDBPipeline;
+    rpOrdenes: TppReport;
+    ppHeaderBand7: TppHeaderBand;
+    lblTituloO: TppLabel;
+    ppLineO1: TppLine;
+    lblProveO: TppLabel;
+    lblChqO: TppLabel;
+    lblFecO: TppLabel;
+    lblNroO: TppLabel;
+    lblTotalO: TppLabel;
+    lblValO: TppLabel;
+    lblContO: TppLabel;
+    lblTktO: TppLabel;
+    lblBonO: TppLabel;
+    ppDetailBand8: TppDetailBand;
+    ppDBText5: TppDBText;
+    lblFechaO: TppDBText;
+    lblNroOPO: TppDBText;
+    lblTotalOP: TppDBText;
+    lblChequesO: TppDBText;
+    lblValoresO: TppDBText;
+    lblContadoO: TppDBText;
+    lblTicketO: TppDBText;
+    lblBonifO: TppDBText;
+    ppFooterBand7: TppFooterBand;
+    lblEmisioO: TppSystemVariable;
+    lblPaginaO: TppSystemVariable;
+    tsAuditBorrados: TRzTabSheet;
+    edtDesdeAudit: TRzDateTimeEdit;
+    edtHastaAudit: TRzDateTimeEdit;
+    qSinStockIDSUCURSAL: TIntegerField;
+    qSinStockNROFACTURA: TMDOStringField;
+    qOrdenesRETENCIONES: TMDOBCDField;
+    tFormularioEntregarA: TStringField;
+    tFormularioDomicilioE: TStringField;
+    tFormularioFormasPago: TStringField;
+    DefCompDetTComp: TStringField;
+    ppFormularioppField28: TppField;
+    ppFormularioppField29: TppField;
+    FormasPago: TppField;
+    tsSucursales: TRzTabSheet;
+    dsSucursales: TDataSource;
+    gbSucursales: TRzGroupBox;
+    gDatosSuc: TwwDBGrid;
+    lblSoftArg: TLabel;
+    iArgentina: TImage;
+    gbSetFecha: TRzGroupBox;
+    lblSetFecha: TLabel;
+    btnSetFecha: TRzBitBtn;
+    gbZAudit: TRzGroupBox;
+    lblZDesde: TLabel;
+    lblZHasta: TLabel;
+    btnReportesZ: TRzBitBtn;
+    lblNroPagina: TppSystemVariable;
+    gbDatosSucursales: TRzGroupBox;
+    lblNroSucursal: TLabel;
+    lblNomSuc: TLabel;
+    lblDirSuc: TLabel;
+    lblLocSuc: TLabel;
+    lblProvSuc: TLabel;
+    lblCPSuc: TLabel;
+    lblTelSuc: TLabel;
+    lblIdSuc: TDBText;
+    lblDenSuc: TLabel;
+    lblFIni: TLabel;
+    lblNRemito: TLabel;
+    lblHost: TLabel;
+    lblNRemitoI: TLabel;
+    lblFecTInv: TLabel;
+    lblUltActPrd: TLabel;
+    lblUltActDatos: TLabel;
+    lblTimeAct: TLabel;
+    lblSucRem: TLabel;
+    lblConSubD: TLabel;
+    lblSucTienda: TLabel;
+    edtNomSuc: TwwDBEdit;
+    edtDirSuc: TwwDBEdit;
+    edtCPSuc: TwwDBEdit;
+    edtTelSuc: TwwDBEdit;
+    cbLocSuc: TwwDBLookupCombo;
+    cbProvSuc: TwwDBLookupCombo;
+    edtDetSuc: TwwDBEdit;
+    edtInicio: TwwDBDateTimePicker;
+    edtComprobante: TwwDBEdit;
+    edtHost: TwwDBEdit;
+    edtComprobanteI: TwwDBEdit;
+    edtFecTInv: TwwDBDateTimePicker;
+    edtUltAct: TwwDBDateTimePicker;
+    edtUltActDatos: TwwDBDateTimePicker;
+    cbRemota: TwwDBComboBox;
+    cbConSubDep: TwwDBComboBox;
+    btnModSuc: TRzBitBtn;
+    btnSaveSuc: TRzBitBtn;
+    btnExpSuc: TRzBitBtn;
+    edtTEAct: TwwDBEdit;
+    cbSucCTienda: TwwDBComboBox;
+    gbFormularios: TRzGroupBox;
+    gTiposComprobantes: TwwDBGrid;
+
+    tFormularioDetalle: TStringField;
+    edtZDesde: TRzDateTimeEdit;
+    edtZHasta: TRzDateTimeEdit;
+    gbComandosCF: TRzGroupBox;
+    btnRepZ: TRzBitBtn;
+    btnRepX: TRzBitBtn;
+    btnCancelarTodo: TRzBitBtn;
+    edtSetFechaCF: TRzDateTimeEdit;
+    lblNEmp: TLabel;
+    dspSucursales: TDataSetProvider;
+    Sucursales: TClientDataSet;
+    SucursalesNombreSuc: TStringField;
+    SucursalesIDSUCURSAL: TIntegerField;
+    btnAddSuc: TRzBitBtn;
+    lblSucActiva: TLabel;
+    cbSucActiva: TwwDBComboBox;
+    SucursalesDetSuc: TStringField;
+    SucursalesFechaInicio: TDateField;
+    SucursalesFechaTInv: TDateField;
+    SucursalesDireccionSuc: TStringField;
+    SucursalesLocalidadSuc: TStringField;
+    SucursalesProvinciaSuc: TStringField;
+    SucursalesCoPostalSuc: TStringField;
+    SucursalesTelefonoSuc: TStringField;
+    SucursalesDirectorio: TStringField;
+    SucursalesRemota: TSmallintField;
+    SucursalesNroRemitoT: TStringField;
+    SucursalesHostName: TStringField;
+    SucursalesNroRemitoI: TStringField;
+    SucursalesConSubDep: TSmallintField;
+    SucursalesEMPRESA: TStringField;
+    SucursalesDOCEMPRE: TStringField;
+    SucursalesULTIMA_ACT: TDateField;
+    SucursalesULTIMA_ACT_ORG: TDateField;
+    SucursalesIDBANCOT: TIntegerField;
+    SucursalesIDBANCOB: TIntegerField;
+    SucursalesIDBANCOE: TIntegerField;
+    SucursalesIDBANCOP: TIntegerField;
+    SucursalesACTIVA: TSmallintField;
+    SucursalesIDEMPRESA: TIntegerField;
+    SucursalesTIEMPOEL: TIntegerField;
+    SucursalesPROXIMA_LECT: TTimeField;
+    SucursalesCON_MEDIDAS: TSmallintField;
+    lblSucProxLect: TDBText;
+    lblModTest: TLabel;
+    cbModoTest: TwwDBComboBox;
+    qViewEmpIDSUCASIGNADA: TIntegerField;
+    Detalle: TppField;
+    dsEmpresas: TDataSource;
+    pcEmpresas: TRzPageControl;
+    tsDatosEmpresas: TRzTabSheet;
+    tsParametros: TRzTabSheet;
+    gbUsuario1: TRzGroupBox;
+    lblPropietario: TLabel;
+    lblEmpresa: TLabel;
+    lblCUIT: TLabel;
+    lblIngBtos: TLabel;
+    lblIdEmpresa: TDBText;
+    lblDomEmp: TLabel;
+    lblLocalidadEmp: TLabel;
+    lblCodPosEmp: TLabel;
+    lblTelEmp: TLabel;
+    lblProvEmp: TLabel;
+    edtNombreEmpresa: TwwDBEdit;
+    edtPropietario: TwwDBEdit;
+    edtIngBtosEmp: TwwDBEdit;
+    edtDocEmpresa: TwwDBEdit;
+    edtLocEmp: TwwDBEdit;
+    edtDirEmp: TwwDBEdit;
+    edtTelEmp: TwwDBEdit;
+    edtCodPosEmp: TwwDBEdit;
+    edtProvEmp: TwwDBEdit;
+    gbUsuario2: TRzGroupBox;
+    lblItmMutTar: TLabel;
+    lblDetItmMT: TDBText;
+    lblAreaCons: TLabel;
+    lblGrpCons: TLabel;
+    lblDetAreaCons: TDBText;
+    lblDetGrupoCons: TDBText;
+    edtItmMT: TwwDBEdit;
+    edtAreaCons: TwwDBEdit;
+    edtGrupoCons: TwwDBEdit;
+    gbAlcIva: TRzGroupBox;
+    gAlicuotas: TwwDBGrid;
+    gbRegImp: TRzGroupBox;
+    gRegImp: TwwDBGrid;
+    gbIngBtos: TRzGroupBox;
+    gbImpProvincial: TRzGroupBox;
+    lblNomImpProv: TLabel;
+    lblCoefImpProv: TLabel;
+    lblDescuento: TLabel;
+    edtDetImpProv: TwwDBEdit;
+    edtAlcImpProv: TwwDBEdit;
+    edtDescIB: TwwDBEdit;
+    gIngBt: TwwDBGrid;
+    gbMovBcos: TRzGroupBox;
+    lblCoefII: TLabel;
+    lblPrcVarDctoII: TLabel;
+    lblValorDolar: TLabel;
+    edtCoefImpInt: TwwDBEdit;
+    edtPrcVarDctoII: TwwDBEdit;
+    edtValorDolar: TwwDBEdit;
+    gbNiveles: TRzGroupBox;
+    lblNivelSeguridad: TLabel;
+    lblNivelMod: TLabel;
+    lblNivelCons: TLabel;
+    lblNivelDcto: TLabel;
+    cbNivelAudit: TwwDBLookupCombo;
+    cbNivelMod: TwwDBLookupCombo;
+    cbNivelCons: TwwDBLookupCombo;
+    cbNivelDcto: TwwDBLookupCombo;
+    gFunciones: TwwDBGrid;
+    pcControlUsuarios: TRzPageControl;
+    tsPersonal: TRzTabSheet;
+    Accesos: TRzTabSheet;
+    gbDatosEmpleados: TRzGroupBox;
+    lblCodEmp: TDBText;
+    lblAltaMod: TDBText;
+    lblNomEmp: TLabel;
+    lblDirEmp: TLabel;
+    lblLocEmp: TLabel;
+    lblEProvCP: TLabel;
+    lblENroTel: TLabel;
+    lblTDocEmp: TLabel;
+    lblCodCtaCon: TLabel;
+    lblNroAnt: TLabel;
+    lblSucAsig: TLabel;
+    edtENombre: TwwDBEdit;
+    edtEDireccion: TwwDBEdit;
+    edtELocalidad: TwwDBEdit;
+    edtETelefono: TwwDBEdit;
+    cbEProvincias: TwwDBLookupCombo;
+    edtECodPostal: TwwDBEdit;
+    cbETipoDoc: TwwDBLookupCombo;
+    edtEDocumento: TwwDBEdit;
+    pnlNavEmp: TRzPanel;
+    btnInsertEmp: TRzBitBtn;
+    btnSaveEmp: TRzBitBtn;
+    btnPrintEmp: TRzBitBtn;
+    btnCancelEmp: TRzBitBtn;
+    btnEditEmp: TRzBitBtn;
+    btnBuscarEmp: TRzBitBtn;
+    btnExportarEmp: TRzBitBtn;
+    gbSeguridad: TRzGroupBox;
+    lblNivelSeg: TLabel;
+    lblEPassW: TLabel;
+    lblEActivo: TLabel;
+    cbNivelSeg: TwwDBLookupCombo;
+    edtEPassW: TwwDBEdit;
+    cbActivo: TwwDBComboBox;
+    edtCodCtaCon: TwwDBEdit;
+    pnlEmpleados: TRzPanel;
+    edtNroAnt: TwwDBEdit;
+    cbSucAsignada: TwwDBComboBox;
+    gbEmpleados: TRzGroupBox;
+    gEmpleados: TwwDBGrid;
+    lblDenEmp: TLabel;
+    edtDenEmp: TwwDBEdit;
+    gbNumeradoresSistema: TRzGroupBox;
+    lblOrdPago: TLabel;
+    lblOrdCmp: TLabel;
+    lblLiqMT: TLabel;
+    lblNCertIva: TLabel;
+    lblNCertGan: TLabel;
+    LblNCertIBLH: TLabel;
+    lblNCertSS: TLabel;
+    edtOrdPago: TwwDBEdit;
+    edtNroOCmp: TwwDBEdit;
+    edtNroLiqMT: TwwDBEdit;
+    edtNCertRIva: TwwDBEdit;
+    edtNCertRGan: TwwDBEdit;
+    edtNCertRIBLH: TwwDBEdit;
+    edtNCertRSS: TwwDBEdit;
+    lblMinNoImpGan: TLabel;
+    edtMinNoImpGan: TwwDBEdit;
+    lblMinNoImpIva: TLabel;
+    edtMinNoImpIva: TwwDBEdit;
+    lblMinNoImpIBT: TLabel;
+    edtMinNoImpIBT: TwwDBEdit;
+    gbUsuarios: TRzGroupBox;
+    gbTareas: TRzGroupBox;
+    gAccEmpleado: TwwDBGrid;
+    gbAccesos: TRzGroupBox;
+    gAccesosMenu: TwwDBGrid;
+    cbMenuOptionsMP: TwwDBComboBox;
+    gAccesosVentas: TwwDBGrid;
+    cbMenuOptionsFV: TwwDBComboBox;
+    spAccesos: TRzSizePanel;
+    qVentasIDFACTURA: TIntegerField;
+    qVentasIDSUCURSAL: TIntegerField;
+    qVentasIDPUNTOVENTA: TIntegerField;
+    qVentasIDARTICULO: TIntegerField;
+    qVentasFECHAF: TDateField;
+    qVentasCANTIDAD: TIntegerField;
+    qVentasDESCUENTO: TMDOBCDField;
+    qVentasPRCBONIFICACION: TMDOBCDField;
+    qVentasPRECIOTOTAL: TMDOBCDField;
+    qVentasVALORLISTA: TMDOBCDField;
+    qVentasNROCTAS: TSmallintField;
+    qVentasOFERTA: TSmallintField;
+    qVentasTALLE: TIntegerField;
+    qVentasSUBDET: TMDOStringField;
+    qVentasIDSUBDEP: TIntegerField;
+    qVentasDCTOSTK: TSmallintField;
+    qVentasMARCA: TMDOStringField;
+    qVentasDETALLE: TMDOStringField;
+    qVentasDETSUC: TMDOStringField;
+    qVentasMAXDTOCDO: TMDOBCDField;
+    qVentasMAXDCTO: TMDOBCDField;
+    qVentasNOMBRE: TMDOStringField;
+    lblPrcBonif: TppDBText;
+    qSinStockCANTIDAD: TIntegerField;
+    lblNroFac: TppLabel;
+    lblNroFacSS: TppDBText;
+    gbConfiguraciones: TRzGroupBox;
+    cbxIIIncEnCosto: TRzDBCheckBox;
+    cbDetEmpSuc: TwwDBLookupCombo;
+    EmpleadosTIPOE: TSmallintField;
+    lblTipoEmp: TLabel;
+    cbTipoEmp: TwwDBComboBox;
+    tFormularioIdEmpresa: TIntegerField;
+    tFormularioEmpresa: TStringField;
+    Empresa: TppField;
+    IdEmpresa: TppField;
+    pnlNavEmpresas: TRzPanel;
+    navEmpresas: TRzDBNavigator;
+    cbPracRetIva: TwwDBComboBox;
+    lblPracRetIva: TLabel;
+    lblPracRetGan: TLabel;
+    cbPracRetGan: TwwDBComboBox;
+    lblPracRetIBLH: TLabel;
+    cbPracRetIBLH: TwwDBComboBox;
+    lblPracRetSS: TLabel;
+    cbPracRetSS: TwwDBComboBox;
+    lblEstTarMut: TLabel;
+    gEstMovCrd: TwwDBGrid;
+    tFormularioComision: TFloatField;
+    ppDBText1: TppDBText;
+    gConectados: TwwDBGrid;
+    Comision: TppField;
+    tFormularioCantArtic: TSmallintField;
+    CantArtic: TppField;
+
+    dsqEstadosTerm: TDataSource;
+    qEstadosTerm: TMDOQuery;
+    qEstadosTermIDSUCURSAL: TIntegerField;
+    qEstadosTermIDPUNTOVENTA: TSmallintField;
+    qEstadosTermESTADO: TSmallintField;
+    qEstadosTermUENTRADA: TDateTimeField;
+    qEstadosTermUSALIDA: TDateTimeField;
+    qEstadosTermUSUARIO: TIntegerField;
+    qEstadosTermNOMBRE: TMDOStringField;
+
+    tsEstadisticasSistema: TRzTabSheet;
+    gEstStm: TwwDBGrid;
+    pnlEstStm: TRzPanel;
+    qEstStm: TMDOQuery;
+    dsqEstStm: TDataSource;
+    qEstStmDETALLE: TMDOStringField;
+    qEstStmSUCURSAL: TMDOStringField;
+    qEstStmMES_EST: TIntegerField;
+    qEstStmYEAR_EST: TIntegerField;
+    qEstStmFACTURAS: TLargeintField;
+    qEstStmITEMS: TLargeintField;
+    cbSucEstStm: TRzComboBox;
+    lblSucursalES: TLabel;
+    btnCalcES: TRzBitBtn;
+    btnExpES: TRzBitBtn;
+    qDeleted: TMDOQuery;
+    qDeletedTIPO: TSmallintField;
+    qDeletedIDFAC: TIntegerField;
+    qDeletedIDSUC: TIntegerField;
+    qDeletedIDPTO: TIntegerField;
+    qDeletedFECHA: TDateField;
+    qDeletedNROC: TMDOStringField;
+    qDeletedTFAC: TMDOStringField;
+    qDeletedMONTO: TMDOBCDField;
+    qDeletedDETSUC: TMDOStringField;
+    qDeletedMOTIVO: TMDOStringField;
+    qDeletedNOMUSR: TMDOStringField;
+    dsqDeleted: TDataSource;
+    gBorrados: TwwDBGrid;
+    ComprobantesBorrados: TMenuItem;
+    pnlNavCli: TRzPanel;
+    btnInsertTer: TRzBitBtn;
+    btnEditTer: TRzBitBtn;
+    btnSaveTer: TRzBitBtn;
+    btnCancelTer: TRzBitBtn;
+    btnPriorTer: TRzBitBtn;
+    btnSigTer: TRzBitBtn;
+    prnPrintFichaCli: TRzBitBtn;
+    TerminalesAVISOSMORA: TStringField;
+    tsTiposComprobantes: TRzTabSheet;
+
+    TiposComp: TClientDataSet;
+    dspqTComp: TDataSetProvider;
+    dsTiposComp: TDataSource;
+    qTiposComp: TMDODataSet;
+    qTiposCompIDCOMPROBANTE: TIntegerField;
+    qTiposCompDESCRIPCION: TMDOStringField;
+    qTiposCompDESCCORTA: TMDOStringField;
+    qTiposCompIP1: TIntegerField;
+    qTiposCompIP2: TIntegerField;
+    qTiposCompIP3: TIntegerField;
+    qTiposCompIP4: TIntegerField;
+    qTiposCompIP5: TIntegerField;
+    qTiposCompIP6: TIntegerField;
+    qTiposCompIP7: TIntegerField;
+    qTiposCompIP8: TIntegerField;
+    qTiposCompIP9: TIntegerField;
+    qTiposCompIP10: TIntegerField;
+    qTiposCompTC_SIAP: TSmallintField;
+    TiposCompIDCOMPROBANTE: TIntegerField;
+    TiposCompDESCRIPCION: TStringField;
+    TiposCompDESCCORTA: TStringField;
+    TiposCompIP1: TIntegerField;
+    TiposCompIP2: TIntegerField;
+    TiposCompIP3: TIntegerField;
+    TiposCompIP4: TIntegerField;
+    TiposCompIP5: TIntegerField;
+    TiposCompIP6: TIntegerField;
+    TiposCompIP7: TIntegerField;
+    TiposCompIP8: TIntegerField;
+    TiposCompIP9: TIntegerField;
+    TiposCompIP10: TIntegerField;
+    TiposCompTC_SIAP: TSmallintField;
+    gTComp: TwwDBGrid;
+    pnlTComp: TRzPanel;
+    btnSaveTComp: TRzBitBtn;
+    lblTipoSuc: TLabel;
+    cbTActSuc: TwwDBComboBox;
+    SucursalesULTIMA_ACT_PRE: TDateTimeField;
+    SucursalesTACTIVIDAD: TSmallintField;
+    cbxConRemPro: TRzDBCheckBox;
+    gbModoControlador: TRzGroupBox;
+    lblTBusqueda: TLabel;
+    cbxCF_ControladorLocal: TRzDBCheckBox;
+    cbxCF_ServidorFiscal: TRzDBCheckBox;
+    edtTFiscal: TwwDBEdit;
+    chEnLinea: TRzDBCheckBox;
+    chConCajon: TRzDBCheckBox;
+    TerminalesACUERDOEXJ: TStringField;
+    gbTipoFactura: TRzGroupBox;
+    chConLogo: TRzDBCheckBox;
+    chTriplicado: TRzDBCheckBox;
+    chMarco: TRzDBCheckBox;
+    qAjustesIDPUNTOVENTA: TIntegerField;
+    qspRepCostoFV: TMDOStoredProc;
+    cbxTransEnVta: TRzDBCheckBox;
+    cbxImpRtoDom: TRzDBCheckBox;
+    tsProgramacion: TRzTabSheet;
+    gbNoUsar: TRzGroupBox;
+    btnRearStk: TRzBitBtn;
+    btnRep_Costos: TRzBitBtn;
+    btnRec_num: TRzBitBtn;
+    btnTranInv: TRzBitBtn;
+    lblRtoAjt: TLabel;
+    edtRtoAjt: TwwDBEdit;
+
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure edtCentavosEnter(Sender: TObject);
+    procedure edtCentavosPrecioEnter(Sender: TObject);
+    procedure edtNombreCF1Enter(Sender: TObject);
+    procedure edtNombreCF2Enter(Sender: TObject);
+    procedure edtNroPuntoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtNombreCF1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtIdPtoVtaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnActualizar_NumeracionClick(Sender: TObject);
+    procedure btnSetFechaClick(Sender: TObject);
+    procedure cbModeloControladorKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtNroPuntoEnter(Sender: TObject);
+    procedure btnReportesZClick(Sender: TObject);
+    procedure TerminalesAfterPost(DataSet: TDataSet);
+    procedure TerminalesNewRecord(DataSet: TDataSet);
+    procedure TerminalesReconcileError(DataSet: TCustomClientDataSet;
+      E: EReconcileError; UpdateKind: TUpdateKind; var Action: TReconcileAction);
+    procedure dsTerminalesDataChange(Sender: TObject; Field: TField);
+    procedure btnRepXClick(Sender: TObject);
+    procedure btnRepZClick(Sender: TObject);
+    procedure btnCancelarTodoClick(Sender: TObject);
+    procedure btnAceptarClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure edtPropietarioKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure gAlicuotasKeyPress(Sender: TObject; var Key: Char);
+    procedure gIngBtKeyPress(Sender: TObject; var Key: Char);
+    procedure edtAlcImpProvKeyPress(Sender: TObject; var Key: Char);
+    procedure edtDetImpProvKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnRearStkClick(Sender: TObject);
+    procedure btnEditor_FormClick(Sender: TObject);
+    procedure btnCopy_FormClick(Sender: TObject);
+    procedure cbTipoCompKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtAnchoHKeyPress(Sender: TObject; var Key: Char);
+    procedure cbPrintersChange(Sender: TObject);
+    procedure lblTalleCBGetText(Sender: TObject; var Text: String);
+    procedure lblTalleEtqGetText(Sender: TObject; var Text: String);
+    procedure DefCompAfterPost(DataSet: TDataSet);
+    procedure DefCompBeforePost(DataSet: TDataSet);
+    procedure btnInsertEmpClick(Sender: TObject);
+    procedure btnEditEmpClick(Sender: TObject);
+    procedure btnSaveEmpClick(Sender: TObject);
+    procedure btnCancelEmpClick(Sender: TObject);
+    procedure btnBuscarEmpClick(Sender: TObject);
+    procedure btnExportarEmpClick(Sender: TObject);
+    procedure btnPrintEmpClick(Sender: TObject);
+    procedure edtENombreEnter(Sender: TObject);
+    procedure edtEDireccionEnter(Sender: TObject);
+    procedure edtELocalidadEnter(Sender: TObject);
+    procedure edtETelefonoEnter(Sender: TObject);
+    procedure cbEProvinciasEnter(Sender: TObject);
+    procedure edtECodPostalEnter(Sender: TObject);
+    procedure cbETipoDocEnter(Sender: TObject);
+    procedure edtEDocumentoEnter(Sender: TObject);
+    procedure gEmpleadosDblClick(Sender: TObject);
+    procedure edtENombreKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure gEmpleadosCalcCellColors(Sender: TObject; Field: TField;
+      State: TGridDrawState; Highlight: Boolean; AFont: TFont; ABrush: TBrush);
+    procedure qViewEmpACTIVOGetText(Sender: TField; var Text: String; DisplayText: Boolean);
+    procedure ImpTodoslosInformesClick(Sender: TObject);
+    procedure gOrdenesDblClick(Sender: TObject);
+    procedure gVentasDblClick(Sender: TObject);
+    procedure gVSinStockDblClick(Sender: TObject);
+    procedure gAjustesStkDblClick(Sender: TObject);
+    procedure qAjustesTipoAjGetText(Sender: TField; var Text: String; DisplayText: Boolean);
+    procedure lblTAjusteAGetText(Sender: TObject; var Text: String);
+    procedure ImpVentasConDescuentosClick(Sender: TObject);
+    procedure ImpAjustesDeStockClick(Sender: TObject);
+    procedure ImpModificacionesDePreciosClick(Sender: TObject);
+    procedure ImpVentasSinStockClick(Sender: TObject);
+    procedure ImpPreciosBajoMarkUpClick(Sender: TObject);
+    procedure ImpOrdenesAnuladasClick(Sender: TObject);
+    procedure ExportarVtasConDctoClick(Sender: TObject);
+    procedure ExpAjustesClick(Sender: TObject);
+    procedure ExpModPrcClick(Sender: TObject);
+    procedure ExpVtasSinStockClick(Sender: TObject);
+    procedure ExpPreciosBajoMarkUpClick(Sender: TObject);
+    procedure ExpOrdenesAnuladasClick(Sender: TObject);
+    procedure gVentasUpdateFooter(Sender: TObject);
+    procedure btnCalcularAuditClick(Sender: TObject);
+    procedure DefCompPREVISUALIZARGetText(Sender: TField; var Text: String; DisplayText: Boolean);
+    procedure btnModSucClick(Sender: TObject);
+    procedure btnSaveSucClick(Sender: TObject);
+    procedure btnExpSucClick(Sender: TObject);
+    procedure edtComprobanteExit(Sender: TObject);
+    procedure edtComprobanteIExit(Sender: TObject);
+    procedure edtIdEmpresaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure edtPrcListaKeyPress(Sender: TObject; var Key: Char);
+    procedure EmpleadosTIPODOCChange(Sender: TField);
+    procedure EmpleadosDOCUMENTOValidate(Sender: TField);
+    procedure EmpleadosNewRecord(DataSet: TDataSet);
+    procedure EmpleadosBeforePost(DataSet: TDataSet);
+    procedure EmpleadosAfterPost(DataSet: TDataSet);
+    procedure EmpleadosIDEMPLEADOGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure EmpleadosReconcileError(DataSet: TCustomClientDataSet;
+              E: EReconcileError; UpdateKind: TUpdateKind; var Action: TReconcileAction);
+    procedure qViewEmpDETSUCGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure SucursalesAfterPost(DataSet: TDataSet);
+    procedure btnAddSucClick(Sender: TObject);
+    procedure SucursalesIDSUCURSALGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure SucursalesNewRecord(DataSet: TDataSet);
+    procedure SucursalesBeforePost(DataSet: TDataSet);
+    procedure SucursalesReconcileError(DataSet: TCustomClientDataSet;
+              E: EReconcileError; UpdateKind: TUpdateKind; var Action: TReconcileAction);
+    procedure cbNivelAuditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure cbPracRetIvaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure qEstadosTermESTADOGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure qEstadosTermNOMBREGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure cbSucEstStmChange(Sender: TObject);
+    procedure btnCalcESClick(Sender: TObject);
+    procedure btnExpESClick(Sender: TObject);
+    procedure qEstStmMES_ESTGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure gConectadosUpdateFooter(Sender: TObject);
+    procedure qEstadosTermAfterOpen(DataSet: TDataSet);
+    procedure qEstadosTermIDSUCURSALGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure qDeletedTIPOGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure ComprobantesBorradosClick(Sender: TObject);
+    procedure btnInsertTerClick(Sender: TObject);
+    procedure btnEditTerClick(Sender: TObject);
+    procedure btnSaveTerClick(Sender: TObject);
+    procedure btnCancelTerClick(Sender: TObject);
+    procedure btnPriorTerClick(Sender: TObject);
+    procedure btnSigTerClick(Sender: TObject);
+    procedure TerminalesIDPUNTOVENTAGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure TerminalesAfterOpen(DataSet: TDataSet);
+    procedure TerminalesCONTROLADOR_IMPRESORAChange(Sender: TField);
+    procedure TerminalesBeforeOpen(DataSet: TDataSet);
+    procedure TiposCompAfterPost(DataSet: TDataSet);
+    procedure TiposCompReconcileError(DataSet: TCustomClientDataSet;
+      E: EReconcileError; UpdateKind: TUpdateKind;
+      var Action: TReconcileAction);
+    procedure btnSaveTCompClick(Sender: TObject);
+    procedure btnRec_numClick(Sender: TObject);
+    procedure btnRep_CostosClick(Sender: TObject);
+    procedure TerminalesAfterScroll(DataSet: TDataSet);
+    procedure btnTranInvClick(Sender: TObject);
+  private
+    { Private declarations }
+
+    q: TMDOQuery;
+    AddSuc, AltaEmp,
+    NewTer, ModTer,
+    Read_Comp: Boolean;
+
+    ListaDeFunciones: TStringList;
+    Reg: TRegistry;
+    OldAfterScroll: TDataSetNotifyEvent;
+    TotDesc, TotPLis, TotPVen: Currency;
+
+    CiaAct, PtoAct, SucAct, C_Tr, C_In, C_Ot, EstStm: Integer;
+
+    procedure MyAfterScroll(DataSet: TDataSet);
+    function GetPrinterName(TComp: Integer): String;
+    procedure DoCodBarraEAN13;
+    procedure Set_Labels(TComp: SmallInt; Edicion: Boolean = False;
+                         SoloLlenar: Boolean = False; Preview: Boolean = False);
+    function Max_IdPunto(IdC, IdB: Integer): Integer;
+    procedure OpcionesCF;
+    function EmpleadosLast: Integer;
+
+    function TerminalesNext(Act: Integer): Integer;
+    function TerminalesPrior(Act: Integer): Integer;
+
+    procedure Calcular_Ventas_Dcto(Desde,Hasta: TDate);
+    procedure Calcular_Ajustes_Stk(Desde,Hasta: TDate);
+    procedure Calcular_Mod_Precios(Desde,Hasta: TDate);
+    procedure Calcular_VtaSinStk(Desde,Hasta: TDate);
+    procedure Calcular_BajoMarkUp(Desde,Hasta: TDate);
+    procedure Calcular_OrdenesA(Desde,Hasta: TDate);
+    procedure Calcular_Borrados(Desde,Hasta: TDate);
+
+  public
+    { Public declarations }
+    procedure Print_Formulario(var Comprobante: TFactura;
+                               var Items: TBody_Fiscal;
+                               SoloLlenar: Boolean = False);
+    procedure Print_CodBar_Traspaso(Items: TDataSet);
+    procedure Print_Label_Traspaso(Items: TDataSet);
+  end;
+
+var
+  frmConfiguracion: TfrmConfiguracion;
+
+function Print_Form(var Comprobante: TFactura; var Items: TBody_Fiscal): Boolean;
+procedure Print_Label(Items: TDataSet);
+procedure Print_CodeB(Items: TDataSet);
+
+
+implementation
+
+uses udmGestion, uFiscal, udmSaveFile, uBuscaEmp, uOrdPagos,
+     uViewFacC, uViewFacT, uViewFacV, uViewOrdP, uRecalcularStock, uClaveMod,
+  uTransDep, uTransInv;
+
+{$R *.DFM}
+
+procedure TfrmConfiguracion.FormCreate(Sender: TObject);
+var
+  i: Integer;
+begin
+  AddSuc := False;
+  NewTer := False;
+  Read_Comp := False;
+  Reg := TRegistry.Create;
+  cbPrinters.Items.Clear;
+  for i := 0 to Printer.Printers.Count-1 do
+    cbPrinters.Items.Add(Printer.Printers.Strings[i]+#9+IntToStr(i));
+  qEstadosTerm.Close;
+  OldAfterScroll := DefComp.AfterScroll;
+  DefComp.AfterScroll := MyAfterScroll;
+  if not DefComp.Active then
+    DefComp.Open;
+  try
+    Sucursales.Open;
+    Sucursales.DisableControls;
+    Sucursales.First;
+    cbSucEstStm.Items.Clear;
+    cbSucEstStm.Items.AddObject('<TODOS>', TObject(0));
+    cbSucAsignada.Items.Clear;
+    cbSucAsignada.Items.Add('<Todos>' + #9 + '0');
+    while not Sucursales.Eof do
+    begin
+      if SucursalesACTIVA.AsInteger = Verdadero then
+        cbSucEstStm.Items.AddObject(SucursalesNombreSuc.AsString, TObject(SucursalesIDSUCURSAL.AsInteger));
+      cbSucAsignada.Items.Add(SucursalesNombreSuc.AsString + #9 + SucursalesIDSUCURSAL.AsString);
+      Sucursales.Next;
+    end;
+  finally
+    Sucursales.EnableControls;
+  end;
+  cbSucAsignada.MapList := True;
+  cbSucEstStm.ItemIndex := IdBranch;
+  Sucursales.Locate(SucursalesIDSUCURSAL.FieldName, IdBranch, []);
+  with dmGestion do
+  begin
+    IngBruto.Open;
+    Alicuotas.Open;
+    EstMovTer.Open;
+    MotivosAJ.Open;
+    MotivosNC.Open;
+    MotivosBJ.Open;
+    RegImp.Open;
+  end;
+  C_Tr := 0;
+  C_In := 0;
+  C_Ot := 0;
+end;
+
+procedure TfrmConfiguracion.FormShow(Sender: TObject);
+begin
+  // Niveles de Seguridad
+  tsProgramacion.TabVisible := (Tarea = 0);
+  tsPuntos.TabVisible := True;
+  tsDatosSis.TabVisible  := True;
+  tsEmpleados.TabVisible := (Tarea <= Nivel_Adm);
+  tsAuditoria.TabVisible := (Tarea <= Nivel_Adm);
+  pcControlUsuarios.Visible := (Tarea <= Nivel_Adm);
+  gbConfiguraciones.Visible := (Tarea <= Nivel_Adm);
+  btnEditTer.Enabled := (Tarea <= Nivel_Adm);
+  NewTer := False;
+  ModTer := False;
+  try
+    Terminales.Params.ParamByName('E').AsInteger := Id_Cia;
+    Terminales.Params.ParamByName('S').AsInteger := IdBranch;
+    Terminales.Params.ParamByName('P').AsInteger := IdSalesPoint;
+    Terminales.Open;
+    if not Terminales.IsEmpty then
+    begin
+      lblDetItmMT.Caption := Vacio;
+
+      edtSetFechaCF.Date := Date;
+      edtZDesde.Date := StartOfTheMonth(Date);
+      edtZHasta.Date := Date;
+
+      SubDep.Open;
+      ListaDeFunciones := TStringList.Create;
+
+      OpcionesCF;
+      Empleados.Open;
+      qViewEmp.Open;
+      AltaEmp := False;
+
+      edtDesdeAudit.Date := StartOfTheMonth(Date);
+      edtHastaAudit.Date := Date;
+
+      TiposComp.Open;
+      with dmGestion do
+      begin
+        if not Empresas.Active then
+          Empresas.Open;
+        if not MPAccesos.Active then
+          MPAccesos.Open;
+        if not FVAccesos.Active then
+          FVAccesos.Open;
+        if not Funciones.Active then
+          Funciones.Open;
+        Funciones.First;
+        cbMenuOptionsMP.Items.Add('Acceso Libre'+ #9 +'999');
+        cbMenuOptionsFV.Items.Add('Acceso Libre'+ #9 +'999');
+        while not Funciones.Eof do
+        begin
+          cbMenuOptionsMP.Items.Add(FuncionesFuncion.AsString+#9+FuncionesIdFuncion.AsString);
+          cbMenuOptionsFV.Items.Add(FuncionesFuncion.AsString+#9+FuncionesIdFuncion.AsString);
+          Funciones.Next;
+        end;
+        cbMenuOptionsMP.ApplyList;
+        cbMenuOptionsMP.MapList := True;
+        cbMenuOptionsFV.ApplyList;
+        cbMenuOptionsFV.MapList := True;
+      end;
+    end;
+  except
+    on E:Exception do
+      raise EUsuario.Create(E.Message);
+  end;
+end;
+
+procedure TfrmConfiguracion.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Reg.Free;
+  DefComp.AfterScroll := OldAfterScroll;
+
+  if Terminales.Active then
+  begin
+    ServidorFiscal := (TerminalesServidorFiscal.AsInteger = Verdadero);           // Servidor de Controlador Fiscal
+    ControladorLocal := (TerminalesControladorLocal.AsInteger = Verdadero);       // ControladorLocal = False, imprime en Servidor Fiscal
+    IdSalesPoint := TerminalesIdPuntoVenta.AsInteger;                             // Punto de Venta
+    IdBranch := TerminalesIdSucursal.AsInteger;                                   // Sucursal
+    SectorSistema := TerminalesSector.AsInteger;                                  // Sector
+    Text_PieComprobante := TerminalesPieComprobante.AsString;                     // Texto pie Comprobantes
+
+    try
+      if not dmGestion.trGestion.InTransaction then
+        dmGestion.trGestion.StartTransaction;
+      with dmGestion do
+      begin
+        // Niveles de Seguridad
+        if Empresas.State in dsEditModes then
+          Empresas.Post;
+        Nivel_Adm := EmpresasNivel_Del.AsInteger;
+        Nivel_Mod := EmpresasNivel_Mod.AsInteger;
+        Nivel_Con := EmpresasNivel_Con.AsInteger;
+        Nivel_Dto := EmpresasNivel_Dto.AsInteger;
+        MaxDtoArtII:= EmpresasDCTOPRODCII.AsFloat;
+        Incluir_CostoConII := (EmpresasII_INC_EN_COSTO.AsInteger = Verdadero);
+        PermitirRem_DeProv := (EmpresasCONREMPROV.AsInteger = Verdadero);
+        Hacer_Trans_EnFact := (EmpresasTRANF_EN_FACT.AsInteger = Verdadero);
+        EmitirRtoDomicilio := (EmpresasREMITODOMICILIO.AsInteger = Verdadero);
+        if Funciones.State in dsEditModes then
+          Funciones.Post;
+        if Alicuotas.State in dsEditModes then
+          Alicuotas.Post;
+        if IngBruto.State in dsEditModes then
+          IngBruto.Post;
+        if Empresas.State in dsEditModes then
+          Empresas.Post;
+        if EstMovTer.State in dsEditModes then
+          EstMovTer.Post;
+        if MotivosAJ.State in dsEditModes then
+          MotivosAJ.Post;
+        if MotivosNC.State in dsEditModes then
+          MotivosNC.Post;
+        if MotivosBJ.State in dsEditModes then
+          MotivosBJ.Post;
+        if RegImp.State in dsEditModes then
+          RegImp.Post;
+        if Funciones.State in dsEditModes then
+          Funciones.Post;
+        if MPAccesos.State in dsEditModes then
+          MPAccesos.Post;
+        if FVAccesos.State in dsEditModes then
+          FVAccesos.Post;
+        if Sucursales.State in dsEditModes then
+          Sucursales.Post;
+      end;
+      if DefComp.State in dsEditModes then
+        DefComp.Post;
+      if SubDep.State in dsEditModes then
+        SubDep.Post;
+      if Empleados.State in dsEditModes then
+        Empleados.Post;
+
+      if TiposComp.State in dsEditModes then
+        TiposComp.Post;
+      dmGestion.trGestion.Commit;
+    except
+      on E:Exception do
+      begin
+        dmGestion.trGestion.Rollback;
+        raise EUsuario.Create('Error '+E.Message);
+      end;
+    end;
+    if Assigned(ListaDeFunciones) then
+      ListaDeFunciones.Free;
+    qVentas.Close;
+    qModPrc.Close;
+    qAjustes.Close;
+  end;
+  Action := caFree;
+end;
+
+procedure TfrmConfiguracion.edtCentavosEnter(Sender: TObject);
+begin
+  edtCentavos.SelectAll;
+end;
+
+procedure TfrmConfiguracion.edtCentavosPrecioEnter(Sender: TObject);
+begin
+  edtCentavosPrecio.SelectAll;
+end;
+
+procedure TfrmConfiguracion.edtComprobanteExit(Sender: TObject);
+Var
+  Part1, Part2: Integer;
+begin
+  if dmGestion.Sucursales.State in dsEditModes then
+  begin
+    try
+      Part1:= StrToInt(Trim(Copy(edtComprobante.Text,1,Pos('-',edtComprobante.Text)-1)));
+    except
+      on E: EConvertError do
+      begin
+        edtComprobante.SetFocus;
+        edtComprobante.SelStart := 0;
+        edtComprobante.SelLength := 3;
+        raise EUsuario.Create('Error en el Pto. de Venta del comprobante');
+      end;
+    end;
+
+    try
+      Part2:= StrToInt(Trim(Copy(edtComprobante.Text,Pos('-',edtComprobante.Text)+1,Length(edtComprobante.Text))));
+    except
+      on E: EConvertError do
+      begin
+        edtComprobante.SetFocus;
+        edtComprobante.SelStart := 5;
+        edtComprobante.SelLength := 8;
+        raise EUsuario.Create('Error en el Nº de comprobante');
+      end;
+    end;
+    dmGestion.SucursalesNroRemitoT.AsString := Format('%.4d-%.8d',[Part1,Part2]);
+  end;
+end;
+
+procedure TfrmConfiguracion.edtComprobanteIExit(Sender: TObject);
+Var
+  Part1, Part2: Integer;
+begin
+  if dmGestion.Sucursales.State in dsEditModes then
+  begin
+    try
+      Part1:= StrToInt(Trim(Copy(edtComprobanteI.Text,1,Pos('-',edtComprobanteI.Text)-1)));
+    except
+      on E: EConvertError do
+      begin
+        edtComprobanteI.SetFocus;
+        edtComprobanteI.SelStart := 0;
+        edtComprobanteI.SelLength := 3;
+        raise EUsuario.Create('Error en el Pto. de Venta del comprobante');
+      end;
+    end;
+
+    try
+      Part2:= StrToInt(Trim(Copy(edtComprobanteI.Text,Pos('-',edtComprobanteI.Text)+1,Length(edtComprobanteI.Text))));
+    except
+      on E: EConvertError do
+      begin
+        edtComprobanteI.SetFocus;
+        edtComprobanteI.SelStart := 5;
+        edtComprobanteI.SelLength := 8;
+        raise EUsuario.Create('Error en el Nº de comprobante');
+      end;
+    end;
+    dmGestion.SucursalesNroRemitoI.AsString := Format('%.4d-%.8d',[Part1,Part2]);
+  end;
+end;
+
+procedure TfrmConfiguracion.edtIdEmpresaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.INC}
+end;
+
+procedure TfrmConfiguracion.edtNombreCF1Enter(Sender: TObject);
+begin
+  edtNombreCF1.SelectAll;
+end;
+
+procedure TfrmConfiguracion.edtNombreCF2Enter(Sender: TObject);
+begin
+  edtNombreCF2.SelectAll;
+end;
+
+procedure TfrmConfiguracion.edtNroPuntoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.Inc}
+end;
+
+procedure TfrmConfiguracion.edtNombreCF1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.Inc}
+end;
+
+procedure TfrmConfiguracion.edtIdPtoVtaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.Inc}
+end;
+
+procedure TfrmConfiguracion.btnActualizar_NumeracionClick(Sender: TObject);
+var
+  AuxComp: St13;
+begin
+  if (TerminalesImprimeEnControlador.AsInteger = Verdadero) and
+     (TerminalesControladorLocal.AsInteger = Verdadero) then
+  begin
+    if not ControladorOK then
+      ControladorOK := frmFiscal.InicializarControlador;
+    if ControladorOK then
+    begin
+      try
+        NewTer := False;
+        ModTer := False;
+        CiaAct := TerminalesIDEMPRESA.AsInteger;
+        SucAct := TerminalesIDSUCURSAL.AsInteger;
+        PtoAct := TerminalesIDPUNTOVENTA.AsInteger;
+        NewTer := False;
+        frmFiscal.UltimosNroComprobantes(PtoVta, True, 0, AuxComp);
+        Terminales.Refresh;
+      finally
+        Terminales.Close;
+        Terminales.Params.ParamByName('E').AsInteger := CiaAct;
+        Terminales.Params.ParamByName('S').AsInteger := SucAct;
+        Terminales.Params.ParamByName('P').AsInteger := PtoAct;
+        Terminales.Open;
+      end;
+    end
+    else
+      ShowMessage('No se pudo realizar la actualización. Terminal sin CF.-');
+  end;
+end;
+
+procedure TfrmConfiguracion.btnSetFechaClick(Sender: TObject);
+begin
+  with frmFiscal do
+  begin
+    if Application.MessageBox('Es necesario emitir un reporte Z antes de Continuar. ¿Continua...?', 'Controlador Fiscal',MB_ICONQUESTION+MB_YESNO) = ID_YES then
+    begin
+      InicializarControlador;
+      case IF_Modelo of
+        1,2,3:begin
+                ReporteZ;
+                Hasar.FechaHoraFiscal := edtSetFechaCF.Date + Time;
+              end;
+          8,9:begin
+                ReporteZ;
+                Hasar.FechaHoraFiscal := edtSetFechaCF.Date + Time;
+              end;
+        4,5,6:begin
+              end;
+      end;
+      Finalizar;
+    end;
+  end;
+end;
+
+procedure TfrmConfiguracion.btnRec_numClick(Sender: TObject);
+begin
+  if not Check_Seg(Nivel_Adm, 'Counters', AutorDto) then
+    raise EUsuario.Create('No esta habilitado.');
+  ReNumerar_Contadores;
+end;
+
+procedure TfrmConfiguracion.btnReportesZClick(Sender: TObject);
+begin
+  with frmFiscal do
+  begin
+    InicializarControlador;
+    case IF_Modelo of
+      1,2,3: Hasar.ReporteZPorFechas(edtZDesde.Date, edtZHasta.Date, True);
+        8,9: Hasar.ReporteZPorFechas(edtZDesde.Date, edtZHasta.Date, True);
+      4,5,6: Epson.ReporteZPorFechas(edtZDesde.Date, edtZHasta.Date);
+    end;
+    Finalizar;
+  end;
+end;
+
+procedure TfrmConfiguracion.cbModeloControladorKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.Inc}
+end;
+
+procedure TfrmConfiguracion.cbNivelAuditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.INC}
+end;
+
+function TfrmConfiguracion.Max_IdPunto(IdC, IdB: Integer): Integer;
+begin
+  Result := 1;
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := qTerminales.Database;
+    q.Transaction := qTerminales.Transaction;
+    q.SQL.Add('Select Max(IDPUNTOVENTA) as M ');
+    q.SQL.Add('From CFGPTOVTA ');
+    q.SQL.Add('Where IdEmpresa = :IdC And ');
+    q.SQL.Add('      IdSucursal = :IdB ');
+    q.ParamByName('IdC').AsInteger := IdC;
+    q.ParamByName('IdB').AsInteger := IdB;
+    q.Open;
+    Result := q.FieldByName('MaxPto').AsInteger + 1;
+    q.Close;
+  finally
+    q.Free;
+  end;
+end;
+
+procedure TfrmConfiguracion.OpcionesCF;
+begin
+  if TerminalesIMPRIMEENCONTROLADOR.AsInteger = Verdadero then
+  begin // Emisión de comprobantes Con IF
+    gbControlador.Enabled := True;
+    if TerminalesControladorLocal.AsInteger = Verdadero then
+      ControladorLocal := True
+    else
+      ControladorLocal := False;
+
+    if TerminalesServidorFiscal.AsInteger = Verdadero then
+      ServidorFiscal := True
+    else
+      ServidorFiscal := False;
+
+    if ControladorLocal then
+    begin
+      rgTipo_CFiscal.Enabled := True;
+      gbTipoFactura.Enabled := (TerminalesTipoControlador.AsInteger >= ControladorTipoFactura);
+      chEnLinea.Enabled := True;
+      chConCajon.Enabled := True;
+      chConLogo.Enabled := gbTipoFactura.Enabled;
+      chTriplicado.Enabled := gbTipoFactura.Enabled;
+      chMarco.Enabled := gbTipoFactura.Enabled;
+    end
+    else begin
+      chEnLinea.Enabled := False;
+      chConCajon.Enabled := False;
+      gbTipoFactura.Enabled := False;
+      rgTipo_CFiscal.Enabled := False;
+    end;
+  end
+  else begin // Emisión de comprobantes Con Impresora Comun
+    gbControlador.Enabled := False;
+    btnActualizar_Numeracion.Enabled := False;
+    gbNumeradores.Enabled := True;
+    ControladorLocal := False;
+    ServidorFiscal := False;
+  end;
+end;
+
+procedure TfrmConfiguracion.TerminalesAfterOpen(DataSet: TDataSet);
+begin
+  if not qEstadosTerm.Active then
+    qEstadosTerm.Open;
+end;
+
+procedure TfrmConfiguracion.TerminalesAfterPost(DataSet: TDataSet);
+begin
+  if (NewTer) or (ModTer) then
+  begin
+    try
+      if NewTer then
+        TerminalesIDPUNTOVENTA.AsInteger := Max_IdPunto(TerminalesIDEMPRESA.AsInteger, TerminalesIDSUCURSAL.AsInteger);
+
+      SucAct := TerminalesIDSUCURSAL.AsInteger;
+      PtoAct := TerminalesIDPUNTOVENTA.AsInteger;
+      CiaAct := TerminalesIDEMPRESA.AsInteger;
+      try
+        if not qTerminales.Transaction.InTransaction then
+          qTerminales.Transaction.StartTransaction;
+        if Terminales.ApplyUpdates(0) > 0 then
+          Abort;
+        qTerminales.Transaction.Commit;
+      except
+        on E:Exception do
+        begin
+          qTerminales.Transaction.Rollback;
+          raise EUsuario.Create(E.Message);
+        end;
+      end;
+    finally
+      if not Terminales.Active then
+      begin
+        Terminales.Close;
+        Terminales.Params.ParamByName('E').AsInteger := CiaAct;
+        Terminales.Params.ParamByName('S').AsInteger := SucAct;
+        Terminales.Params.ParamByName('P').AsInteger := PtoAct;
+        Terminales.Open;
+      end;
+    end;
+    OpcionesCF;
+  end;
+end;
+
+procedure TfrmConfiguracion.TerminalesAfterScroll(DataSet: TDataSet);
+begin
+  if not qEstadosTerm.Active then
+    qEstadosTerm.Open;
+end;
+
+procedure TfrmConfiguracion.TerminalesBeforeOpen(DataSet: TDataSet);
+begin
+  NewTer := False;
+  ModTer := False;
+end;
+
+procedure TfrmConfiguracion.TerminalesCONTROLADOR_IMPRESORAChange(Sender: TField);
+begin
+  if (NewTer) or (ModTer) then
+  begin
+    Case TerminalesCONTROLADOR_IMPRESORA.AsInteger of
+      Con_Controlador: TerminalesIMPRIMEENCONTROLADOR.AsInteger := Verdadero;
+      Con_Impresora  : TerminalesIMPRIMEENCONTROLADOR.AsInteger := Falso;
+    End
+  end;
+end;
+
+procedure TfrmConfiguracion.TerminalesIDPUNTOVENTAGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+begin
+  if Sender.AsInteger = Nuevo_Registro then
+    Text := 'NT'
+  else
+    Text := Sender.AsString;
+end;
+
+procedure TfrmConfiguracion.TerminalesNewRecord(DataSet: TDataSet);
+begin
+  TerminalesIDEMPRESA.AsInteger := Id_Cia;
+  TerminalesIDSUCURSAL.AsInteger := IdBranch;
+  TerminalesIDPUNTOVENTA.AsInteger := Nuevo_Registro;
+  TerminalesSECTOR.AsInteger := SectorSistema;
+  TerminalesCENTAVOS.AsInteger := 2;
+  TerminalesCENTAVOSPRECIOS.AsInteger := 2;
+  TerminalesCONTROLADOR_IMPRESORA.AsInteger := 0;
+  TerminalesIMPRIMEENCONTROLADOR.AsInteger := 0;
+  TerminalesCAJONDINERO.AsInteger := 0;
+  TerminalesCIERREAUTOMATICO.AsInteger := 0;
+  TerminalesSERVIDORFISCAL.AsInteger := 0;
+  TerminalesIMPRIMEENLINEA.AsInteger := 0;
+  TerminalesCONTROLADORLOCAL.AsInteger := 0;
+  TerminalesAVISARSTOCKMINIMO.AsInteger := 0;
+  TerminalesCONTROL_TALLES.AsInteger := 0;
+  TerminalesHACERNOTACREDITO.AsInteger := 1;
+  TerminalesPEDIRSUBDET.AsInteger := 1;
+  TerminalesPEDIRDESCUENTO.AsInteger := 1;
+  TerminalesINVERTIRCANTIDAD.AsInteger := 0;
+  TerminalesIMPRIMIRTRIPLICADO.AsInteger := 0;
+  TerminalesCANTIDADPRODUCTOS.AsInteger := 20;
+  TerminalesIMPRIMIRMARCO.AsInteger := 0;
+  TerminalesPTOISSERVER.AsInteger := 0;
+  TerminalesULTIMOSPRECIOS.AsDateTime := Date;
+  TerminalesCOMPA.AsString := '0000-00000000';
+  TerminalesCOMPB.AsString := '0000-00000000';
+  TerminalesCOMPT.AsString := '0000-00000000';
+  TerminalesNOTCREDA.AsString := '0000-00000000';
+  TerminalesNOTCREDB.AsString := '0000-00000000';
+  TerminalesREMX.AsString := '0000-00000000';
+  TerminalesRECX.AsString := '0000-00000000';
+  TerminalesREMITOT.AsString := '0000-00000000';
+  TerminalesPRESUPUESTO.AsString := '0000-00000000';
+  TerminalesNOTAPEDIDO.AsString := '0000-00000000';
+  TerminalesDOCINTERNOS.AsString := '0000-00000000';
+  TerminalesESTADO.AsInteger := 0;
+end;
+
+procedure TfrmConfiguracion.TerminalesReconcileError(
+  DataSet: TCustomClientDataSet; E: EReconcileError;
+  UpdateKind: TUpdateKind; var Action: TReconcileAction);
+begin
+  ApplicationShowException(E);
+end;
+
+procedure TfrmConfiguracion.btnSaveTCompClick(Sender: TObject);
+begin
+  if TiposComp.State in dsEditModes then
+    TiposComp.Post
+end;
+
+procedure TfrmConfiguracion.TiposCompAfterPost(DataSet: TDataSet);
+begin
+  try
+    if not qTiposComp.Transaction.InTransaction then
+      qTiposComp.Transaction.StartTransaction;
+    if TiposComp.ApplyUpdates(0) > 0 then
+      Abort;
+    qTiposComp.Transaction.Commit;
+  except
+    on E:Exception do
+    begin
+      qTiposComp.Transaction.Rollback;
+      raise EUsuario.Create(E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmConfiguracion.TiposCompReconcileError(
+          DataSet: TCustomClientDataSet; E: EReconcileError;
+          UpdateKind: TUpdateKind; var Action: TReconcileAction);
+begin
+  ApplicationShowException(E);
+end;
+
+function TfrmConfiguracion.TerminalesPrior(Act: Integer): Integer;
+var
+  q: TMDOQuery;
+begin
+  Result := 1;
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := qTerminales.Database;
+    q.Transaction := qTerminales.Transaction;
+    q.SQL.Add('Select Max(IDPUNTOVENTA) as P ');
+    q.SQL.Add('From CFGPTOVTA ');
+    q.SQL.Add('Where IDEMPRESA = :Emp And ');
+    q.SQL.Add('      IDSUCURSAL = :Suc And ');
+    q.SQL.Add('      IDPUNTOVENTA < :Pto ');
+    q.ParamByName('Emp').AsInteger := CiaAct;
+    q.ParamByName('Suc').AsInteger := SucAct;
+    q.ParamByName('Pto').AsInteger := Act;
+    q.Open;
+    if q.FieldByName('P').AsInteger = 0 then
+      Result := Act
+    else
+      Result := q.FieldByName('P').AsInteger;
+    q.Close;
+  finally
+    q.Free;
+  end;
+ (*  Select Max(IDPUNTOVENTA) as P
+     From CFGPTOVTA
+     Where IDEMPRESA = :Emp And
+           IDSUCURSAL = :Suc And
+           IDPUNTOVENTA > :Pto *)
+end;
+
+procedure TfrmConfiguracion.btnPriorTerClick(Sender: TObject);
+begin
+  NewTer := False;
+  ModTer := False;
+  CiaAct := TerminalesIDEMPRESA.AsInteger;
+  SucAct := TerminalesIDSUCURSAL.AsInteger;
+  PtoAct := TerminalesPrior(TerminalesIDPUNTOVENTA.AsInteger);
+  try
+    Terminales.Close;
+    Terminales.Params.ParamByName('E').AsInteger := CiaAct;
+    Terminales.Params.ParamByName('S').AsInteger := SucAct;
+    Terminales.Params.ParamByName('P').AsInteger := PtoAct;
+    Terminales.Open;
+  except
+    on E:Exception do
+    begin
+      Terminales.Close;
+      Terminales.Params.ParamByName('E').AsInteger := CiaAct;
+      Terminales.Params.ParamByName('S').AsInteger := IdBranch;
+      Terminales.Params.ParamByName('P').AsInteger := IdSalesPoint;
+      Terminales.Open;
+      raise EUsuario.Create(E.Message);
+    end;
+  end;
+end;
+
+function TfrmConfiguracion.TerminalesNext(Act: Integer): Integer;
+var
+  q: TMDOQuery;
+begin
+  Result := 1;
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := qTerminales.Database;
+    q.Transaction := qTerminales.Transaction;
+    q.SQL.Add('Select Min(IDPUNTOVENTA) as N ');
+    q.SQL.Add('From CFGPTOVTA ');
+    q.SQL.Add('Where IDEMPRESA = :Emp And ');
+    q.SQL.Add('      IDSUCURSAL = :Suc And ');
+    q.SQL.Add('      IDPUNTOVENTA > :Pto ');
+    q.ParamByName('Emp').AsInteger := CiaAct;
+    q.ParamByName('Suc').AsInteger := SucAct;
+    q.ParamByName('Pto').AsInteger := Act;
+    q.Open;
+    if q.FieldByName('N').AsInteger = 0 then
+      Result := Act
+    else
+      Result := q.FieldByName('N').AsInteger;
+    q.Close;
+  finally
+    q.Free;
+  end;
+  (*  Select Min(IDPUNTOVENTA) as N From CFGPTOVTA
+      Where IDEMPRESA = :Emp And IDSUCURSAL = :Suc And IDPUNTOVENTA > :Pto *)
+end;
+
+procedure TfrmConfiguracion.btnSigTerClick(Sender: TObject);
+begin
+  NewTer := False;
+  ModTer := False;
+  CiaAct := TerminalesIDEMPRESA.AsInteger;
+  SucAct := TerminalesIDSUCURSAL.AsInteger;
+  PtoAct := TerminalesNext(TerminalesIDPUNTOVENTA.AsInteger);
+  try
+    Terminales.Close;
+    Terminales.Params.ParamByName('E').AsInteger := CiaAct;
+    Terminales.Params.ParamByName('S').AsInteger := SucAct;
+    Terminales.Params.ParamByName('P').AsInteger := PtoAct;
+    Terminales.Open;
+  except
+    on E:Exception do
+    begin
+      Terminales.Close;
+      Terminales.Params.ParamByName('E').AsInteger := CiaAct;
+      Terminales.Params.ParamByName('S').AsInteger := IdBranch;
+      Terminales.Params.ParamByName('P').AsInteger := IdSalesPoint;
+      Terminales.Open;
+      raise EUsuario.Create(E.Message);
+    end;
+  end;
+end;
+
+// *************************************************************************
+//                              Conversion Inventarios
+//**************************************************************************
+
+procedure TfrmConfiguracion.btnTranInvClick(Sender: TObject);
+begin
+  if not Check_Seg(0, 'T. Inventario', AutorDto) then
+    raise EUsuario.Create('No esta habilitado.');
+  frmTransInv := TfrmTransInv.Create(Self);
+  frmTransInv.ShowModal;
+end;
+
+procedure TfrmConfiguracion.dsTerminalesDataChange(Sender: TObject; Field: TField);
+begin
+  OpcionesCF;
+end;
+
+procedure TfrmConfiguracion.edtNroPuntoEnter(Sender: TObject);
+begin
+  edtNroPunto.SelectAll;
+end;
+
+procedure TfrmConfiguracion.btnInsertTerClick(Sender: TObject);
+begin
+  rgTipoFacturacion.SetFocus;
+  NewTer := True;
+  ModTer := False;
+  CiaAct := TerminalesIDEMPRESA.AsInteger;
+  PtoAct := TerminalesIDPUNTOVENTA.AsInteger;
+  SucAct := TerminalesIDSUCURSAL.AsInteger;
+  Terminales.Insert;
+end;
+
+procedure TfrmConfiguracion.btnCancelTerClick(Sender: TObject);
+begin
+  if Terminales.State in dsEditModes then
+  begin
+    Terminales.Cancel;
+    NewTer := False;
+    ModTer := False;
+  end;
+end;
+
+procedure TfrmConfiguracion.btnSaveTerClick(Sender: TObject);
+begin
+  if (Application.MessageBox('¿Graba los datos de la Terminal? ', 'Terminales',
+                             MB_ICONQUESTION + MB_YESNO) = IDYES) then
+  begin
+    if Terminales.State in dsEditModes then
+      Terminales.Post;
+  end;
+end;
+
+procedure TfrmConfiguracion.btnEditTerClick(Sender: TObject);
+begin
+  rgTipoFacturacion.SetFocus;
+  NewTer := False;
+  ModTer := True;
+  CiaAct := TerminalesIDEMPRESA.AsInteger;
+  PtoAct := TerminalesIDPUNTOVENTA.AsInteger;
+  SucAct := TerminalesIDSUCURSAL.AsInteger;
+  Terminales.Edit;
+end;
+
+procedure TfrmConfiguracion.btnRepXClick(Sender: TObject);
+begin
+  if (Application.MessageBox('¿Imprimir reporte X?', 'Confirmación',
+                             MB_ICONQUESTION + MB_YESNO + MB_DEFBUTTON2) = ID_YES) then
+  begin
+    with frmFiscal do
+    begin
+      if (not ControladorOK) And
+         (not ImprimirEnLinea) then
+        ControladorOK := InicializarControlador;
+      ReporteX;
+    end;
+  end;
+end;
+
+procedure TfrmConfiguracion.btnRepZClick(Sender: TObject);
+begin
+  if (Application.MessageBox('¡Última operación de la jornada fiscal!',
+      'Atención', MB_ICONEXCLAMATION + MB_YESNO + MB_DEFBUTTON2) = ID_YES) then
+  begin
+    with frmFiscal do
+    begin
+      if not ControladorOK then
+        ControladorOK := InicializarControlador;
+      ReporteZ;
+    end;
+  end;
+end;
+
+procedure TfrmConfiguracion.btnCancelarTodoClick(Sender: TObject);
+begin
+  if (not ControladorOK) and (not ImprimirEnLinea) then
+    ControladorOK := frmFiscal.InicializarControlador;
+  frmFiscal.CancelarTodo;
+end;
+
+procedure TfrmConfiguracion.ComprobantesBorradosClick(Sender: TObject);
+begin
+  dmGestion.IyC_Exp.DataSet := qDeleted;
+  dmGestion.IyC_Exp.Select;
+end;
+
+procedure TfrmConfiguracion.btnAceptarClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TfrmConfiguracion.edtPrcListaKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key in [',', '.'] then
+    Key := DecimalSeparator;
+end;
+
+procedure TfrmConfiguracion.edtPropietarioKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.INC}
+end;
+
+procedure TfrmConfiguracion.gAlicuotasKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (gAlicuotas.SelectedField.DataType in [ftFloat, ftCurrency, ftBCD])and
+     (Key in [',', '.']) then
+    Key := DecimalSeparator;
+end;
+
+procedure TfrmConfiguracion.gIngBtKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (gIngBt.SelectedField.DataType in [ftFloat, ftCurrency, ftBCD])and
+     (Key in [',', '.']) then
+    Key := DecimalSeparator;
+end;
+
+procedure TfrmConfiguracion.edtAlcImpProvKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key in [',', '.'] then
+    Key := DecimalSeparator;
+end;
+
+procedure TfrmConfiguracion.edtDetImpProvKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.INC}
+end;
+
+procedure TfrmConfiguracion.btnRearStkClick(Sender: TObject);
+begin
+  if not Check_Seg(Nivel_Adm, 'Counters', AutorDto) then
+    raise EUsuario.Create('No esta habilitado.');
+  frmRecalcularStock := TfrmRecalcularStock.Create(Self);
+  frmRecalcularStock.ShowModal;
+  (*
+  Select I.IdFactura
+  From ItemsTR I
+  Where (I.IdFactura not in
+        (Select T.IdFactura From Traspaso T
+         Where T.TipoFactura = I.TMov And
+               T.IdSucursal = I.IdSucursal))
+               
+  Select I.IdFactura, Count(I.IdFactura)
+  From ItemsTR I
+  Left outer Join Traspaso T
+    On T.IdFactura = I.IdFactura And
+       T.IdSucursal = I.IdSucursal And
+       T.IdPuntoVenta = I.IdPuntoVenta
+  Group by I.IdFactura
+  Order By 2
+  *)
+End;
+
+procedure TfrmConfiguracion.btnEditor_FormClick(Sender: TObject);
+begin
+  Set_Labels(StrToInt(cbTipoComp.LookupValue), True);
+end;
+
+procedure TfrmConfiguracion.DefCompPREVISUALIZARGetText(Sender: TField; var Text: String; DisplayText: Boolean);
+begin
+  if DefCompPREVISUALIZAR.AsInteger = Verdadero then
+    Text := 'SI'
+  else
+    Text := 'NO'
+end;
+
+procedure TfrmConfiguracion.btnRep_CostosClick(Sender: TObject);
+begin
+  if not Check_Seg(Nivel_Adm, 'Counters', AutorDto) then
+    raise EUsuario.Create('No esta habilitado.');
+  if (Application.MessageBox('¿Acepta corregir costos en facturación de venta?',
+    'Costos', MB_ICONEXCLAMATION + MB_YESNO) = IDYES) then
+  begin
+    try
+      Screen.Cursor := crSQLWait;
+      try
+        qspRepCostoFV.ParamByName('Desde').AsDate := Date - 25;
+        qspRepCostoFV.ParamByName('Hasta').AsDate := Date;
+        qspRepCostoFV.ExecProc;
+      except
+        on E:Exception do
+          raise EUsuario.Create('Error: '+E.Message);
+      end;
+    finally
+      Screen.Cursor := crDefault;
+      ShowMessage('finalizado reparación de costos!!');
+    end;
+  end;
+end;
+
+procedure TfrmConfiguracion.btnCopy_FormClick(Sender: TObject);
+type
+  TCopyComp = record
+    FieldName: String;
+    Value: Variant;
+  end;
+var
+  CompArr: array of TCopyComp;
+  i: Integer;
+begin
+  SetLength(CompArr, DefComp.FieldCount);
+  for i := 0 to DefComp.FieldCount-1 do
+  begin
+    CompArr[i].FieldName := DefComp.Fields[i].FieldName;
+    CompArr[i].Value := DefComp.Fields[i].Value;
+  end;
+  DefComp.Insert;
+  for i := 0 to (Length(CompArr)-1) do
+    DefComp.FieldByName(CompArr[i].FieldName).Value := CompArr[i].Value;
+  DefCompREPNAME.Clear;
+  DefCompTipoComp.Clear;
+  DefComp.Post;
+end;
+
+procedure TfrmConfiguracion.cbTipoCompKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.Inc}
+end;
+
+function Print_Form(var Comprobante: TFactura; var Items: TBody_Fiscal): Boolean;
+begin
+  try
+    Result := True;
+    frmConfiguracion := TfrmConfiguracion.Create(nil);
+    try
+      frmConfiguracion.Print_Formulario(Comprobante, Items);
+    except
+      on E:Exception do
+      begin
+        Result := False;
+        raise EUsuario.Create('No se puede imprimir el comprobante. Error: '+E.Message);
+      end;
+    end;
+  finally
+    frmConfiguracion.Close;
+  end;
+end;
+
+procedure Print_Label(Items: TDataSet);
+begin
+  try
+    frmConfiguracion := TfrmConfiguracion.Create(nil);
+    try
+      frmConfiguracion.Print_Label_Traspaso(Items);
+    except
+      on E:Exception do
+      begin
+        raise EUsuario.Create('No se pueden imprimir las etiquetas. Error: '+E.Message);
+      end;
+    end;
+  finally
+    frmConfiguracion.Close;
+  end;
+end;
+
+procedure Print_CodeB(Items: TDataSet);
+begin
+  try
+    frmConfiguracion := TfrmConfiguracion.Create(nil);
+    try
+      frmConfiguracion.Print_CodBar_Traspaso(Items);
+    except
+      on E:Exception do
+      begin
+        raise EUsuario.Create('No se pueden imprimir las etiquetas. Error: '+E.Message);
+      end;
+    end;
+  finally
+    frmConfiguracion.Close;
+  end;
+end;
+
+procedure TfrmConfiguracion.MyAfterScroll(DataSet: TDataSet);
+var
+  PrinterName: String;
+begin
+  if Assigned(OldAfterScroll) then
+    OldAfterScroll(DataSet);
+  if Reg.OpenKey('\Software\IyC\FB_Gestion\Comp_Printers', True) then
+  begin
+    PrinterName := Reg.ReadString(DataSet.FieldByName('TipoComp').AsString);
+    if Trim(PrinterName) = VACIO then
+    begin
+      PrinterName := 'Default';
+      Reg.WriteString(DataSet.FieldByName('TipoComp').AsString, PrinterName);
+    end;
+    cbPrinters.Text := PrinterName;
+    cbPrinters.ItemIndex := cbPrinters.Items.IndexOf(PrinterName);
+  end;
+
+  if not Read_Comp then
+  begin
+    try
+      Read_Comp := True;
+      if not(DataSet.FieldByName('Reporte').IsNull) then
+      begin
+        if (DataSet.FieldByName('AlturaHoja').AsInteger <= 0) or
+           (DataSet.FieldByName('AnchoHoja').AsInteger <= 0) then
+          lstFormulario.PrinterSetup.PaperName := 'A4';
+        lstFormulario.Template.FileName := DataSet.FieldByName('TipoComp').AsString;
+        lstFormulario.Template.DatabaseSettings.Name := DataSet.FieldByName('TipoComp').AsString;
+        lstFormulario.Template.LoadFromDatabase;
+      end;
+      try
+        lstFormulario.PrinterSetup.PrinterName := GetPrinterName(DataSet.FieldByName('TipoComp').AsInteger);
+      except
+        lstFormulario.PrinterSetup.PrinterName := 'Default';
+      end;
+    finally
+      Read_Comp := False;
+    end;
+  end;
+end;
+
+function TfrmConfiguracion.GetPrinterName(TComp: Integer): String;
+begin
+  Result := 'Default';
+  try
+    Result := Reg.ReadString(IntToStr(TComp));
+  except
+    on E: Exception do
+    begin
+      raise EUsuario.Create('No se pudo leer la impresora para el formulario. Se utilizara la impresora por defecto. ' + E.Message);
+    end;
+  end;
+end;
+
+procedure TfrmConfiguracion.DoCodBarraEAN13;
+var
+  CodBarra,
+  AuxTexto,
+  AuxTextoTalle,
+  ElTalle, Size: String;
+  Largo, i: Integer;
+  VaTalle: Boolean;
+begin
+  CodBarra := tItemsFormCodProd.AsString;
+  Size := tItemsFormTalle.AsString;
+  Largo := 8 - Length(CodBarra);
+  Auxtexto := '';
+  for i := 1 to Largo do
+    Insert('0', AuxTexto, 1);
+
+  if Control_Talles then
+  begin
+    VaTalle := (Trim(Size) > Vacio ) and (Size <> IntToStr(SIN_DETALLE_TALLE));
+    if VaTalle then
+    begin
+      ElTalle := IntToStr(SetTextTalle(Size));
+      Largo := 4 - Length(ElTalle);
+      AuxTextoTalle := '';
+      for i := 1 to Largo do
+        Insert('0', AuxTextoTalle, 1);
+      CodBarra := AuxTexto + CodBarra + AuxTextoTalle + ElTalle;
+    end
+    else begin
+      CodBarra := AuxTexto + CodBarra + '0000';
+    end;
+  end
+  else begin
+    CodBarra := AuxTexto + CodBarra + '0000';
+  end;
+  tItemsFormCodBarra.AsString := CodBarra;
+end;
+
+procedure TfrmConfiguracion.Print_CodBar_Traspaso(Items: TDataSet);
+var
+  i: Integer;
+begin
+  if tItemsForm.Active then
+    tItemsForm.EmptyDataSet
+  else
+    tItemsForm.CreateDataSet;
+  tItemsForm.Open;
+  try
+    Items.First;
+    while not Items.Eof do
+    begin
+      if Items.FieldByName('Cantidad').AsInteger > 0 then
+      begin
+        for i := 1 to Items.FieldByName('Cantidad').AsInteger do
+        begin
+          tItemsForm.Append;
+          tItemsFormCodProd.AsString := Items.FieldByName('IdArticulo').AsString;
+          if Control_Talles then
+          begin
+            if (Items.FieldByName('Talle').AsInteger <> SIN_DETALLE_TALLE) and
+               (Items.FieldByName('Talle').AsInteger > 0) then
+              tItemsFormTalle.AsString := Items.FieldByName('Talle').AsString
+            else
+              tItemsFormTalle.AsString := '';
+          end
+          else
+            tItemsFormTalle.AsString := Items.FieldByName('Talle').AsString;
+
+          DoCodBarraEAN13;
+          tItemsFormDescripcion.AsString := Items.FieldByName('Descripcion').AsString;
+          tItemsFormMarca.AsString := Items.FieldByName('Marca').AsString;
+          tItemsFormColor.AsString := Items.FieldByName('Color').AsString;
+          tItemsFormGrupoSubGrupo.AsString := Items.FieldByName('GrupoSubGrupo').AsString;
+          tItemsFormPFinal.AsCurrency := Items.FieldByName('PrecioFinal').AsCurrency;
+          tItemsForm.Post;
+        end;
+      end;
+      Items.Next;
+    end;
+
+    Items.First;
+    if not tItemsForm.IsEmpty then
+    begin
+      ppCodeBar.DeviceType := 'Screen';
+      ppCodeBar.PrintReport;
+    end;
+  finally
+    tItemsForm.Close;
+  end;
+end;
+
+procedure TfrmConfiguracion.Print_Label_Traspaso(Items: TDataSet);
+var
+  i: Integer;
+begin
+  if tItemsForm.Active then
+    tItemsForm.EmptyDataSet
+  else
+    tItemsForm.CreateDataSet;
+  tItemsForm.Open;
+  try
+    Items.First;
+    while not Items.Eof do
+    begin
+      if Items.FieldByName('Cantidad').AsInteger > 0 then
+      begin
+        for i := 1 to Items.FieldByName('Cantidad').AsInteger do
+        begin
+          tItemsForm.Append;
+          tItemsFormCodProd.AsString := Items.FieldByName('IdArticulo').AsString;
+          tItemsFormDescripcion.AsString := Items.FieldByName('Descripcion').AsString;
+          tItemsFormMarca.AsString := Items.FieldByName('Marca').AsString;
+          tItemsFormColor.AsString := Items.FieldByName('Color').AsString;
+          tItemsFormTalle.AsString := Items.FieldByName('Talle').AsString;
+          tItemsFormCodBarra.AsString := Items.FieldByName('CodBarra').AsString;
+          tItemsFormGrupoSubGrupo.AsString := Items.FieldByName('GrupoSubGrupo').AsString;
+          tItemsFormPFinal.AsCurrency := Items.FieldByName('PrecioFinal').AsCurrency;
+          tItemsForm.Post;
+        end;
+        Items.Next;
+      end;
+    end;
+    Items.First;
+    if not tItemsForm.IsEmpty then
+    begin
+      ppEtiquetas.DeviceType := 'Screen';
+      ppEtiquetas.PrintReport;
+    end;
+  finally
+    tItemsForm.Close;
+  end;
+end;
+
+procedure TfrmConfiguracion.edtAnchoHKeyPress(Sender: TObject; var Key: Char);
+begin
+  if (Key in [',', '.']) then
+    Key := DecimalSeparator;
+end;
+
+procedure TfrmConfiguracion.Set_Labels(TComp: SmallInt; Edicion: Boolean = False; SoloLlenar: Boolean = False; Preview: Boolean = False);
+begin
+  if DefComp.Locate(DefCompTipoComp.FieldName, TComp, []) then
+  begin
+    if not(DefCompReporte.IsNull) then
+    begin
+      if (DefCompAlturaHoja.AsInteger <= 0) or
+         (DefCompAnchoHoja.AsInteger <= 0) then
+        lstFormulario.PrinterSetup.PaperName := 'A4';
+      lstFormulario.Template.FileName := DefCompTipoComp.AsString;
+      lstFormulario.Template.DatabaseSettings.Name := DefCompTipoComp.AsString;
+      lstFormulario.Template.LoadFromDatabase;
+    end
+    else begin
+      // Hoja
+      lstFormulario.PrinterSetup.Copies := DefCompCantCopias.AsInteger;
+      lstFormulario.PrinterSetup.Orientation := poPortrait;
+      lstFormulario.PrinterSetup.DocumentName := tFormularioTipoComp.AsString +' Nº '+ tFormularioNroComp.AsString;
+      lstFormulario.PrinterSetup.PaperHeight := DefCompAlturaHoja.AsInteger;
+      lstFormulario.PrinterSetup.PaperWidth := DefCompAnchoHoja.AsInteger;
+      lstFormulario.PrinterSetup.MarginTop := DefCompMargenSuperior.AsInteger;
+      lstFormulario.PrinterSetup.MarginLeft := DefCompMargenIzquierdo.AsInteger;
+      lstFormulario.PrinterSetup.MarginRight := DefCompMargenDerecho.AsInteger;
+      lstFormulario.PrinterSetup.MarginBottom := DefCompMargenInferior.AsInteger;
+    end;
+
+    if DefCompPrevisualizar.AsInteger = VERDADERO then
+      lstFormulario.DeviceType := 'Screen'
+    else
+      lstFormulario.DeviceType := 'Printer';
+
+    if not Edicion then
+    begin
+      if not SoloLlenar then
+      begin
+        lstFormulario.ShowPrintDialog := True;
+        try
+          lstFormulario.PrinterSetup.PrinterName := GetPrinterName(TComp);
+        except
+          lstFormulario.PrinterSetup.PrinterName := 'Default';
+        end;
+        lstFormulario.Print;
+      end;
+    end
+    else begin
+      if not Preview then
+      begin
+        ppdIyC.ShowModal;
+        lstFormulario.Template.FileName := DefCompTipoComp.AsString;
+        lstFormulario.Template.DatabaseSettings.Name := DefCompTipoComp.AsString;
+        lstFormulario.Template.SaveToDatabase;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmConfiguracion.SucursalesAfterPost(DataSet: TDataSet);
+begin
+  if Trim(SucursalesDetSuc.AsString) = Vacio then
+  begin
+    raise EUsuario.Create('debe ingresar una denominación de 2 letras para la sucursal.-');
+  end;
+
+  if not dmGestion.trGestion.InTransaction then
+    dmGestion.trGestion.StartTransaction;
+  try
+    if Sucursales.ApplyUpdates(0) > 0 then
+      Abort;
+    dmGestion.trGestion.Commit;
+  except
+    dmGestion.trGestion.Rollback;
+  end;
+  AddSuc := False;
+end;
+
+procedure TfrmConfiguracion.SucursalesBeforePost(DataSet: TDataSet);
+var
+  q: TMDOQuery;
+begin
+  if (Sucursales.State in [dsInsert]) And (AddSuc) then
+  begin
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := dmGestion.dbGestion;
+      q.Transaction := dmGestion.tSucursales.Transaction;
+      q.SQL.Add('Select Max(IdSucursal) as Ultimo ');
+      q.SQL.Add('From Sucursales ');
+      q.Open;
+      SucursalesIdSucursal.AsInteger := q.FieldByName('Ultimo').AsInteger + 1;
+      q.Close;
+    finally
+      q.Free;
+    end;
+  end;
+end;
+
+procedure TfrmConfiguracion.SucursalesIDSUCURSALGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+begin
+  if Sender.AsInteger = NUEVO_REGISTRO then
+    Text := 'Nueva'
+  else
+    Text := Sender.AsString;
+end;
+
+procedure TfrmConfiguracion.SucursalesNewRecord(DataSet: TDataSet);
+begin
+  SucursalesIDSUCURSAL.AsInteger := NUEVO_REGISTRO;
+  SucursalesActiva.AsInteger := Verdadero;
+  SucursalesTACTIVIDAD.AsInteger := 0; // Tipo Comercial
+end;
+
+procedure TfrmConfiguracion.SucursalesReconcileError(DataSet: TCustomClientDataSet;
+          E: EReconcileError; UpdateKind: TUpdateKind; var Action: TReconcileAction);
+begin
+  ApplicationShowException(E);
+end;
+
+procedure TfrmConfiguracion.Print_Formulario(var Comprobante: TFactura; var Items: TBody_Fiscal; SoloLlenar: Boolean = False);
+var
+  i, j: SmallInt;
+begin
+  if tFormulario.Active then
+    tFormulario.EmptyDataSet
+  else
+    tFormulario.CreateDataSet;
+  DefComp.Locate(DefCompTipoComp.FieldName, Comprobante.TipoFactura, []);
+
+  tFormulario.Append;
+  tFormularioIdEmpresa.AsInteger := Comprobante.IdEmpresa;
+  tFormularioEmpresa.AsString := Comprobante.DtEmpresa;
+  tFormularioIdFactura.AsInteger := Comprobante.IdFactura;
+  tFormularioDetSuc.AsString := Comprobante.DetSuc;
+  tFormularioTipoComp.AsString := Comprobante.TipoFacStr;
+  tFormularioNroComp.AsString := Comprobante.NroFactura;
+  tFormularioLugar_Fecha.AsString := dmGestion.EmpresasProvincia.AsString+', '+ FormatDateTime('dd "de" mmmm "de" yyyy',Comprobante.FechaF);
+  tFormularioNroCliente.AsInteger := Comprobante.Entidad;
+  tFormularioNomCliente.AsString := Comprobante.NombreEnt;
+  tFormularioFanCliente.AsString := Comprobante.NombreFan;
+  tFormularioDomicilio.AsString := Comprobante.Direccion;
+  tFormularioLocProv.AsString := Comprobante.Localidad +' - '+ Comprobante.Provincia;
+  if Comprobante.Telefono > Vacio then
+    tFormularioLocProv.AsString := tFormularioLocProv.AsString +' Tel. '+ Comprobante.Telefono;
+  if Comprobante.CodPostal > Vacio then
+    tFormularioLocProv.AsString := tFormularioLocProv.AsString +' CP '+ Comprobante.CodPostal;
+  tFormularioDocumento.AsString := Comprobante.TipoDocStr+' '+Comprobante.NroDocumento;
+  tFormularioTipoIva.AsString := Comprobante.TipoIvaStr;
+  tFormularioNroVend.AsInteger := Comprobante.Empleado;
+  tFormularioNomVendedor.AsString := Comprobante.NombreEmpleado;
+  tFormularioDepOrg.AsString := Comprobante.DepOrigen;
+  tFormularioDepDest.AsString := Comprobante.DepDestino;
+  tFormularioAlcIva1.AsFloat := Comprobante.AlicuotaIva1;
+  tFormularioTAlcIva1.AsCurrency := Abs(Comprobante.IvaAlicuota1);
+  tFormularioAlcIva2.AsFloat := Comprobante.AlicuotaIva2;
+  tFormularioTAlcIva2.AsCurrency := Abs(Comprobante.IvaAlicuota2);
+  tFormularioEntregarA.AsString := Comprobante.EntregarA;
+  tFormularioDomicilioE.AsString:= Comprobante.DomicilioE;
+  tFormularioDetalle.AsString := Comprobante.Detalle;
+  tFormularioListaPre.AsString := IntToStr(Comprobante.NroLiquidacion);
+  tFormularioCantArtic.AsInteger := Comprobante.CantArtic;
+  if Comprobante.Imprimir_Totales then
+  begin
+    tFormularioTNeto.AsCurrency   := Abs(Comprobante.Neto);
+    tFormularioTExento.AsCurrency := Abs(Comprobante.Exento);
+    tFormularioTImpInt.AsCurrency := Abs(Comprobante.NoComputables);
+    tFormularioDescuento.Value := Abs(Comprobante.Descuento);
+    tFormularioComision.AsCurrency := Comprobante.Comision;
+    tFormularioTotalF.AsCurrency := Abs(Comprobante.Total);
+  end
+  else begin
+    tFormularioTNeto.AsCurrency   := 0;
+    tFormularioTExento.AsCurrency := 0;
+    tFormularioTImpInt.AsCurrency := 0;
+    tFormularioDescuento.Value := 0;
+    tFormularioComision.AsCurrency := 0;
+    tFormularioTotalF.AsCurrency := 0;
+  end;
+  tFormulario.Post;
+
+  if tItemsForm.Active then
+    tItemsForm.EmptyDataSet
+  else
+    tItemsForm.CreateDataSet;
+
+  if tDetExtItem.Active then
+    tDetExtItem.EmptyDataSet
+  else
+    tDetExtItem.CreateDataSet;
+
+  for i := 1 to Comprobante.CantArtic do
+  begin
+    if Items[i].IdProducto > 0 then
+    begin
+      tItemsForm.Append;
+      if (Items[i].Talle > 0) and (Control_Talles) then
+        tItemsFormCodProd.AsString := IntToStr(Items[i].IdProducto)+' T'+GetTextTalle(Items[i].Talle)
+      else
+        tItemsFormCodProd.AsString := IntToStr(Items[i].IdProducto);
+
+      tItemsFormMarca.AsString := Items[i].Marca;
+      tItemsFormDescripcion.AsString := Items[i].Detalle;
+      tItemsFormCodBarra.AsString := Items[i].CodProd;
+      tItemsFormColor.AsString := Items[i].Color;
+      tItemsFormSubDet.AsString := Items[i].SubDet;
+      tItemsFormCant.AsFloat := Items[i].Cantidad;
+      if Comprobante.Imprimir_Totales then
+      begin
+        tItemsFormPNeto.AsCurrency := Items[i].PrecioNetoT;
+        tItemsFormBonif.AsFloat := Items[i].Bonificacion;
+        tItemsFormPTotal.AsCurrency := Items[i].PrecioTotal;
+        tItemsFormPFinal.AsCurrency := Items[i].PrecioFinal;
+        tItemsFormDescuento.AsCurrency := Items[i].Descuento;
+        tItemsFormNetoUnit.AsCurrency := Items[i].PrecioNetoU;
+      end
+      else begin
+        tItemsFormPNeto.AsCurrency := 0;
+        tItemsFormBonif.AsFloat := 0;
+        tItemsFormPTotal.AsCurrency := 0;
+        tItemsFormPFinal.AsCurrency := 0;
+        tItemsFormDescuento.AsCurrency := 0;
+        tItemsFormNetoUnit.AsCurrency := 0;
+      end;
+
+      if (Items[i].DetalleExtendido) then
+      begin
+        for j := 1 to MaxDetExt do
+        begin
+          if Trim(Items[i].DetalleExt[j]) <> Vacio then
+          begin
+            tDetExtItem.Append;
+            tDetExtItemIdItem.AsInteger := i;
+            tDetExtItemIdDetalle.AsInteger := j;
+            tDetExtItemDetalle.AsString := Items[i].DetalleExt[j];
+            tDetExtItem.Post;
+          end;
+        end;
+      end;
+
+      tItemsForm.Post;
+    end;
+  end;
+  tItemsForm.First;
+  Set_Labels(Comprobante.TipoFactura, False, SoloLlenar);
+end;
+
+procedure TfrmConfiguracion.cbPracRetIvaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.INC}
+end;
+
+procedure TfrmConfiguracion.cbPrintersChange(Sender: TObject);
+begin
+  if not DefCompTipoComp.IsNull then
+    Reg.WriteString(DefCompTipoComp.AsString, cbPrinters.Text);
+end;
+
+procedure TfrmConfiguracion.cbSucEstStmChange(Sender: TObject);
+begin
+  try
+    EstStm := Integer(cbSucEstStm.Items.Objects[cbSucEstStm.ItemIndex])
+  except
+    EstStm := 0;
+  end;
+end;
+
+procedure TfrmConfiguracion.lblTalleCBGetText(Sender: TObject; var Text: String);
+begin
+  if Control_Talles then
+  begin
+    try
+      Text := 'T/N ' + GetTextTalle(StrToInt(Text));
+    except
+      Text := ' ';
+    end;
+  end
+  else begin
+    Text := ' ';
+  end;
+end;
+
+procedure TfrmConfiguracion.lblTalleEtqGetText(Sender: TObject; var Text: String);
+begin
+  if Control_Talles then
+  begin
+    try
+      Text := 'T/N ' + GetTextTalle(StrToInt(Text));
+    except
+      Text := ' ';
+    end;
+  end
+  else begin
+    Text := ' ';
+  end;
+end;
+
+procedure TfrmConfiguracion.DefCompAfterPost(DataSet: TDataSet);
+begin
+  if not tDefComp.Transaction.InTransaction then
+    tDefComp.Transaction.StartTransaction;
+  try
+    if TClientDataSet(DataSet).ApplyUpdates(0) > 0 then
+      Abort;
+    tDefComp.Transaction.Commit;
+  except
+    tDefComp.Transaction.Rollback;
+    raise;
+  end;
+end;
+
+procedure TfrmConfiguracion.DefCompBeforePost(DataSet: TDataSet);
+begin
+  if Trim(DefCompREPNAME.AsString) = Vacio then
+    DefCompREPNAME.Value := DefCompTIPOCOMP.AsString;
+end;
+
+//******************************** EMPLEADOS **********************************
+
+function TfrmConfiguracion.EmpleadosLast: Integer;
+var
+  q: TMDOQuery;
+begin
+  Result := 1;
+  try
+    q := TMDOQuery.Create(nil);
+    q.Database := dmGestion.qEmpleados.Database;
+    q.Transaction := dmGestion.qEmpleados.Transaction;
+    q.SQL.Text := 'Select Max(IDEMPLEADO) from EMPLEADOS ';
+    q.Open;
+    Result := q.Fields[0].AsInteger;
+    q.Close;
+  finally
+    q.Free;
+  end;
+end;
+
+procedure TfrmConfiguracion.EmpleadosNewRecord(DataSet: TDataSet);
+begin
+  EmpleadosIDEMPLEADO.AsInteger := NUEVO_REGISTRO;
+  EmpleadosActivo.AsInteger := Verdadero;
+  EmpleadosIdTareaFuncion.AsInteger := 4;
+  EmpleadosPassW.AsString := '0000';
+end;
+
+procedure TfrmConfiguracion.EmpleadosReconcileError(DataSet: TCustomClientDataSet;
+         E: EReconcileError; UpdateKind: TUpdateKind;var Action: TReconcileAction);
+begin
+  ApplicationShowException(E);
+end;
+
+procedure TfrmConfiguracion.btnInsertEmpClick(Sender: TObject);
+begin
+  AltaEmp := True;
+  edtENombre.SetFocus;
+  Empleados.Insert;
+end;
+
+procedure TfrmConfiguracion.btnEditEmpClick(Sender: TObject);
+begin
+  AltaEmp := False;
+  edtENombre.SetFocus;
+  Empleados.Edit;
+end;
+
+procedure TfrmConfiguracion.btnSaveEmpClick(Sender: TObject);
+begin
+  qViewEmp.Close;
+  if Empleados.State in dsEditModes then
+    Empleados.Post;
+  qViewEmp.Open;
+end;
+
+procedure TfrmConfiguracion.btnCancelEmpClick(Sender: TObject);
+begin
+  AltaEmp := False;
+  if Empleados.State in dsEditModes then
+    Empleados.Cancel;
+end;
+
+procedure TfrmConfiguracion.btnBuscarEmpClick(Sender: TObject);
+begin
+  frmBuscaEmp := TfrmBuscaEmp.Create(nil);
+  if frmBuscaEmp.ShowModal = mrOk then
+    Empleados.Locate(EmpleadosIdEmpleado.FieldName, frmBuscaEmp.Elegido, []);
+end;
+
+procedure TfrmConfiguracion.btnExpESClick(Sender: TObject);
+begin
+  if qEstStm.Active then
+  begin
+    dmGestion.IyC_Exp.DataSet := qEstStm;
+    dmGestion.IyC_Exp.Select;
+  end;
+end;
+
+procedure TfrmConfiguracion.btnExportarEmpClick(Sender: TObject);
+begin
+  dmGestion.IyC_Exp.DataSet := Empleados;
+  dmGestion.IyC_Exp.Select;
+end;
+
+procedure TfrmConfiguracion.btnPrintEmpClick(Sender: TObject);
+begin
+  lblTitulo1.Caption := OwnerName;
+  lblTitulo2.Caption := 'EMPLEADOS';
+  rpEmpleados.PrintReport;
+  if Tarea < Nivel_Adm then
+    lblClave.Visible := False;
+end;
+
+procedure TfrmConfiguracion.edtENombreEnter(Sender: TObject);
+begin
+  edtENombre.SelectAll;
+  pnlEmpleados.Caption := edtENombre.Hint;
+end;
+
+procedure TfrmConfiguracion.edtEDireccionEnter(Sender: TObject);
+begin
+  edtEDireccion.SelectAll;
+  pnlEmpleados.Caption := edtEDireccion.Hint;
+end;
+
+procedure TfrmConfiguracion.edtELocalidadEnter(Sender: TObject);
+begin
+  edtELocalidad.SelectAll;
+  pnlEmpleados.Caption := edtELocalidad.Hint;
+end;
+
+procedure TfrmConfiguracion.edtETelefonoEnter(Sender: TObject);
+begin
+  edtETelefono.SelectAll;
+  pnlEmpleados.Caption := edtETelefono.Hint;
+end;
+
+procedure TfrmConfiguracion.cbEProvinciasEnter(Sender: TObject);
+begin
+  cbEProvincias.SelectAll;
+  pnlEmpleados.Caption := cbEProvincias.Hint;
+end;
+
+procedure TfrmConfiguracion.edtECodPostalEnter(Sender: TObject);
+begin
+  edtECodPostal.SelectAll;
+  pnlEmpleados.Caption := edtECodPostal.Hint;
+end;
+
+procedure TfrmConfiguracion.cbETipoDocEnter(Sender: TObject);
+begin
+  cbETipoDoc.SelectAll;
+  pnlEmpleados.Caption := cbETipoDoc.Hint;
+end;
+
+procedure TfrmConfiguracion.edtEDocumentoEnter(Sender: TObject);
+begin
+  edtEDocumento.SelectAll;
+  pnlEmpleados.Caption := edtEDocumento.Hint;
+end;
+
+procedure TfrmConfiguracion.gEmpleadosDblClick(Sender: TObject);
+begin
+  Empleados.Locate(EmpleadosIdEmpleado.FieldName, qViewEmpIDEMPLEADO.AsInteger, []);
+end;
+
+procedure TfrmConfiguracion.edtENombreKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  {$INCLUDE IyC_NextEdit.INC}
+end;
+
+procedure TfrmConfiguracion.gEmpleadosCalcCellColors(Sender: TObject;
+  Field: TField; State: TGridDrawState; Highlight: Boolean; AFont: TFont; ABrush: TBrush);
+begin
+  if qViewEmpACTIVO.AsInteger = Falso then
+  begin
+    AFont.Style := AFont.Style + [fsStrikeOut];
+  end;
+  if qViewEmpIDSUCASIGNADA.AsInteger = IdBranch then
+  begin
+    ABrush.Color := clRed;
+    AFont.Color := clWhite;
+  end;
+end;
+
+procedure TfrmConfiguracion.EmpleadosAfterPost(DataSet: TDataSet);
+begin
+  if Empleados.ApplyUpdates(0) > 0 then
+    Abort;
+  UpDate_DatosSistema(0, 2);
+end;
+
+procedure TfrmConfiguracion.EmpleadosBeforePost(DataSet: TDataSet);
+var
+  q: TMDOQuery;
+begin
+  if AltaEmp then
+  begin
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := dmGestion.dbGestion;
+      q.Transaction := qEmpleados.Transaction;
+      q.SQL.Add('Select Max(IdEmpleado) as Ultimo ');
+      q.SQL.Add('From Empleados ');
+      q.Open;
+      EmpleadosIDEMPLEADO.AsInteger := q.FieldByName('Ultimo').AsInteger + 1;
+      EmpleadosALTAMOD.AsDateTime := Date;
+      q.Close;
+    finally
+      q.Free;
+    end;
+  end;
+end;
+
+procedure TfrmConfiguracion.EmpleadosDOCUMENTOValidate(Sender: TField);
+begin
+  if EmpleadosTipoDoc.AsInteger in [CUIT, CUIL] then
+  begin
+    if not(Validate_Documento_Fiscal(Sender.Value))and
+      (Application.MessageBox('El número de C.U.I.T./C.U.I.L. puede ser erroneo. Acepta?',
+      'C.U.I.T. no válido', MB_ICONEXCLAMATION + MB_YESNO) = IDNO) then
+      SysUtils.Abort;
+  end;
+end;
+
+procedure TfrmConfiguracion.EmpleadosIDEMPLEADOGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+begin
+  if Sender.AsInteger = NUEVO_REGISTRO then
+    Text := 'Nuevo'
+  else
+    Text := Sender.AsString;
+end;
+
+procedure TfrmConfiguracion.EmpleadosTIPODOCChange(Sender: TField);
+begin
+  if Sender.AsInteger in [CUIT, CUIL] then //Tipo doc Cuit
+    EmpleadosDocumento.EditMask := '##-########-#;1;_'
+  else
+    EmpleadosDocumento.EditMask := Vacio;
+end;
+
+procedure TfrmConfiguracion.qViewEmpACTIVOGetText(Sender: TField; var Text: String; DisplayText: Boolean);
+begin
+  Case qViewEmpACTIVO.AsInteger of
+    Falso     : Text := 'No';
+    Verdadero : Text := 'Si';
+  end;
+end;
+
+procedure TfrmConfiguracion.qViewEmpDETSUCGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+begin
+  if Trim(qViewEmpDETSUC.AsString) = Vacio then
+    Text := 'T'
+  else
+    Text := qViewEmpDETSUC.AsString;
+end;
+
+procedure TfrmConfiguracion.Calcular_Ventas_Dcto(Desde,Hasta: TDate);
+Const
+   Items = 'Select IdFactura, IdSucursal, IdPuntoVenta, IdArticulo, '+
+           '       FechaF, Cantidad, Descuento, PRCBONIFICACION, '+
+           '       PrecioTotal, ValorLista, NroCtas, Oferta, Talle, '+
+           '       SubDet, IdSubDep, DctoStk, Marca, Detalle, DetSuc, '+
+           '       MaxDtoCdo, MaxDcto, IdAutorDto, MosDom, IdSucSalida, '+
+           '       Nombre '+
+           'From PRODUCTOS_VENDIDOS_CAJA(:Desde, :Hasta, :IdSuc) '+
+           'where (PrcBonificacion > MAXDTOCDO and NROCTAS = 0) or '+
+           '      (PrcBonificacion > MAXDCTO and NROCTAS > 0) ';
+var
+  q : TMDOQuery;
+begin
+  TotDesc := 0;
+  TotPLis := 0;
+  TotPVen := 0;
+  qVentas.Close;
+  if Desde <= Hasta then
+  begin
+    qVentas.ParamByName('Desde').AsDate := Desde;
+    qVentas.ParamByName('Hasta').AsDate := Hasta;
+    qVentas.ParamByName('IdSuc').AsInteger := 0;
+    qVentas.Open;
+    if not qVentas.IsEmpty then
+    begin
+      gVentas.GroupFieldName := 'DetSuc';
+      try
+        q := TMDOQuery.Create(nil);
+        q.Database := qVentas.Database;
+        q.Transaction := qVentas.Transaction;
+        q.SQL.Add('Select Sum(Descuento) as TDesc, ');
+        q.SQL.Add('       Sum(ValorLista) as TLista, ');
+        q.SQL.Add('       Sum(PrecioTotal) as TTotal ');
+        q.SQL.Add('From PRODUCTOS_VENDIDOS_CAJA(:Desde, :Hasta, 0)');
+        q.SQL.Add('Where (PrcBonificacion > MAXDTOCDO and NROCTAS = 0) or ');
+        q.SQL.Add('      (PrcBonificacion > MAXDCTO and NROCTAS > 0)');
+        q.ParamByName('Desde').AsDate := Desde;
+        q.ParamByName('Hasta').AsDate := Hasta;
+        q.Open;
+        TotDesc := q.FieldByName('TDesc').AsCurrency;
+        (*
+        TotPLis := q.FieldByName('TLista').AsCurrency;
+        TotPVen := q.FieldByName('TTotal').AsCurrency;
+        *)
+        q.Close;
+      finally
+        q.Free;
+      end;
+      qVentas.First;
+      gVentas.ColumnByName('Descuento').FooterValue := Format('%m', [TotDesc]);
+      (*
+      gVentas.ColumnByName('ValorLista').FooterValue := Format('%m', [TotPLis]);
+      gVentas.ColumnByName('PrecioTotal').FooterValue := Format('%m', [TotPVen]);
+      *)
+    end;
+  end;
+end;
+
+procedure TfrmConfiguracion.gVentasUpdateFooter(Sender: TObject);
+begin
+  gVentas.ColumnByName('Descuento').FooterValue := Format('%m', [TotDesc]);
+end;
+
+procedure TfrmConfiguracion.Calcular_Mod_Precios(Desde,Hasta: TDate);
+begin
+  qModPrc.Close;
+  if Desde <= Hasta then
+  begin
+    qModPrc.ParamByName('Desde').AsDate := Desde;
+    qModPrc.ParamByName('Hasta').AsDate := Hasta;
+    qModPrc.Open;
+    if not qModPrc.IsEmpty then
+      gModPrc.GroupFieldName := 'SubGrupo';
+  end;
+end;
+
+procedure TfrmConfiguracion.Calcular_Ajustes_Stk(Desde,Hasta: TDate);
+begin
+  qAjustes.Close;
+  if Desde <= Hasta then
+  begin
+    qAjustes.ParamByName('Desde').AsDate := Desde;
+    qAjustes.ParamByName('Hasta').AsDate := Hasta;
+    qAjustes.Open;
+    if not qAjustes.IsEmpty then
+      gAjustes.GroupFieldName := 'SubGrupo';
+  end;
+end;
+
+procedure TfrmConfiguracion.Calcular_VtaSinStk(Desde,Hasta: TDate);
+begin
+  qSinStock.Close;
+  if Desde <= Hasta then
+  begin
+    qSinStock.ParamByName('Desde').AsDate := Desde;
+    qSinStock.ParamByName('Hasta').AsDate := Hasta;
+    qSinStock.Open;
+    if not qSinStock.IsEmpty then
+      gVSinStock.GroupFieldName := 'DetSuc';
+  end;
+end;
+
+procedure TfrmConfiguracion.Calcular_BajoMarkUp(Desde,Hasta: TDate);
+begin
+  qBajoMarkUp.Close;
+  if Desde <= Hasta then
+  begin
+    qBajoMarkUp.ParamByName('Desde').AsDate := Desde;
+    qBajoMarkUp.ParamByName('Hasta').AsDate := Hasta;
+    qBajoMarkUp.Open;
+    if not qBajoMarkUp.IsEmpty then
+      gBajoMUp.GroupFieldName := 'SubGrupo';
+  end;
+end;
+
+procedure TfrmConfiguracion.Calcular_OrdenesA(Desde,Hasta: TDate);
+begin
+  qOrdenes.Close;
+  if Desde <= Hasta then
+  begin
+    qOrdenes.ParamByName('Desde').AsDate := Desde;
+    qOrdenes.ParamByName('Desde').AsDate := Hasta;
+    qOrdenes.Open;
+  end;
+end;
+
+procedure TfrmConfiguracion.Calcular_Borrados(Desde,Hasta: TDate);
+begin
+  qDeleted.Close;
+  if Desde <= Hasta then
+  begin
+    qDeleted.ParamByName('Desde').AsDate := Desde;
+    qDeleted.ParamByName('Desde').AsDate := Hasta;
+    qDeleted.Open;
+    if not qDeleted.IsEmpty then
+      gBorrados.GroupFieldName := 'Tipo';
+  end;
+end;
+
+procedure TfrmConfiguracion.gOrdenesDblClick(Sender: TObject);
+begin
+  Get_OP(qOrdenesIdOrden.AsInteger);
+end;
+
+procedure TfrmConfiguracion.gVentasDblClick(Sender: TObject);
+begin
+  Get_FacV(qVentasIdFactura.AsInteger,
+           qVentasIdSucursal.AsInteger,
+           qVentasIDPUNTOVENTA.AsInteger);
+end;
+
+procedure TfrmConfiguracion.gVSinStockDblClick(Sender: TObject);
+begin
+  (*
+  Get_FacV(qSinStockIdFactura.AsInteger,
+           qSinStockIdStock.AsInteger,
+           qSinStockIdPuntoVenta.AsInteger);
+  *)
+end;
+
+procedure TfrmConfiguracion.gAjustesStkDblClick(Sender: TObject);
+begin
+  Get_FacS(qAjustesTMov.AsInteger,
+           qAjustesIdFactura.AsInteger,
+           qAjustesIdSucursal.AsInteger,
+           qAjustesIdPuntoVenta.AsInteger);
+end;
+
+procedure TfrmConfiguracion.qAjustesTipoAjGetText(Sender: TField; var Text: String; DisplayText: Boolean);
+begin
+  if Sender.AsInteger > 0 then
+    Text := 'Ent'
+  else
+    Text := 'Sal';
+end;
+
+procedure TfrmConfiguracion.qDeletedTIPOGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+begin
+  Case qDeletedTIPO.AsInteger of
+    1: Text := 'Ingresos';
+    2: Text := 'Egresos ';
+  End;
+end;
+
+procedure TfrmConfiguracion.qEstadosTermAfterOpen(DataSet: TDataSet);
+Const
+  Est = 'Select Count(Estado) as C From CfgPtoVta '+
+        'Where (Estado =:E) And (IdSucursal =:S) ';
+  All = 'Select Count(*) as C From CfgPtoVta '+
+        'Where IdSucursal =:S ';
+var
+  q: TMDOQuery;
+
+begin
+  try
+    C_In := 0;
+    C_Ot := 0;
+    C_Tr := 0;
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := qEstadosTerm.Database;
+      q.Transaction := qEstadosTerm.Transaction;
+      q.SQL.Text := Est;
+      q.ParamByName('E').AsInteger := 0;  // Out
+      q.ParamByName('S').AsInteger := IdBranch;
+      q.Open;
+      C_Ot := q.FieldByName('C').AsInteger;
+    finally
+      q.Free
+    end;
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := qEstadosTerm.Database;
+      q.Transaction := qEstadosTerm.Transaction;
+      q.SQL.Text := Est;
+      q.ParamByName('E').AsInteger := 1;  // In
+      q.ParamByName('S').AsInteger := IdBranch;
+      q.Open;
+      C_In := q.FieldByName('C').AsInteger;
+    finally
+      q.Free
+    end;
+    try
+      q := TMDOQuery.Create(nil);
+      q.Database := qEstadosTerm.Database;
+      q.Transaction := qEstadosTerm.Transaction;
+      q.SQL.Text := All;
+      q.ParamByName('S').AsInteger := IdBranch;
+      q.Open;
+      C_Tr := q.FieldByName('C').AsInteger;
+    finally
+      q.Free
+    end;
+  finally
+    qEstadosTerm.First;
+    gConectados.ColumnByName('UEntrada').FooterValue := Format('%d',[C_In]);
+    gConectados.ColumnByName('USalida').FooterValue := Format('%d',[C_Ot]);
+    gConectados.ColumnByName('Nombre').FooterValue := Format('%d',[C_Tr]);
+  end;
+end;
+
+procedure TfrmConfiguracion.gConectadosUpdateFooter(Sender: TObject);
+begin
+  gConectados.ColumnByName('UEntrada').FooterValue := Format('%d',[C_In]);
+  gConectados.ColumnByName('USalida').FooterValue := Format('%d',[C_Ot]);
+  gConectados.ColumnByName('Nombre').FooterValue := Format('º Terminales %d',[C_Tr]);
+end;
+
+procedure TfrmConfiguracion.qEstadosTermESTADOGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+begin
+  Case qEstadosTermESTADO.AsInteger of
+    0: Text := 'Out';
+    1: Text := ' In';
+  End;
+end;
+
+procedure TfrmConfiguracion.qEstadosTermIDSUCURSALGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+begin
+  Text := Get_DetSuc(qEstadosTermIDSUCURSAL.AsInteger, 2);
+end;
+
+procedure TfrmConfiguracion.qEstadosTermNOMBREGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+begin
+  if qEstadosTermUsuario.AsInteger = 0 then
+  begin
+    if qEstadosTermESTADO.AsInteger = 1 then
+      Text := 'Programador'
+    else
+      Text := ' - '
+  end
+  else
+    Text := Sender.AsString;
+end;
+
+procedure TfrmConfiguracion.qEstStmMES_ESTGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+begin
+  try
+    Text := LongMonthNames[qEstStmMES_EST.AsInteger];
+  except
+    Text := qEstStmMES_EST.AsString;
+  end;
+end;
+
+procedure TfrmConfiguracion.lblTAjusteAGetText(Sender: TObject; var Text: String);
+begin
+  if qAjustesTipoAj.AsInteger > 0 then
+    Text := 'Ent'
+  else
+    Text := 'Sal';
+end;
+
+procedure TfrmConfiguracion.ImpTodoslosInformesClick(Sender: TObject);
+begin
+  try
+    qVentas.DisableControls;
+    qAjustes.DisableControls;
+    qModPrc.DisableControls;
+    qSinStock.DisableControls;
+    qBajoMarkUp.DisableControls;
+    qOrdenes.DisableControls;
+    lblTituloV.Caption := Format('%s - Ventas con Descuentos entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpVentas.PrintReport;
+    lblTituloA.Caption := Format('%s - Ajustes de Stock entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpAjustes.PrintReport;
+    lblTituloM.Caption := Format('%s - Cambios de Precios entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpModPrc.PrintReport;
+    lblTituloS.Caption := Format('%s - Ventas realizadas sin Stock entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpVtaSinStk.PrintReport;
+    lblTituloB.Caption := Format('%s - Precios Bajo Mark_Up entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpBajoMarkUp.PrintReport;
+    lblTituloO.Caption := Format('%s - Ordenes Anuladas entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpOrdenes.PrintReport;
+  finally
+    qVentas.EnableControls;
+    qAjustes.EnableControls;
+    qSinStock.EnableControls;
+    qModPrc.EnableControls;
+    qBajoMarkUp.EnableControls;
+    qOrdenes.EnableControls;
+  end;
+end;
+
+procedure TfrmConfiguracion.ImpVentasConDescuentosClick(Sender: TObject);
+begin
+  try
+    qVentas.DisableControls;
+    lblTituloV.Caption := Format('%s - Ventas con Descuentos entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpVentas.PrintReport;
+  finally
+    qVentas.EnableControls;
+  end;
+end;
+
+procedure TfrmConfiguracion.ImpAjustesDeStockClick(Sender: TObject);
+begin
+  try
+    qAjustes.DisableControls;
+    lblTituloA.Caption := Format('%s - Ajustes de Stock entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpAjustes.PrintReport;
+  finally
+    qAjustes.EnableControls;
+  end;
+end;
+
+procedure TfrmConfiguracion.ImpModificacionesDePreciosClick(Sender: TObject);
+begin
+  try
+    qModPrc.DisableControls;
+    lblTituloM.Caption := Format('%s - Cambios de Precios entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpModPrc.PrintReport;
+  finally
+    qModPrc.EnableControls;
+  end;
+end;
+
+procedure TfrmConfiguracion.ImpVentasSinStockClick(Sender: TObject);
+begin
+  try
+    qSinStock.DisableControls;
+    lblTituloS.Caption := Format('%s - Ventas realizadas sin Stock entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpVtaSinStk.PrintReport;
+  finally
+    qSinStock.EnableControls;
+  end;
+end;
+
+procedure TfrmConfiguracion.ImpPreciosBajoMarkUpClick(Sender: TObject);
+begin
+  try
+    qBajoMarkUp.DisableControls;
+    lblTituloB.Caption := Format('%s - Precios Bajo Mark_Up entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpBajoMarkUp.PrintReport;
+  finally
+    qBajoMarkUp.EnableControls;
+  end;
+end;
+
+procedure TfrmConfiguracion.ImpOrdenesAnuladasClick(Sender: TObject);
+begin
+  try
+    qOrdenes.DisableControls;
+    lblTituloO.Caption := Format('%s - Ordenes Anuladas entre %s al %s ', [OwnerName, edtDesdeAudit.Text, edtHastaAudit.Text]);
+    rpOrdenes.PrintReport;
+  finally
+    qOrdenes.EnableControls;
+  end;
+end;
+
+procedure TfrmConfiguracion.ExportarVtasConDctoClick(Sender: TObject);
+begin
+  dmGestion.IyC_Exp.DataSet := qVentas;
+  dmGestion.IyC_Exp.Select;
+end;
+
+procedure TfrmConfiguracion.ExpAjustesClick(Sender: TObject);
+begin
+  dmGestion.IyC_Exp.DataSet := qAjustes;
+  dmGestion.IyC_Exp.Select;
+end;
+
+procedure TfrmConfiguracion.ExpModPrcClick(Sender: TObject);
+begin
+  dmGestion.IyC_Exp.DataSet := qModPrc;
+  dmGestion.IyC_Exp.Select;
+end;
+
+procedure TfrmConfiguracion.ExpVtasSinStockClick(Sender: TObject);
+begin
+  dmGestion.IyC_Exp.DataSet := qSinStock;
+  dmGestion.IyC_Exp.Select;
+end;
+
+procedure TfrmConfiguracion.ExpPreciosBajoMarkUpClick(Sender: TObject);
+begin
+  dmGestion.IyC_Exp.DataSet := qBajoMarkUp;
+  dmGestion.IyC_Exp.Select;
+end;
+
+procedure TfrmConfiguracion.ExpOrdenesAnuladasClick(Sender: TObject);
+begin
+  dmGestion.IyC_Exp.DataSet := qOrdenes;
+  dmGestion.IyC_Exp.Select;
+end;
+
+procedure TfrmConfiguracion.btnCalcESClick(Sender: TObject);
+begin
+  try
+    Screen.Cursor := crSQLWait;
+    gEstStm.Enabled := False;
+    btnExpES.Enabled := False;
+    qEstStm.Close;
+    qEstStm.ParamByName('IdSuc').AsInteger := EstStm;
+    qEstStm.Open;
+    if not qEstStm.IsEmpty then
+    begin
+      gEstStm.GroupFieldName := 'Detalle';
+      gEstStm.Enabled := True;
+      btnExpES.Enabled := True;
+    end;
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TfrmConfiguracion.btnCalcularAuditClick(Sender: TObject);
+begin
+  try
+    Screen.Cursor := crHourGlass;
+    Calcular_Ventas_Dcto(edtDesdeAudit.Date, edtHastaAudit.Date);
+    Calcular_Ajustes_Stk(edtDesdeAudit.Date, edtHastaAudit.Date);
+    Calcular_Mod_Precios(edtDesdeAudit.Date, edtHastaAudit.Date);
+    Calcular_VtaSinStk(edtDesdeAudit.Date, edtHastaAudit.Date);
+    Calcular_BajoMarkUp(edtDesdeAudit.Date, edtHastaAudit.Date);
+    Calcular_OrdenesA(edtDesdeAudit.Date, edtHastaAudit.Date);
+    Calcular_Borrados(edtDesdeAudit.Date, edtHastaAudit.Date);
+  finally
+    Screen.Cursor := crDefault;
+  end;
+end;
+
+procedure TfrmConfiguracion.btnSaveSucClick(Sender: TObject);
+begin
+  if Sucursales.State in dsEditModes then
+    Sucursales.Post;
+end;
+
+procedure TfrmConfiguracion.btnAddSucClick(Sender: TObject);
+begin
+  AddSuc := True;
+  Sucursales.Insert;
+  edtNomSuc.SetFocus;
+end;
+
+procedure TfrmConfiguracion.btnModSucClick(Sender: TObject);
+begin
+  AddSuc := False;
+  Sucursales.Edit;
+  edtNomSuc.SetFocus;
+end;
+
+procedure TfrmConfiguracion.btnExpSucClick(Sender: TObject);
+begin
+  dmGestion.IyC_Exp.DataSet := Sucursales;
+  dmGestion.IyC_Exp.Select;
+end;
+
+end.
