@@ -1,0 +1,2783 @@
+object frmOrdenCompra: TfrmOrdenCompra
+  Left = 211
+  Top = 168
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Ordenes de Compra'
+  ClientHeight = 523
+  ClientWidth = 790
+  Color = clCream
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clBlack
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Icon.Data = {
+    0000010001002020100000000000E80200001600000028000000200000004000
+    0000010004000000000080020000000000000000000000000000000000000000
+    000000008000008000000080800080000000800080008080000080808000C0C0
+    C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF000000
+    0000000000000000000000000000000000000000000000000000000000000000
+    0000000000000000000000000000000000000000000000000000000000000000
+    0000000000000000000000000000000000000000000000000000000000000000
+    0000000000000000000000000000000000000000000000000000000000000888
+    8888888888888888888888888880088888800888888888000000000088800888
+    880B80888888880FFFFFFFF08880088880B8B808888888066666666088800888
+    0B8B8B808888880FFFFFFFF088800880B8B8B8B808888806666666608880080B
+    8B8B8B8B8088880FFFFFFFF088800808B8B8B8B8B80888066666666088800880
+    8B8B8B8B8B80880FFFFFFFF088800880B8B8B8B8B8B808066666666088800880
+    8B8B8B8B8B8B080FFFFFFFF08880088808B8B8B8B8B0880FFFFFFFF088800888
+    80008B8B8B08880FFFFFFFF088800888888808B8B08888000000000088800888
+    8888808B08888888888888888880088888888800888808888888888888800888
+    8888888888888088888888888880088880088800888888088888888888800888
+    0FF080FF0888888088888888888008880FF080FF088888880888888888800888
+    0000000008888888808888888880088888888888888888888888888888800888
+    888888888888888888888888888000000000000000000000000000000000FFFF
+    FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
+    0000000000000000000000000000000000000000000000000000000000000000
+    0000000000000000000000000000000000000000000000000000000000000000
+    000000000000000000000000000000000000000000000000000000000000}
+  OldCreateOrder = False
+  Position = poScreenCenter
+  ShowHint = True
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pcOrdCpm: TRzPageControl
+    Left = 0
+    Top = 0
+    Width = 790
+    Height = 498
+    Cursor = crHandPoint
+    ActivePage = tsOrdenes
+    ActivePageDefault = tsOrdenes
+    Align = alClient
+    BoldCurrentTab = True
+    Color = 16119543
+    UseColoredTabs = True
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    FlatColor = 10263441
+    HotTrackColor = 3983359
+    ParentColor = False
+    ParentFont = False
+    ShowCardFrame = False
+    ShowFocusRect = False
+    ShowFullFrame = False
+    ShowShadow = False
+    TabColors.HighlightBar = 3983359
+    TabIndex = 1
+    TabOrder = 0
+    TextColors.Selected = 20736
+    TextColors.Unselected = 10724259
+    FixedDimension = 22
+    object tsOrdenesRealizadas: TRzTabSheet
+      Color = 16119543
+      Caption = 'Ordenes/Pedidos Realizados'
+      object gOrdenes: TwwDBGrid
+        Left = 0
+        Top = 0
+        Width = 339
+        Height = 476
+        Selected.Strings = (
+          'FechaOC'#9'8'#9'Fecha'#9'F'
+          'NroOrdCmp'#9'13'#9'N'#186' de Orden'#9'F'
+          'NomEntidad'#9'10'#9'Proveedor'#9'F'
+          'TotalOC'#9'10'#9'Total'#9'F')
+        IniAttributes.Delimiter = ';;'
+        TitleColor = 16119543
+        FixedCols = 0
+        ShowHorzScrollBar = True
+        Align = alLeft
+        BorderStyle = bsNone
+        DataSource = dsqOrdCmp
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -9
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        KeyOptions = [dgEnterToTab]
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgWordWrap]
+        ParentColor = True
+        ParentFont = False
+        TabOrder = 0
+        TitleAlignment = taLeftJustify
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clBlack
+        TitleFont.Height = -9
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        TitleLines = 1
+        TitleButtons = False
+        UseTFields = False
+        OnDblClick = gOrdenesDblClick
+      end
+      object gItemsOrd: TwwDBGrid
+        Left = 339
+        Top = 0
+        Width = 451
+        Height = 476
+        Selected.Strings = (
+          'CantidadP'#9'6'#9'Pedido'#9'F'
+          'CantidadR'#9'6'#9'Recibido'#9'F'
+          'DetProd'#9'20'#9'Producto'#9'F'
+          'PrecioN'#9'8'#9'Neto'#9'F'
+          'ImpInt'#9'7'#9'Imp.Int.'#9'F'
+          'PrecioTotal'#9'8'#9'Total'#9'F'
+          'PrcBonif'#9'8'#9'%Bonif'#9'F'
+          'PrecioR'#9'9'#9'Prc.Rec'#9'F')
+        IniAttributes.Delimiter = ';;'
+        TitleColor = 15461334
+        FixedCols = 0
+        ShowHorzScrollBar = True
+        Align = alClient
+        BorderStyle = bsNone
+        DataSource = dsqItemsOC
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -9
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyOptions = [dgEnterToTab]
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgWordWrap]
+        ParentFont = False
+        TabOrder = 1
+        TitleAlignment = taLeftJustify
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clBlack
+        TitleFont.Height = -9
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        TitleLines = 1
+        TitleButtons = False
+        UseTFields = False
+        OnDblClick = gItemsOrdDblClick
+      end
+    end
+    object tsOrdenes: TRzTabSheet
+      Hint = 'Ingreso de Ordenes o pedidos de compras'
+      Color = 14548991
+      Caption = 'Ordenes / Pedidos'
+      object gFacOC: TwwDBGrid
+        Left = 0
+        Top = 74
+        Width = 790
+        Height = 402
+        DisableThemesInTitle = True
+        PictureMasks.Strings = (
+          'Marca'#9'*[&,#,;#,;&[*?]]'#9'T'#9'T'
+          'DETALLE'#9'*[&, ,#,;#,;&[*?]]'#9'T'#9'T'
+          'OtrosDetalle'#9'*[&, ,#,;#,;&[*?]]'#9'T'#9'T')
+        Selected.Strings = (
+          'IdArticulo'#9'6'#9'C'#243'digo~Producto'#9'F'
+          'DetProd'#9'38'#9'Detalle~Producto'#9'F'
+          'PrcBonif'#9'7'#9'%~Dcto.'#9'F'
+          'CantidadP'#9'8'#9'Cantidad~Pedida'#9'F'
+          'PrecioN'#9'9'#9'Neto~Unitario'#9'F'
+          'ImpInt'#9'9'#9'Impuestos~Internos'#9'F'
+          'PrecioTotal'#9'12'#9'Precio~Total'#9'F'
+          'Detalle'#9'27'#9'Detalle/~Observaci'#243'n'#9'F')
+        IniAttributes.Delimiter = ';;'
+        TitleColor = 14408667
+        FixedCols = 0
+        ShowHorzScrollBar = True
+        Align = alClient
+        BorderStyle = bsNone
+        Ctl3D = True
+        DataSource = dsItemsOC
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clMaroon
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyOptions = [dgEnterToTab, dgAllowDelete, dgAllowInsert]
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgWordWrap, dgShowFooter, dgFooter3DCells]
+        ParentColor = True
+        ParentCtl3D = False
+        ParentFont = False
+        TabOrder = 1
+        TitleAlignment = taCenter
+        TitleFont.Charset = ANSI_CHARSET
+        TitleFont.Color = clMaroon
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        TitleLines = 2
+        TitleButtons = False
+        UseTFields = False
+        LineColors.DataColor = clBlack
+        LineColors.FixedColor = clRed
+        OnColEnter = gFacOCColEnter
+        OnColExit = gFacOCColExit
+        OnKeyDown = gFacOCKeyDown
+        OnKeyPress = gFacOCKeyPress
+        OnUpdateFooter = gFacOCUpdateFooter
+        FooterColor = 14408667
+        FooterCellColor = 14408667
+        ExplicitTop = 85
+        ExplicitHeight = 391
+      end
+      object pnlTopOC: TRzPanel
+        Left = 0
+        Top = 0
+        Width = 790
+        Height = 74
+        Align = alTop
+        BorderInner = fsFlatRounded
+        BorderOuter = fsNone
+        ParentColor = True
+        TabOrder = 0
+        object lblEntidad: TLabel
+          Left = 192
+          Top = 2
+          Width = 62
+          Height = 13
+          Caption = '&Proveedor:'
+          FocusControl = edtProveedor
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 21760
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
+        object lblNomEnt: TDBText
+          Left = 243
+          Top = 18
+          Width = 321
+          Height = 17
+          DataField = 'NomProv'
+          DataSource = dsOrdCmp
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clMaroon
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object lblFecha: TLabel
+          Left = 571
+          Top = 2
+          Width = 36
+          Height = 13
+          Caption = '&Fecha:'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 21760
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
+        object lblComprobante: TLabel
+          Left = 4
+          Top = 37
+          Width = 53
+          Height = 13
+          Caption = 'N'#186' &Orden:'
+          FocusControl = edtComprobante
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 21760
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
+        object lblIdOrdCmp: TDBText
+          Left = 467
+          Top = 3
+          Width = 65
+          Height = 14
+          Alignment = taRightJustify
+          DataField = 'IdOrdCmp'
+          DataSource = dsOrdCmp
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 21760
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
+        object lblCondPago: TLabel
+          Left = 108
+          Top = 37
+          Width = 239
+          Height = 13
+          Caption = 'Condiciones de Pago/Trasporte/Viajante:  '
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 21760
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
+        object lblFecEnv: TLabel
+          Left = 671
+          Top = 37
+          Width = 103
+          Height = 13
+          Caption = ' Probable Entrega '
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 21760
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
+        object lblOrdPrv: TLabel
+          Left = 530
+          Top = 37
+          Width = 132
+          Height = 13
+          Caption = 'N'#186' &Orden del Proveedor'
+          FocusControl = edtNroPrv
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 21760
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
+        object lblDetEmpFC: TLabel
+          Left = 672
+          Top = 2
+          Width = 52
+          Height = 13
+          Caption = '&Empresa:'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 21760
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+          Transparent = True
+        end
+        object edtProveedor: TwwDBEdit
+          Left = 192
+          Top = 16
+          Width = 45
+          Height = 19
+          BorderStyle = bsNone
+          DataField = 'Entidad'
+          DataSource = dsOrdCmp
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Enabled = True
+          Frame.Transparent = True
+          Frame.NonFocusBorders = [efLeftBorder, efTopBorder, efRightBorder, efBottomBorder]
+          Frame.NonFocusStyle = efsFrameSingle
+          ParentColor = True
+          ParentFont = False
+          TabOrder = 1
+          UnboundDataType = wwDefault
+          WantReturns = False
+          WordWrap = False
+          OnEnter = edtProveedorEnter
+          OnKeyDown = edtProveedorKeyDown
+        end
+        object edtFecha: TwwDBDateTimePicker
+          Left = 571
+          Top = 16
+          Width = 81
+          Height = 19
+          AutoFillDateAndTime = True
+          BorderStyle = bsNone
+          CalendarAttributes.Font.Charset = DEFAULT_CHARSET
+          CalendarAttributes.Font.Color = clWindowText
+          CalendarAttributes.Font.Height = -11
+          CalendarAttributes.Font.Name = 'MS Sans Serif'
+          CalendarAttributes.Font.Style = []
+          DataField = 'FechaOC'
+          DataSource = dsOrdCmp
+          Epoch = 1950
+          ButtonEffects.Transparent = True
+          ButtonEffects.Flat = True
+          Frame.Enabled = True
+          Frame.Transparent = True
+          Frame.NonFocusBorders = [efLeftBorder, efTopBorder, efRightBorder, efBottomBorder]
+          Frame.NonFocusStyle = efsFrameSingle
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentColor = True
+          ParentFont = False
+          ShowButton = True
+          TabOrder = 3
+          UnboundDataType = wwDTEdtDate
+          DisplayFormat = 'dd/mm/yy'
+          OnKeyDown = edtFecEnvKeyDown
+        end
+        object edtComprobante: TwwDBEdit
+          Left = 4
+          Top = 51
+          Width = 100
+          Height = 19
+          BorderStyle = bsNone
+          DataField = 'NroOrdCmp'
+          DataSource = dsOrdCmp
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Enabled = True
+          Frame.Transparent = True
+          Frame.NonFocusBorders = [efLeftBorder, efTopBorder, efRightBorder, efBottomBorder]
+          Frame.NonFocusStyle = efsFrameSingle
+          ParentColor = True
+          ParentFont = False
+          TabOrder = 4
+          UnboundDataType = wwDefault
+          WantReturns = False
+          WordWrap = False
+          OnExit = edtComprobanteExit
+          OnKeyDown = edtFecEnvKeyDown
+        end
+        object edtCondPago: TwwDBEdit
+          Left = 108
+          Top = 51
+          Width = 461
+          Height = 19
+          BorderStyle = bsNone
+          CharCase = ecUpperCase
+          DataField = 'CondPago'
+          DataSource = dsOrdCmp
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Enabled = True
+          Frame.Transparent = True
+          Frame.NonFocusBorders = [efLeftBorder, efTopBorder, efRightBorder, efBottomBorder]
+          Frame.NonFocusStyle = efsFrameSingle
+          ParentColor = True
+          ParentFont = False
+          TabOrder = 5
+          UnboundDataType = wwDefault
+          WantReturns = False
+          WordWrap = False
+          OnKeyDown = edtCondPagoKeyDown
+        end
+        object edtFecEnv: TwwDBDateTimePicker
+          Left = 671
+          Top = 51
+          Width = 85
+          Height = 19
+          BorderStyle = bsNone
+          CalendarAttributes.Font.Charset = DEFAULT_CHARSET
+          CalendarAttributes.Font.Color = clWindowText
+          CalendarAttributes.Font.Height = -11
+          CalendarAttributes.Font.Name = 'MS Sans Serif'
+          CalendarAttributes.Font.Style = []
+          DataField = 'FechaEnv'
+          DataSource = dsOrdCmp
+          Epoch = 1950
+          ButtonEffects.Transparent = True
+          ButtonEffects.Flat = True
+          Frame.Enabled = True
+          Frame.Transparent = True
+          Frame.NonFocusBorders = [efLeftBorder, efTopBorder, efRightBorder, efBottomBorder]
+          Frame.NonFocusStyle = efsFrameSingle
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentColor = True
+          ParentFont = False
+          ShowButton = True
+          TabOrder = 7
+          DisplayFormat = 'dd/mm/yy'
+          OnKeyDown = edtFecEnvKeyDown
+        end
+        object edtNroPrv: TwwDBEdit
+          Left = 571
+          Top = 51
+          Width = 94
+          Height = 19
+          BorderStyle = bsNone
+          DataField = 'NroOrdPrv'
+          DataSource = dsOrdCmp
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          Frame.Enabled = True
+          Frame.Transparent = True
+          Frame.NonFocusBorders = [efLeftBorder, efTopBorder, efRightBorder, efBottomBorder]
+          Frame.NonFocusStyle = efsFrameSingle
+          ParentColor = True
+          ParentFont = False
+          TabOrder = 6
+          UnboundDataType = wwDefault
+          WantReturns = False
+          WordWrap = False
+          OnExit = edtNroPrvExit
+          OnKeyDown = edtFecEnvKeyDown
+        end
+        object pnlBtns: TRzPanel
+          Left = 4
+          Top = 5
+          Width = 186
+          Height = 32
+          BorderOuter = fsFlat
+          ParentColor = True
+          ParentShowHint = False
+          ShowHint = True
+          TabOrder = 0
+          TabStop = True
+          object btnNewOrd: TRzBitBtn
+            Left = 2
+            Top = 1
+            Width = 30
+            Height = 30
+            Hint = 'agregar orden de compras'
+            HotTrack = True
+            ParentColor = True
+            TabOrder = 2
+            OnClick = btnNewOrdClick
+            Glyph.Data = {
+              36060000424D3606000000000000360400002800000020000000100000000100
+              08000000000000020000830B0000830B00000001000000000000000000003300
+              00006600000099000000CC000000FF0000000033000033330000663300009933
+              0000CC330000FF33000000660000336600006666000099660000CC660000FF66
+              000000990000339900006699000099990000CC990000FF99000000CC000033CC
+              000066CC000099CC0000CCCC0000FFCC000000FF000033FF000066FF000099FF
+              0000CCFF0000FFFF000000003300330033006600330099003300CC003300FF00
+              330000333300333333006633330099333300CC333300FF333300006633003366
+              33006666330099663300CC663300FF6633000099330033993300669933009999
+              3300CC993300FF99330000CC330033CC330066CC330099CC3300CCCC3300FFCC
+              330000FF330033FF330066FF330099FF3300CCFF3300FFFF3300000066003300
+              66006600660099006600CC006600FF0066000033660033336600663366009933
+              6600CC336600FF33660000666600336666006666660099666600CC666600FF66
+              660000996600339966006699660099996600CC996600FF99660000CC660033CC
+              660066CC660099CC6600CCCC6600FFCC660000FF660033FF660066FF660099FF
+              6600CCFF6600FFFF660000009900330099006600990099009900CC009900FF00
+              990000339900333399006633990099339900CC339900FF339900006699003366
+              99006666990099669900CC669900FF6699000099990033999900669999009999
+              9900CC999900FF99990000CC990033CC990066CC990099CC9900CCCC9900FFCC
+              990000FF990033FF990066FF990099FF9900CCFF9900FFFF99000000CC003300
+              CC006600CC009900CC00CC00CC00FF00CC000033CC003333CC006633CC009933
+              CC00CC33CC00FF33CC000066CC003366CC006666CC009966CC00CC66CC00FF66
+              CC000099CC003399CC006699CC009999CC00CC99CC00FF99CC0000CCCC0033CC
+              CC0066CCCC0099CCCC00CCCCCC00FFCCCC0000FFCC0033FFCC0066FFCC0099FF
+              CC00CCFFCC00FFFFCC000000FF003300FF006600FF009900FF00CC00FF00FF00
+              FF000033FF003333FF006633FF009933FF00CC33FF00FF33FF000066FF003366
+              FF006666FF009966FF00CC66FF00FF66FF000099FF003399FF006699FF009999
+              FF00CC99FF00FF99FF0000CCFF0033CCFF0066CCFF0099CCFF00CCCCFF00FFCC
+              FF0000FFFF0033FFFF0066FFFF0099FFFF00CCFFFF00FFFFFF00000080000080
+              000000808000800000008000800080800000C0C0C00080808000191919004C4C
+              4C00B2B2B200E5E5E500C8AC2800E0CC6600F2EABF00B59B2400D8E9EC009933
+              6600D075A300ECC6D900646F710099A8AC00E2EFF10000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              09090909E8E8E8E8E8E8E8E8E8E8E8E881818181E8E8E8E8E8E8E8E8E8E8E8E8
+              09101009E8E8E8E8E8E8E8E8E8E8E8E881ACAC81E8E8E8E8E8E8E8E8E8E8E8E8
+              09101009E8E8E8E8E8E8E8E8E8E8E8E881ACAC81E8E8E8E8E8E8E8E8E8E8E8E8
+              09101009E8E8E8E8E8E8E8E8E8E8E8E881ACAC81E8E8E8E8E8E8E8E809090909
+              0910100909090909E8E8E8E88181818181ACAC8181818181E8E8E8E809101010
+              1010101010101009E8E8E8E881ACACACACACACACACACAC81E8E8E8E809101010
+              1010101010101009E8E8E8E881ACACACACACACACACACAC81E8E8E8E809090909
+              0910100909090909E8E8E8E88181818181ACAC8181818181E8E8E8E8E8E8E8E8
+              09101009E8E8E8E8E8E8E8E8E8E8E8E881ACAC81E8E8E8E8E8E8E8E8E8E8E8E8
+              09101009E8E8E8E8E8E8E8E8E8E8E8E881ACAC81E8E8E8E8E8E8E8E8E8E8E8E8
+              09101009E8E8E8E8E8E8E8E8E8E8E8E881ACAC81E8E8E8E8E8E8E8E8E8E8E8E8
+              09090909E8E8E8E8E8E8E8E8E8E8E8E881818181E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
+            NumGlyphs = 2
+          end
+          object btnDelOrd: TRzBitBtn
+            Left = 32
+            Top = 1
+            Width = 30
+            Height = 30
+            Hint = 'borrar orden de compras'
+            HotTrack = True
+            ParentColor = True
+            TabOrder = 3
+            OnClick = btnDelOrdClick
+            Glyph.Data = {
+              36060000424D3606000000000000360400002800000020000000100000000100
+              08000000000000020000830B0000830B00000001000000000000000000003300
+              00006600000099000000CC000000FF0000000033000033330000663300009933
+              0000CC330000FF33000000660000336600006666000099660000CC660000FF66
+              000000990000339900006699000099990000CC990000FF99000000CC000033CC
+              000066CC000099CC0000CCCC0000FFCC000000FF000033FF000066FF000099FF
+              0000CCFF0000FFFF000000003300330033006600330099003300CC003300FF00
+              330000333300333333006633330099333300CC333300FF333300006633003366
+              33006666330099663300CC663300FF6633000099330033993300669933009999
+              3300CC993300FF99330000CC330033CC330066CC330099CC3300CCCC3300FFCC
+              330000FF330033FF330066FF330099FF3300CCFF3300FFFF3300000066003300
+              66006600660099006600CC006600FF0066000033660033336600663366009933
+              6600CC336600FF33660000666600336666006666660099666600CC666600FF66
+              660000996600339966006699660099996600CC996600FF99660000CC660033CC
+              660066CC660099CC6600CCCC6600FFCC660000FF660033FF660066FF660099FF
+              6600CCFF6600FFFF660000009900330099006600990099009900CC009900FF00
+              990000339900333399006633990099339900CC339900FF339900006699003366
+              99006666990099669900CC669900FF6699000099990033999900669999009999
+              9900CC999900FF99990000CC990033CC990066CC990099CC9900CCCC9900FFCC
+              990000FF990033FF990066FF990099FF9900CCFF9900FFFF99000000CC003300
+              CC006600CC009900CC00CC00CC00FF00CC000033CC003333CC006633CC009933
+              CC00CC33CC00FF33CC000066CC003366CC006666CC009966CC00CC66CC00FF66
+              CC000099CC003399CC006699CC009999CC00CC99CC00FF99CC0000CCCC0033CC
+              CC0066CCCC0099CCCC00CCCCCC00FFCCCC0000FFCC0033FFCC0066FFCC0099FF
+              CC00CCFFCC00FFFFCC000000FF003300FF006600FF009900FF00CC00FF00FF00
+              FF000033FF003333FF006633FF009933FF00CC33FF00FF33FF000066FF003366
+              FF006666FF009966FF00CC66FF00FF66FF000099FF003399FF006699FF009999
+              FF00CC99FF00FF99FF0000CCFF0033CCFF0066CCFF0099CCFF00CCCCFF00FFCC
+              FF0000FFFF0033FFFF0066FFFF0099FFFF00CCFFFF00FFFFFF00000080000080
+              000000808000800000008000800080800000C0C0C00080808000191919004C4C
+              4C00B2B2B200E5E5E500C8AC2800E0CC6600F2EABF00B59B2400D8E9EC009933
+              6600D075A300ECC6D900646F710099A8AC00E2EFF10000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E809090909
+              0909090909090909E8E8E8E8818181818181818181818181E8E8E8E809101010
+              1010101010101009E8E8E8E881ACACACACACACACACACAC81E8E8E8E809101010
+              1010101010101009E8E8E8E881ACACACACACACACACACAC81E8E8E8E809090909
+              0909090909090909E8E8E8E8818181818181818181818181E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
+            NumGlyphs = 2
+          end
+          object btnPrnOrd: TRzBitBtn
+            Left = 63
+            Top = 1
+            Width = 30
+            Height = 30
+            Hint = 'imprimir'
+            HotTrack = True
+            ParentColor = True
+            TabOrder = 1
+            OnClick = btnPrnOrdClick
+            Glyph.Data = {
+              36060000424D3606000000000000360400002800000020000000100000000100
+              08000000000000020000730E0000730E00000001000000000000000000003300
+              00006600000099000000CC000000FF0000000033000033330000663300009933
+              0000CC330000FF33000000660000336600006666000099660000CC660000FF66
+              000000990000339900006699000099990000CC990000FF99000000CC000033CC
+              000066CC000099CC0000CCCC0000FFCC000000FF000033FF000066FF000099FF
+              0000CCFF0000FFFF000000003300330033006600330099003300CC003300FF00
+              330000333300333333006633330099333300CC333300FF333300006633003366
+              33006666330099663300CC663300FF6633000099330033993300669933009999
+              3300CC993300FF99330000CC330033CC330066CC330099CC3300CCCC3300FFCC
+              330000FF330033FF330066FF330099FF3300CCFF3300FFFF3300000066003300
+              66006600660099006600CC006600FF0066000033660033336600663366009933
+              6600CC336600FF33660000666600336666006666660099666600CC666600FF66
+              660000996600339966006699660099996600CC996600FF99660000CC660033CC
+              660066CC660099CC6600CCCC6600FFCC660000FF660033FF660066FF660099FF
+              6600CCFF6600FFFF660000009900330099006600990099009900CC009900FF00
+              990000339900333399006633990099339900CC339900FF339900006699003366
+              99006666990099669900CC669900FF6699000099990033999900669999009999
+              9900CC999900FF99990000CC990033CC990066CC990099CC9900CCCC9900FFCC
+              990000FF990033FF990066FF990099FF9900CCFF9900FFFF99000000CC003300
+              CC006600CC009900CC00CC00CC00FF00CC000033CC003333CC006633CC009933
+              CC00CC33CC00FF33CC000066CC003366CC006666CC009966CC00CC66CC00FF66
+              CC000099CC003399CC006699CC009999CC00CC99CC00FF99CC0000CCCC0033CC
+              CC0066CCCC0099CCCC00CCCCCC00FFCCCC0000FFCC0033FFCC0066FFCC0099FF
+              CC00CCFFCC00FFFFCC000000FF003300FF006600FF009900FF00CC00FF00FF00
+              FF000033FF003333FF006633FF009933FF00CC33FF00FF33FF000066FF003366
+              FF006666FF009966FF00CC66FF00FF66FF000099FF003399FF006699FF009999
+              FF00CC99FF00FF99FF0000CCFF0033CCFF0066CCFF0099CCFF00CCCCFF00FFCC
+              FF0000FFFF0033FFFF0066FFFF0099FFFF00CCFFFF00FFFFFF00000080000080
+              000000808000800000008000800080800000C0C0C00080808000191919004C4C
+              4C00B2B2B200E5E5E500C8AC2800E0CC6600F2EABF00B59B2400D8E9EC009933
+              6600D075A300ECC6D900646F710099A8AC00E2EFF10000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E809090909
+              09090909090909E8E8E8E8E88181818181818181818181E8E8E8E85E89898989
+              89898989895E5E09E8E8E8E2ACACACACACACACACACE2E281E8E85E5E5E5E5E5E
+              5E5E5E5E5E5E095E09E8E2E2E2E2E2E2E2E2E2E2E2E281E281E85ED789898989
+              8989898989895E0909E8E2E8ACACACACACACACACACACE28181E85ED789898989
+              181289B490895E5E09E8E2E8ACACACACE281ACE281ACE2E281E85ED7D7D7D7D7
+              D7D7D7D7D7D75E5E5E09E2E8E8E8E8E8E8E8E8E8E8E8E2E2E2815ED789898989
+              8989898989895E5E5E09E2E8ACACACACACACACACACACE2E2E281E85E5E5E5E5E
+              5E5E5E5E5E89895E5E09E8E2E2E2E2E2E2E2E2E2E2ACACE2E281E8E85ED7D7D7
+              D7D7D7D7D75E89895E09E8E8E2E8E8E8E8E8E8E8E8E2ACACE281E8E8E85ED7E3
+              E3E3E3E3D75E5E5E09E8E8E8E8E2E8ACACACACACE8E2E2E281E8E8E8E85ED7D7
+              D7D7D7D7D7D75EE8E8E8E8E8E8E2E8E8E8E8E8E8E8E8E2E8E8E8E8E8E8E85ED7
+              E3E3E3E3E3D75EE8E8E8E8E8E8E8E2E8ACACACACACE8E2E8E8E8E8E8E8E85ED7
+              D7D7D7D7D7D7D75EE8E8E8E8E8E8E2E8E8E8E8E8E8E8E8E2E8E8E8E8E8E8E85E
+              5E5E5E5E5E5E5E5EE8E8E8E8E8E8E8E2E2E2E2E2E2E2E2E2E8E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
+            NumGlyphs = 2
+          end
+          object btnGraOrd: TRzBitBtn
+            Left = 93
+            Top = 1
+            Width = 30
+            Height = 30
+            Hint = 'grabar orden'
+            HotTrack = True
+            ParentColor = True
+            TabOrder = 0
+            OnClick = btnGraOrdClick
+            Glyph.Data = {
+              36060000424D3606000000000000360400002800000020000000100000000100
+              08000000000000020000730E0000730E00000001000000000000000000003300
+              00006600000099000000CC000000FF0000000033000033330000663300009933
+              0000CC330000FF33000000660000336600006666000099660000CC660000FF66
+              000000990000339900006699000099990000CC990000FF99000000CC000033CC
+              000066CC000099CC0000CCCC0000FFCC000000FF000033FF000066FF000099FF
+              0000CCFF0000FFFF000000003300330033006600330099003300CC003300FF00
+              330000333300333333006633330099333300CC333300FF333300006633003366
+              33006666330099663300CC663300FF6633000099330033993300669933009999
+              3300CC993300FF99330000CC330033CC330066CC330099CC3300CCCC3300FFCC
+              330000FF330033FF330066FF330099FF3300CCFF3300FFFF3300000066003300
+              66006600660099006600CC006600FF0066000033660033336600663366009933
+              6600CC336600FF33660000666600336666006666660099666600CC666600FF66
+              660000996600339966006699660099996600CC996600FF99660000CC660033CC
+              660066CC660099CC6600CCCC6600FFCC660000FF660033FF660066FF660099FF
+              6600CCFF6600FFFF660000009900330099006600990099009900CC009900FF00
+              990000339900333399006633990099339900CC339900FF339900006699003366
+              99006666990099669900CC669900FF6699000099990033999900669999009999
+              9900CC999900FF99990000CC990033CC990066CC990099CC9900CCCC9900FFCC
+              990000FF990033FF990066FF990099FF9900CCFF9900FFFF99000000CC003300
+              CC006600CC009900CC00CC00CC00FF00CC000033CC003333CC006633CC009933
+              CC00CC33CC00FF33CC000066CC003366CC006666CC009966CC00CC66CC00FF66
+              CC000099CC003399CC006699CC009999CC00CC99CC00FF99CC0000CCCC0033CC
+              CC0066CCCC0099CCCC00CCCCCC00FFCCCC0000FFCC0033FFCC0066FFCC0099FF
+              CC00CCFFCC00FFFFCC000000FF003300FF006600FF009900FF00CC00FF00FF00
+              FF000033FF003333FF006633FF009933FF00CC33FF00FF33FF000066FF003366
+              FF006666FF009966FF00CC66FF00FF66FF000099FF003399FF006699FF009999
+              FF00CC99FF00FF99FF0000CCFF0033CCFF0066CCFF0099CCFF00CCCCFF00FFCC
+              FF0000FFFF0033FFFF0066FFFF0099FFFF00CCFFFF00FFFFFF00000080000080
+              000000808000800000008000800080800000C0C0C00080808000191919004C4C
+              4C00B2B2B200E5E5E500C8AC2800E0CC6600F2EABF00B59B2400D8E9EC009933
+              6600D075A300ECC6D900646F710099A8AC00E2EFF10000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E809090909
+              090909090909090909E8E8E881818181818181818181818181E8E809101009E3
+              1009E3E3E309101009E8E881ACAC81E3AC81E3E3E381ACAC81E8E809101009E3
+              1009E3E3E309101009E8E881ACAC81E3AC81E3E3E381ACAC81E8E809101009E3
+              1009E3E3E309101009E8E881ACAC81E3AC81E3E3E381ACAC81E8E809101009E3
+              E3E3E3E3E309101009E8E881ACAC81E3E3E3E3E3E381ACAC81E8E80910101009
+              090909090910101009E8E881ACACAC818181818181ACACAC81E8E80910101010
+              101010101010101009E8E881ACACACACACACACACACACACAC81E8E80910100909
+              090909090909101009E8E881ACAC8181818181818181ACAC81E8E8091009D7D7
+              D7D7D7D7D7D7091009E8E881AC81D7D7D7D7D7D7D7D781AC81E8E8091009D709
+              0909090909D7091009E8E881AC81D7818181818181D781AC81E8E8091009D7D7
+              D7D7D7D7D7D7091009E8E881AC81D7D7D7D7D7D7D7D781AC81E8E809E309D709
+              0909090909D7090909E8E881E381D7818181818181D7818181E8E8091009D7D7
+              D7D7D7D7D7D7091009E8E881AC81D7D7D7D7D7D7D7D781AC81E8E80909090909
+              090909090909090909E8E88181818181818181818181818181E8E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
+            NumGlyphs = 2
+          end
+          object btnClrOrd: TRzBitBtn
+            Left = 124
+            Top = 1
+            Width = 30
+            Height = 30
+            Hint = 'cancelar'
+            HotTrack = True
+            ParentColor = True
+            TabOrder = 4
+            OnClick = btnClrOrdClick
+            Glyph.Data = {
+              36060000424D3606000000000000360400002800000020000000100000000100
+              08000000000000020000630B0000630B00000001000000000000000000003300
+              00006600000099000000CC000000FF0000000033000033330000663300009933
+              0000CC330000FF33000000660000336600006666000099660000CC660000FF66
+              000000990000339900006699000099990000CC990000FF99000000CC000033CC
+              000066CC000099CC0000CCCC0000FFCC000000FF000033FF000066FF000099FF
+              0000CCFF0000FFFF000000003300330033006600330099003300CC003300FF00
+              330000333300333333006633330099333300CC333300FF333300006633003366
+              33006666330099663300CC663300FF6633000099330033993300669933009999
+              3300CC993300FF99330000CC330033CC330066CC330099CC3300CCCC3300FFCC
+              330000FF330033FF330066FF330099FF3300CCFF3300FFFF3300000066003300
+              66006600660099006600CC006600FF0066000033660033336600663366009933
+              6600CC336600FF33660000666600336666006666660099666600CC666600FF66
+              660000996600339966006699660099996600CC996600FF99660000CC660033CC
+              660066CC660099CC6600CCCC6600FFCC660000FF660033FF660066FF660099FF
+              6600CCFF6600FFFF660000009900330099006600990099009900CC009900FF00
+              990000339900333399006633990099339900CC339900FF339900006699003366
+              99006666990099669900CC669900FF6699000099990033999900669999009999
+              9900CC999900FF99990000CC990033CC990066CC990099CC9900CCCC9900FFCC
+              990000FF990033FF990066FF990099FF9900CCFF9900FFFF99000000CC003300
+              CC006600CC009900CC00CC00CC00FF00CC000033CC003333CC006633CC009933
+              CC00CC33CC00FF33CC000066CC003366CC006666CC009966CC00CC66CC00FF66
+              CC000099CC003399CC006699CC009999CC00CC99CC00FF99CC0000CCCC0033CC
+              CC0066CCCC0099CCCC00CCCCCC00FFCCCC0000FFCC0033FFCC0066FFCC0099FF
+              CC00CCFFCC00FFFFCC000000FF003300FF006600FF009900FF00CC00FF00FF00
+              FF000033FF003333FF006633FF009933FF00CC33FF00FF33FF000066FF003366
+              FF006666FF009966FF00CC66FF00FF66FF000099FF003399FF006699FF009999
+              FF00CC99FF00FF99FF0000CCFF0033CCFF0066CCFF0099CCFF00CCCCFF00FFCC
+              FF0000FFFF0033FFFF0066FFFF0099FFFF00CCFFFF00FFFFFF00000080000080
+              000000808000800000008000800080800000C0C0C00080808000191919004C4C
+              4C00B2B2B200E5E5E500C8AC2800E0CC6600F2EABF00B59B2400D8E9EC009933
+              6600D075A300ECC6D900646F710099A8AC00E2EFF10000000000000000000000
+              0000000000000000000000000000000000000000000000000000000000000000
+              0000000000000000000000000000000000000000000000000000E8E8E8E8E8E8
+              E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8A5D8
+              D8D8D8D8A5E8E8E8E8E8E8E8E8E8AC8181818181ACE8E8E8E8E8E8E8E8D890B4
+              B4B4B4B490D8E8E8E8E8E8E8E881E2ACACACACACE281E8E8E8E8E8E8D8B4B490
+              D8D8D8D8B4B4D8E8E8E8E8E881ACACE281818181ACAC81E8E8E8E8D8B4B4D8A5
+              E8E8E8E8D8B4B4D8E8E8E881ACAC81ACE8E8E8E881ACAC81E8E8A590B4D8E8E8
+              E8E8E8D8B4D8B490A5E8ACE2AC81E8E8E8E8E881AC81ACE2ACE8D8B490A5E8E8
+              E8E8D8B4D8E8D8B4D8E881ACE2ACE8E8E8E881AC81E881AC81E8D8B4D8E8E8E8
+              E8D8B4D8E8E8D8B4D8E881AC81E8E8E8E881AC81E8E881AC81E8D8B4D8E8E8E8
+              D8B4D8E8E8E8D8B4D8E881AC81E8E8E881AC81E8E8E881AC81E8D8B4D8E8E8D8
+              B4D8E8E8E8E8D8B4D8E881AC81E8E881AC81E8E8E8E881AC81E8D8B4D8E8D8B4
+              D8E8E8E8E8A590B4D8E881AC81E881AC81E8E8E8E8ACE2AC81E8A590B4D8B4D8
+              E8E8E8E8E8D8B490A5E8ACE2AC81AC81E8E8E8E8E881ACE2ACE8E8D8B4B4D8E8
+              E8E8E8A5D8B4B4D8E8E8E881ACAC81E8E8E8E8AC81ACAC81E8E8E8E8D8B4B4D8
+              D8D8D890B4B4D8E8E8E8E8E881ACAC81818181E2ACAC81E8E8E8E8E8E8D890B4
+              B4B4B4B490D8E8E8E8E8E8E8E881E2ACACACACACE281E8E8E8E8E8E8E8E8A5D8
+              D8D8D8D8A5E8E8E8E8E8E8E8E8E8AC8181818181ACE8E8E8E8E8}
+            NumGlyphs = 2
+          end
+          object btnCalculadora: TRzBitBtn
+            Left = 154
+            Top = 1
+            Width = 30
+            Height = 30
+            Hint = 'calculadora'
+            HotTrack = True
+            ParentColor = True
+            TabOrder = 5
+            OnClick = btnCalculadoraClick
+            Glyph.Data = {
+              36030000424D3603000000000000360000002800000010000000100000000100
+              1800000000000003000000000000000000000000000000000000FFFFFFEAEAEA
+              5959596666666666666666666666666666666666666666666666666464647070
+              70E9E9E9FFFFFFFFFFFFFFFFFF4343435C5C5C6565655757576464645F5F5F5C
+              5C5C6565655656566565655F5F5F4B4B4B707070FFFFFFFFFFFFFFFFFF191919
+              F4F4F4585858FFFFFF6A6A6AA5A5A5CFCFCF595959FFFFFF5A5A5ACACACA5757
+              57676767FFFFFFFFFFFFFFFFFF222222B2B2B2000000E3E3E300000037373782
+              8282000000FBFBFB0000006A6A6A5D5D5D696969FFFFFFFFFFFFFFFFFF181818
+              FFFFFFF6F6F6FFFFFFF9F9F9FFFFFFFFFFFFF6F6F6FFFFFFF7F7F7FFFFFF4E4E
+              4E696969FFFFFFFFFFFFFFFFFF222222AFAFAF000000E1E1E10000003333337F
+              7F7F000000FAFAFA0000006666665D5D5D696969FFFFFFFFFFFFFFFFFF1A1A1A
+              FFFFFFA7A7A7FFFFFFB1B1B1CFCFCFE4E4E4A8A8A8FFFFFFA8A8A8E9E9E95252
+              52696969FFFFFFFFFFFFFFFFFF1F1F1FCDCDCD030303EDEDED1B1B1B6B6B6BA4
+              A4A4040404FFFFFF060606969696595959696969FFFFFFFFFFFFFFFFFF1F1F1F
+              C8C8C8000000E9E9E90F0F0F6363639E9E9E000000FDFDFD0000008F8F8F5959
+              59696969FFFFFFFFFFFFFFFFFF161616FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFF4B4B4B696969FFFFFFFFFFFFFFFFFF191D1D
+              F7E1E1D75353FF5F5FFF5F5FFF5F5FFF5F5FFF5F5FFF5F5FFF5757FFB7B74B55
+              55696969FFFFFFFFFFFFFFFFFF1C2222E1BBBBBD0000FF0000FF0000FF0000FF
+              0000FF0000FF0000FF0000FF78784B5D5D696969FFFFFFFFFFFFFFFFFF1C2222
+              E3BBBBAF0000EE0000E80000E80000E80000E80000E80000E70000FF78784C5D
+              5D696969FFFFFFFFFFFFFFFFFF191D1DFDE1E1A25353A25F5FA25F5FA25F5FA2
+              5F5FA25F5FA25F5F9E5757DEB7B7505555696969FFFFFFFFFFFFFFFFFF101010
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4C4C
+              4C5C5C5CFFFFFFFFFFFFFFFFFF67676714141419191919191919191919191919
+              1919191919191919191919151515464646E9E9E9FFFFFFFFFFFF}
+          end
+        end
+        object cbOCDetEmp: TwwDBLookupCombo
+          Left = 671
+          Top = 16
+          Width = 109
+          Height = 19
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlack
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          BorderStyle = bsNone
+          DropDownAlignment = taLeftJustify
+          Selected.Strings = (
+            'NOMBREEMPRESA'#9'20'#9'Empresas'#9'F')
+          DataField = 'IdEmpresa'
+          DataSource = dsOrdCmp
+          LookupTable = dmGestion.Empresas
+          LookupField = 'IDEMPRESA'
+          Options = [loColLines, loRowLines, loTitles, loFixedDropDownHeight, loSearchOnBackspace]
+          Color = 14548991
+          ButtonEffects.Transparent = True
+          ButtonEffects.Flat = True
+          Frame.Enabled = True
+          Frame.Transparent = True
+          Frame.NonFocusBorders = [efLeftBorder, efTopBorder, efRightBorder, efBottomBorder]
+          Frame.FocusStyle = efsFrameRaised
+          Frame.NonFocusStyle = efsFrameSingle
+          ParentFont = False
+          TabOrder = 2
+          AutoDropDown = True
+          ShowButton = True
+          UseTFields = False
+          PreciseEditRegion = False
+          AllowClearKey = False
+          ShowMatchText = True
+        end
+      end
+    end
+    object tsPedidos: TRzTabSheet
+      Color = 14548957
+      ImageIndex = 1
+      Caption = 'Productos Pedidos'
+      object gPedidos: TwwDBGrid
+        Left = 0
+        Top = 0
+        Width = 790
+        Height = 476
+        Selected.Strings = (
+          'NomEntidad'#9'25'#9'Proveedor'#9'F'
+          'FechaOC'#9'9'#9'Fecha'#9'F'
+          'DetProd'#9'40'#9'Producto'#9'F'
+          'CantidadP'#9'7'#9'Cantidad'#9'F'
+          'PrecioN'#9'9'#9'Precio'#9'F'
+          'PrcBonif'#9'7'#9'Bonif'#9'F'
+          'PrecioTotal'#9'12'#9'Total'#9'F'
+          'IMPINT'#9'8'#9'Imp.Int.'#9'F')
+        IniAttributes.Delimiter = ';;'
+        TitleColor = 16383993
+        FixedCols = 1
+        ShowHorzScrollBar = True
+        Align = alClient
+        BorderStyle = bsNone
+        Color = 14548957
+        DataSource = dsqPedidos
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyOptions = [dgEnterToTab]
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgWordWrap, dgShowFooter, dgFooter3DCells]
+        ParentFont = False
+        TabOrder = 0
+        TitleAlignment = taCenter
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = 21248
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        TitleLines = 1
+        TitleButtons = False
+        UseTFields = False
+        IndicatorIconColor = clGreen
+        OnUpdateFooter = gPedidosUpdateFooter
+        FooterColor = 16383993
+        FooterCellColor = 16383993
+      end
+    end
+    object tsRecibidos: TRzTabSheet
+      Color = 15527167
+      ImageIndex = 2
+      Caption = 'Productos Recibidos'
+      object gRecibidos: TwwDBGrid
+        Left = 0
+        Top = 0
+        Width = 790
+        Height = 476
+        Selected.Strings = (
+          'FechaOC'#9'10'#9'Pedido'#9'F'
+          'NomEntidad'#9'25'#9'Proveedor'#9'F'
+          'FechaRec'#9'8'#9'Recibido'#9'F'
+          'DetProd'#9'40'#9'Producto'#9'F'
+          'CantidadR'#9'7'#9'Cantidad'#9'F'
+          'PrecioN'#9'8'#9'Precio'#9'F'
+          'PrecioTotal'#9'12'#9'Total'#9'F'
+          'PrecioR'#9'8'#9'P.Compra'#9'F')
+        IniAttributes.Delimiter = ';;'
+        TitleColor = 2631761
+        FixedCols = 1
+        ShowHorzScrollBar = True
+        Align = alClient
+        BorderStyle = bsNone
+        Color = 15527167
+        DataSource = dsqRecibidos
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        KeyOptions = [dgEnterToTab]
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgWordWrap, dgShowFooter, dgFooter3DCells]
+        ParentFont = False
+        TabOrder = 0
+        TitleAlignment = taCenter
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = 16776176
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = [fsBold]
+        TitleLines = 1
+        TitleButtons = False
+        UseTFields = False
+        IndicatorIconColor = 15527167
+        FooterColor = 2631761
+        FooterCellColor = 2631761
+      end
+    end
+  end
+  object pnlFoot: TRzPanel
+    Left = 0
+    Top = 498
+    Width = 790
+    Height = 25
+    Align = alBottom
+    BorderOuter = fsNone
+    ParentColor = True
+    TabOrder = 1
+    object btnSalir: TRzBitBtn
+      Left = 655
+      Top = 1
+      Width = 67
+      Height = 24
+      Caption = '&Salir'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clGreen
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      HotTrack = True
+      ParentColor = True
+      ParentFont = False
+      TabOrder = 0
+      OnClick = btnSalirClick
+      Glyph.Data = {
+        36060000424D3606000000000000360400002800000020000000100000000100
+        08000000000000020000730B0000730B00000001000000000000000000003300
+        00006600000099000000CC000000FF0000000033000033330000663300009933
+        0000CC330000FF33000000660000336600006666000099660000CC660000FF66
+        000000990000339900006699000099990000CC990000FF99000000CC000033CC
+        000066CC000099CC0000CCCC0000FFCC000000FF000033FF000066FF000099FF
+        0000CCFF0000FFFF000000003300330033006600330099003300CC003300FF00
+        330000333300333333006633330099333300CC333300FF333300006633003366
+        33006666330099663300CC663300FF6633000099330033993300669933009999
+        3300CC993300FF99330000CC330033CC330066CC330099CC3300CCCC3300FFCC
+        330000FF330033FF330066FF330099FF3300CCFF3300FFFF3300000066003300
+        66006600660099006600CC006600FF0066000033660033336600663366009933
+        6600CC336600FF33660000666600336666006666660099666600CC666600FF66
+        660000996600339966006699660099996600CC996600FF99660000CC660033CC
+        660066CC660099CC6600CCCC6600FFCC660000FF660033FF660066FF660099FF
+        6600CCFF6600FFFF660000009900330099006600990099009900CC009900FF00
+        990000339900333399006633990099339900CC339900FF339900006699003366
+        99006666990099669900CC669900FF6699000099990033999900669999009999
+        9900CC999900FF99990000CC990033CC990066CC990099CC9900CCCC9900FFCC
+        990000FF990033FF990066FF990099FF9900CCFF9900FFFF99000000CC003300
+        CC006600CC009900CC00CC00CC00FF00CC000033CC003333CC006633CC009933
+        CC00CC33CC00FF33CC000066CC003366CC006666CC009966CC00CC66CC00FF66
+        CC000099CC003399CC006699CC009999CC00CC99CC00FF99CC0000CCCC0033CC
+        CC0066CCCC0099CCCC00CCCCCC00FFCCCC0000FFCC0033FFCC0066FFCC0099FF
+        CC00CCFFCC00FFFFCC000000FF003300FF006600FF009900FF00CC00FF00FF00
+        FF000033FF003333FF006633FF009933FF00CC33FF00FF33FF000066FF003366
+        FF006666FF009966FF00CC66FF00FF66FF000099FF003399FF006699FF009999
+        FF00CC99FF00FF99FF0000CCFF0033CCFF0066CCFF0099CCFF00CCCCFF00FFCC
+        FF0000FFFF0033FFFF0066FFFF0099FFFF00CCFFFF00FFFFFF00000080000080
+        000000808000800000008000800080800000C0C0C00080808000191919004C4C
+        4C00B2B2B200E5E5E500C8AC2800E0CC6600F2EABF00B59B2400D8E9EC009933
+        6600D075A300ECC6D900646F710099A8AC00E2EFF10000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000E8E8E8E8E8E8
+        EEE8E8E8E8E8E8E8E8E8E8E8E8E8E8E8EEE8E8E8E8E8E8E8E8E8E8E8E8EEE3AC
+        E3EEE8E8E8E8E8E8E8E8E8E8E8EEE8ACE3EEE8E8E8E8E8E8E8E8E8EEE3E28257
+        57E2ACE3EEE8E8E8E8E8E8EEE8E2818181E2ACE8EEE8E8E8E8E8E382578282D7
+        578181E2E3E8E8E8E8E8E881818181D7818181E2E8E8E8E8E8E857828989ADD7
+        57797979EEE8E8E8E8E88181DEDEACD781818181EEE8E8E8E8E857898989ADD7
+        57AAAAA2D7ADE8E8E8E881DEDEDEACD781DEDE81D7ACE8E8E8E857898989ADD7
+        57AACEA3AD10E8E8E8E881DEDEDEACD781DEAC81AC81E8E8E8E85789825EADD7
+        57ABCFE21110E8E8E8E881DE8181ACD781ACACE28181E8E8E8E8578957D7ADD7
+        57ABDE101010101010E881DE56D7ACD781ACDE818181818181E857898257ADD7
+        57E810101010101010E881DE8156ACD781E381818181818181E857898989ADD7
+        57E882101010101010E881DEDEDEACD781E381818181818181E857898989ADD7
+        57ACEE821110E8E8E8E881DEDEDEACD781ACEE818181E8E8E8E857898989ADD7
+        57ABE8AB8910E8E8E8E881DEDEDEACD781ACE3ACDE81E8E8E8E857828989ADD7
+        57ACE8A3E889E8E8E8E88181DEDEACD781ACE381E8DEE8E8E8E8E8DE5E8288D7
+        57A2A2A2E8E8E8E8E8E8E8DE8181DED781818181E8E8E8E8E8E8E8E8E8AC8257
+        57E8E8E8E8E8E8E8E8E8E8E8E8AC818181E8E8E8E8E8E8E8E8E8}
+      NumGlyphs = 2
+    end
+  end
+  object dsqItemsOC: TDataSource
+    AutoEdit = False
+    DataSet = qItemsOC
+    Left = 113
+    Top = 493
+  end
+  object rptOrdCompras: TppReport
+    AutoStop = False
+    DataPipeline = dbpItOC
+    PrinterSetup.BinName = 'Default'
+    PrinterSetup.DocumentName = 'Orden de Compras'
+    PrinterSetup.PaperName = 'A4'
+    PrinterSetup.PrinterName = 'Default'
+    PrinterSetup.mmMarginBottom = 15350
+    PrinterSetup.mmMarginLeft = 18350
+    PrinterSetup.mmMarginRight = 6350
+    PrinterSetup.mmMarginTop = 18350
+    PrinterSetup.mmPaperHeight = 297000
+    PrinterSetup.mmPaperWidth = 210000
+    PrinterSetup.PaperSize = 9
+    Units = utMillimeters
+    DeviceType = 'Screen'
+    EmailSettings.ReportFormat = 'PDF'
+    OutlineSettings.CreateNode = True
+    OutlineSettings.CreatePageNodes = True
+    OutlineSettings.Enabled = False
+    OutlineSettings.Visible = False
+    TextSearchSettings.DefaultString = '<FindText>'
+    TextSearchSettings.Enabled = False
+    Left = 143
+    Top = 493
+    Version = '10.02'
+    mmColumnWidth = 0
+    DataPipelineName = 'dbpItOC'
+    object ppHeaderBandOC: TppHeaderBand
+      mmBottomOffset = 0
+      mmHeight = 24077
+      mmPrintPosition = 0
+      object ppShapeOC2: TppShape
+        UserName = 'ShapeOC2'
+        Brush.Color = 14737632
+        ParentWidth = True
+        mmHeight = 4763
+        mmLeft = 0
+        mmTop = 19314
+        mmWidth = 185300
+        BandType = 0
+      end
+      object ppShapeOC1: TppShape
+        UserName = 'ShapeOC1'
+        Brush.Color = 15658734
+        ParentWidth = True
+        mmHeight = 19315
+        mmLeft = 0
+        mmTop = 0
+        mmWidth = 185300
+        BandType = 0
+      end
+      object lblNomProv: TppDBText
+        UserName = 'lblNomProv'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'NomProv'
+        DataPipeline = dbpOC
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = []
+        ParentDataPipeline = False
+        Transparent = True
+        DataPipelineName = 'dbpOC'
+        mmHeight = 4233
+        mmLeft = 30956
+        mmTop = 13758
+        mmWidth = 88106
+        BandType = 0
+      end
+      object lblProvOC: TppLabel
+        UserName = 'lblProvOC'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Proveedor'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = [fsBold, fsUnderline]
+        Transparent = True
+        mmHeight = 3810
+        mmLeft = 30956
+        mmTop = 8467
+        mmWidth = 18521
+        BandType = 0
+      end
+      object lblOrdCmp: TppLabel
+        UserName = 'lblOrdCmp'
+        AutoSize = False
+        Border.BorderPositions = [bpLeft, bpTop, bpRight, bpBottom]
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = True
+        Border.Weight = 1.000000000000000000
+        Caption = 'Orden de Compras'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 17
+        Font.Style = [fsBold]
+        TextAlignment = taCentered
+        WordWrap = True
+        mmHeight = 16933
+        mmLeft = 265
+        mmTop = 1323
+        mmWidth = 29633
+        BandType = 0
+      end
+      object lblNroOC: TppLabel
+        UserName = 'lblNroOC'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'N'#186' OC'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = [fsBold, fsUnderline]
+        Transparent = True
+        mmHeight = 3810
+        mmLeft = 128852
+        mmTop = 8467
+        mmWidth = 11642
+        BandType = 0
+      end
+      object lblNroOrd: TppDBText
+        UserName = 'lblNroOrd'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'NROORDCMP'
+        DataPipeline = dbpOC
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = []
+        ParentDataPipeline = False
+        Transparent = True
+        DataPipelineName = 'dbpOC'
+        mmHeight = 4233
+        mmLeft = 128852
+        mmTop = 13758
+        mmWidth = 25400
+        BandType = 0
+      end
+      object lblFechaOC: TppLabel
+        UserName = 'lblFechaOC'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Fecha'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = [fsBold, fsUnderline]
+        Transparent = True
+        mmHeight = 3810
+        mmLeft = 163777
+        mmTop = 8467
+        mmWidth = 11642
+        BandType = 0
+      end
+      object lblEmpresaOC: TppLabel
+        UserName = 'lblEmpresaOC'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'lblEmpresaOC'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 13
+        Font.Style = [fsBold]
+        TextAlignment = taCentered
+        Transparent = True
+        mmHeight = 5503
+        mmLeft = 94192
+        mmTop = 794
+        mmWidth = 32089
+        BandType = 0
+      end
+      object lblFecOC: TppDBText
+        UserName = 'lblFecOC'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'FECHAOC'
+        DataPipeline = dbpOC
+        DisplayFormat = 'dd/mm/yy'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = []
+        ParentDataPipeline = False
+        Transparent = True
+        DataPipelineName = 'dbpOC'
+        mmHeight = 4233
+        mmLeft = 163777
+        mmTop = 13758
+        mmWidth = 17992
+        BandType = 0
+      end
+      object lblDetProd: TppLabel
+        UserName = 'lblDetProd'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Detalle Producto '
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 8
+        Font.Style = []
+        Transparent = True
+        mmHeight = 3429
+        mmLeft = 13494
+        mmTop = 20108
+        mmWidth = 22490
+        BandType = 0
+      end
+      object lblCant: TppLabel
+        UserName = 'lblCant'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Cantidad'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 8
+        Font.Style = []
+        Transparent = True
+        mmHeight = 3429
+        mmLeft = 70644
+        mmTop = 20108
+        mmWidth = 11906
+        BandType = 0
+      end
+      object lblDct: TppLabel
+        UserName = 'lblDct'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Dcto.'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 8
+        Font.Style = []
+        Transparent = True
+        mmHeight = 3429
+        mmLeft = 87048
+        mmTop = 20108
+        mmWidth = 7673
+        BandType = 0
+      end
+      object lblPrcCompra: TppLabel
+        UserName = 'lblPrcCompra'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Precio'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 8
+        Font.Style = []
+        TextAlignment = taCentered
+        Transparent = True
+        mmHeight = 3429
+        mmLeft = 102923
+        mmTop = 20108
+        mmWidth = 8467
+        BandType = 0
+      end
+      object lblTItem: TppLabel
+        UserName = 'lblTItem'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Total Producto'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 8
+        Font.Style = []
+        TextAlignment = taCentered
+        Transparent = True
+        mmHeight = 3440
+        mmLeft = 120000
+        mmTop = 20108
+        mmWidth = 19844
+        BandType = 0
+      end
+    end
+    object ppDetailBandOC: TppDetailBand
+      mmBottomOffset = 0
+      mmHeight = 5027
+      mmPrintPosition = 0
+      object ppShapeOC3: TppShape
+        UserName = 'ShapeOC3'
+        ParentHeight = True
+        ParentWidth = True
+        mmHeight = 5027
+        mmLeft = 0
+        mmTop = 0
+        mmWidth = 185300
+        BandType = 4
+      end
+      object lblDetalle: TppDBText
+        UserName = 'lblDetalle'
+        BlankWhenZero = True
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'DetProd'
+        DataPipeline = dbpItOC
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 7
+        Font.Style = [fsBold]
+        Transparent = True
+        DataPipelineName = 'dbpItOC'
+        mmHeight = 3440
+        mmLeft = 7938
+        mmTop = 529
+        mmWidth = 61383
+        BandType = 4
+      end
+      object lblCantidad: TppDBText
+        UserName = 'lblCantidad'
+        BlankWhenZero = True
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'CantidadP'
+        DataPipeline = dbpItOC
+        DisplayFormat = '0,0'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 7
+        Font.Style = [fsBold]
+        TextAlignment = taRightJustified
+        Transparent = True
+        DataPipelineName = 'dbpItOC'
+        mmHeight = 3440
+        mmLeft = 70908
+        mmTop = 529
+        mmWidth = 10054
+        BandType = 4
+      end
+      object lblDcto: TppDBText
+        UserName = 'lblDcto'
+        BlankWhenZero = True
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'PrcBonif'
+        DataPipeline = dbpItOC
+        DisplayFormat = '0.00%'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 7
+        Font.Style = [fsBold]
+        TextAlignment = taRightJustified
+        Transparent = True
+        DataPipelineName = 'dbpItOC'
+        mmHeight = 3440
+        mmLeft = 83608
+        mmTop = 529
+        mmWidth = 11377
+        BandType = 4
+      end
+      object lblPrcCmp: TppDBText
+        UserName = 'lblPrcCmp'
+        BlankWhenZero = True
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'PrecioN'
+        DataPipeline = dbpItOC
+        DisplayFormat = '$ 0,00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 7
+        Font.Style = [fsBold]
+        TextAlignment = taRightJustified
+        Transparent = True
+        DataPipelineName = 'dbpItOC'
+        mmHeight = 3440
+        mmLeft = 97102
+        mmTop = 529
+        mmWidth = 15346
+        BandType = 4
+      end
+      object lblTotItem: TppDBText
+        UserName = 'lblTotItem'
+        BlankWhenZero = True
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'PrecioTotal'
+        DataPipeline = dbpItOC
+        DisplayFormat = '$ 0,00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 7
+        Font.Style = [fsBold]
+        TextAlignment = taRightJustified
+        Transparent = True
+        DataPipelineName = 'dbpItOC'
+        mmHeight = 3440
+        mmLeft = 120000
+        mmTop = 529
+        mmWidth = 17992
+        BandType = 4
+      end
+      object lblODetalles: TppDBText
+        UserName = 'lblDetalle1'
+        BlankWhenZero = True
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'Detalle'
+        DataPipeline = dbpItOC
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 7
+        Font.Style = [fsBold]
+        Transparent = True
+        DataPipelineName = 'dbpItOC'
+        mmHeight = 3440
+        mmLeft = 140759
+        mmTop = 529
+        mmWidth = 43127
+        BandType = 4
+      end
+      object lblIdItemOC: TppDBText
+        UserName = 'lblIdItemOC'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'IDITEMOC'
+        DataPipeline = dbpItOC
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 7
+        Font.Style = [fsBold]
+        Transparent = True
+        DataPipelineName = 'dbpItOC'
+        mmHeight = 2963
+        mmLeft = 1058
+        mmTop = 529
+        mmWidth = 5027
+        BandType = 4
+      end
+    end
+    object ppFooterBandOC: TppFooterBand
+      mmBottomOffset = 0
+      mmHeight = 28840
+      mmPrintPosition = 0
+      object ppShapeOC4: TppShape
+        UserName = 'ShapeOC4'
+        Brush.Color = 16119285
+        ParentHeight = True
+        ParentWidth = True
+        mmHeight = 28840
+        mmLeft = 0
+        mmTop = 0
+        mmWidth = 185300
+        BandType = 8
+      end
+      object lblTotal: TppLabel
+        UserName = 'lblTotal'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Total Orden:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = [fsUnderline]
+        Transparent = True
+        mmHeight = 3810
+        mmLeft = 86784
+        mmTop = 3440
+        mmWidth = 20902
+        BandType = 8
+      end
+      object lblCondP: TppLabel
+        UserName = 'lblCondP'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Condiciones de Pago:'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = [fsUnderline]
+        Transparent = True
+        mmHeight = 3810
+        mmLeft = 3704
+        mmTop = 3440
+        mmWidth = 33073
+        BandType = 8
+      end
+      object lblCondPago1OC: TppDBText
+        UserName = 'lblCondPago1OC'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'CONDPAGO'
+        DataPipeline = dbpOC
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = [fsBold]
+        ParentDataPipeline = False
+        Transparent = True
+        DataPipelineName = 'dbpOC'
+        mmHeight = 3895
+        mmLeft = 3704
+        mmTop = 7673
+        mmWidth = 179652
+        BandType = 8
+      end
+      object lblFecEnvOC: TppDBText
+        UserName = 'lblFecEnvOC'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'FECHAENV'
+        DataPipeline = dbpOC
+        DisplayFormat = 'dd/mm/yy'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = [fsBold]
+        ParentDataPipeline = False
+        Transparent = True
+        DataPipelineName = 'dbpOC'
+        mmHeight = 3810
+        mmLeft = 3969
+        mmTop = 18785
+        mmWidth = 20108
+        BandType = 8
+      end
+      object lblFEnv: TppLabel
+        UserName = 'lblFEnv'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Fecha de Envio'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = [fsUnderline]
+        Transparent = True
+        mmHeight = 3810
+        mmLeft = 3969
+        mmTop = 14023
+        mmWidth = 24342
+        BandType = 8
+      end
+      object lnOrdC1: TppLine
+        UserName = 'lnOrdC1'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Weight = 0.750000000000000000
+        mmHeight = 265
+        mmLeft = 78052
+        mmTop = 23548
+        mmWidth = 39423
+        BandType = 8
+      end
+      object lnOrdC2: TppLine
+        UserName = 'lnOrdC2'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Weight = 0.750000000000000000
+        mmHeight = 265
+        mmLeft = 142346
+        mmTop = 23548
+        mmWidth = 39423
+        BandType = 8
+      end
+      object lblTotOC: TppDBText
+        UserName = 'lblTotOC'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'TOTALOC'
+        DataPipeline = dbpOC
+        DisplayFormat = '$ 0,00'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 12
+        Font.Style = [fsBold]
+        ParentDataPipeline = False
+        TextAlignment = taRightJustified
+        Transparent = True
+        DataPipelineName = 'dbpOC'
+        mmHeight = 5027
+        mmLeft = 111125
+        mmTop = 2117
+        mmWidth = 27517
+        BandType = 8
+      end
+      object lblPorProv: TppDBText
+        UserName = 'lblPorProv'
+        AutoSize = True
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'NomVjte'
+        DataPipeline = dbpOC
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 7
+        Font.Style = [fsBold]
+        ParentDataPipeline = False
+        TextAlignment = taCentered
+        Transparent = True
+        DataPipelineName = 'dbpOC'
+        mmHeight = 2963
+        mmLeft = 91858
+        mmTop = 25135
+        mmWidth = 10753
+        BandType = 8
+      end
+      object lblPorEmpresa: TppLabel
+        UserName = 'lblPorEmpresa'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'Responsable'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 7
+        Font.Style = [fsBold]
+        TextAlignment = taCentered
+        Transparent = True
+        mmHeight = 2963
+        mmLeft = 153961
+        mmTop = 25135
+        mmWidth = 18785
+        BandType = 8
+      end
+      object lblNroOrdPrv: TppDBText
+        UserName = 'lblFecEnvOC1'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        DataField = 'NROORDPRV'
+        DataPipeline = dbpOC
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = [fsBold]
+        ParentDataPipeline = False
+        Transparent = True
+        DataPipelineName = 'dbpOC'
+        mmHeight = 3810
+        mmLeft = 33073
+        mmTop = 18785
+        mmWidth = 29898
+        BandType = 8
+      end
+      object lblNroOrdP: TppLabel
+        UserName = 'lblFEnv1'
+        Border.BorderPositions = []
+        Border.Color = clBlack
+        Border.Style = psSolid
+        Border.Visible = False
+        Border.Weight = 1.000000000000000000
+        Caption = 'N'#186' Orden Proveedor'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Name = 'Tahoma'
+        Font.Size = 9
+        Font.Style = [fsUnderline]
+        Transparent = True
+        mmHeight = 3810
+        mmLeft = 33338
+        mmTop = 14023
+        mmWidth = 31485
+        BandType = 8
+      end
+    end
+  end
+  object dbpOC: TppDBPipeline
+    DataSource = dsOrdCmp
+    UserName = 'dbpOC'
+    Left = 173
+    Top = 493
+  end
+  object dbpItOC: TppDBPipeline
+    DataSource = dsItemsOC
+    UserName = 'dbpItOC'
+    Left = 204
+    Top = 493
+    MasterDataPipelineName = 'dbpOC'
+  end
+  object qPedidos: TMDOQuery
+    Database = dmGestion.dbGestion
+    Transaction = dmSaveFile.trSaveComp
+    BufferChunks = 1000
+    CachedUpdates = False
+    LoadDefaults = False
+    SQL.Strings = (
+      
+        'Select I.IdOrdCmp, I.Entidad, I.FechaOC, I.IdArticulo, I.PrecioN' +
+        ', '
+      '           I.CantidadP, I.ImpInt, I.PrecioTotal, I.PrcBonif, '
+      
+        '           (A.Marca||'#39' '#39'||A.Detalle) as DetProd, P.Nombre as Nom' +
+        'Entidad'
+      'From ItemsOC I'
+      'Join Articulos A'
+      '  on A.IdArticulo = I.IdArticulo'
+      'Join Proveedores P'
+      '  on P.IdProveedor = I.Entidad'
+      'Where I.Estado = 0'
+      'Order By I.Entidad, I.FechaOC'
+      '')
+    Left = 234
+    Top = 493
+    object qPedidosIdOrdCmp: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'IdOrdCmp'
+      Origin = '"ITEMSOC"."IDORDCMP"'
+    end
+    object qPedidosEntidad: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'Entidad'
+      Origin = '"ITEMSOC"."ENTIDAD"'
+    end
+    object qPedidosFechaOC: TDateField
+      Alignment = taCenter
+      DisplayLabel = 'Fecha'
+      DisplayWidth = 8
+      FieldName = 'FechaOC'
+      Origin = '"ITEMSOC"."FECHAOC"'
+    end
+    object qPedidosIdArticulo: TIntegerField
+      DisplayLabel = 'C'#186
+      DisplayWidth = 5
+      FieldName = 'IdArticulo'
+      Origin = '"ITEMSOC"."IDARTICULO"'
+    end
+    object qPedidosDetProd: TStringField
+      DisplayLabel = 'Producto'
+      DisplayWidth = 40
+      FieldName = 'DetProd'
+      Size = 40
+    end
+    object qPedidosNomEntidad: TStringField
+      DisplayLabel = 'Proveedor'
+      DisplayWidth = 25
+      FieldName = 'NomEntidad'
+      Origin = 'Proveedores.Nombre'
+      Size = 25
+    end
+    object qPedidosPRECION: TMDOBCDField
+      FieldName = 'PRECION'
+      Origin = '"ITEMSOC"."PRECION"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qPedidosCANTIDADP: TMDOBCDField
+      FieldName = 'CANTIDADP'
+      Origin = '"ITEMSOC"."CANTIDADP"'
+      DisplayFormat = '0'
+      Precision = 18
+      Size = 4
+    end
+    object qPedidosIMPINT: TMDOBCDField
+      FieldName = 'IMPINT'
+      Origin = '"ITEMSOC"."IMPINT"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qPedidosPRECIOTOTAL: TMDOBCDField
+      FieldName = 'PRECIOTOTAL'
+      Origin = '"ITEMSOC"."PRECIOTOTAL"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qPedidosPRCBONIF: TMDOBCDField
+      FieldName = 'PRCBONIF'
+      Origin = '"ITEMSOC"."PRCBONIF"'
+      DisplayFormat = '0.00'
+      Precision = 18
+      Size = 4
+    end
+  end
+  object dsqPedidos: TDataSource
+    DataSet = qPedidos
+    Left = 264
+    Top = 493
+  end
+  object qRecibidos: TMDOQuery
+    Database = dmGestion.dbGestion
+    Transaction = dmSaveFile.trSaveComp
+    BufferChunks = 1000
+    CachedUpdates = False
+    LoadDefaults = False
+    SQL.Strings = (
+      
+        'Select I.Entidad, I.FechaOC, I.IdArticulo, I.PrecioN, I.Cantidad' +
+        'R,'
+      '           I.ImpInt, I.FechaRec, I.PrecioTotal, I.PrecioR,'
+      
+        '           (A.Marca||'#39' '#39'||A.Detalle) as DetProd, P.Nombre as Nom' +
+        'Entidad'
+      'From ItemsOC I'
+      'Join Articulos A'
+      '  on A.IdArticulo = I.IdArticulo'
+      'Join Proveedores P'
+      '  on P.IdProveedor = I.Entidad'
+      'Where I.Estado = 1'
+      'Order By I.Entidad, I.FechaRec'
+      ' ')
+    Left = 325
+    Top = 493
+    object qRecibidosEntidad: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'Entidad'
+      Origin = '"ITEMSOC"."ENTIDAD"'
+    end
+    object qRecibidosFechaOC: TDateField
+      DisplayWidth = 10
+      FieldName = 'FechaOC'
+      Origin = '"ITEMSOC"."FECHAOC"'
+    end
+    object qRecibidosIdArticulo: TIntegerField
+      DisplayLabel = 'C'#186
+      DisplayWidth = 10
+      FieldName = 'IdArticulo'
+      Origin = '"ITEMSOC"."IDARTICULO"'
+    end
+    object qRecibidosDetProd: TStringField
+      DisplayWidth = 40
+      FieldName = 'DetProd'
+      Size = 40
+    end
+    object qRecibidosNomEntidad: TStringField
+      DisplayWidth = 20
+      FieldName = 'NomEntidad'
+      Origin = 'Proveedores.Nombre'
+    end
+    object qRecibidosFechaRec: TDateField
+      FieldName = 'FechaRec'
+      Origin = '"ITEMSOC"."FECHAREC"'
+    end
+    object qRecibidosPRECION: TMDOBCDField
+      FieldName = 'PRECION'
+      Origin = '"ITEMSOC"."PRECION"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qRecibidosCANTIDADR: TMDOBCDField
+      FieldName = 'CANTIDADR'
+      Origin = '"ITEMSOC"."CANTIDADR"'
+      DisplayFormat = '0'
+      Precision = 18
+      Size = 4
+    end
+    object qRecibidosIMPINT: TMDOBCDField
+      FieldName = 'IMPINT'
+      Origin = '"ITEMSOC"."IMPINT"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qRecibidosPRECIOTOTAL: TMDOBCDField
+      FieldName = 'PRECIOTOTAL'
+      Origin = '"ITEMSOC"."PRECIOTOTAL"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qRecibidosPRECIOR: TMDOBCDField
+      FieldName = 'PRECIOR'
+      Origin = '"ITEMSOC"."PRECIOR"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+  end
+  object dsqRecibidos: TDataSource
+    DataSet = qRecibidos
+    Left = 356
+    Top = 493
+  end
+  object qTotPed: TMDOQuery
+    Database = dmGestion.dbGestion
+    Transaction = dmSaveFile.trSaveComp
+    BufferChunks = 1000
+    CachedUpdates = False
+    LoadDefaults = False
+    SQL.Strings = (
+      'Select Sum(PrecioTotal) as Total'
+      'From ItemsOC'
+      'Where Estado = 0')
+    Left = 295
+    Top = 493
+    object qTotPedTOTAL: TMDOBCDField
+      FieldName = 'TOTAL'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+  end
+  object qOrdComp: TMDOQuery
+    Database = dmGestion.dbGestion
+    Transaction = dmSaveFile.trSaveComp
+    BufferChunks = 1000
+    CachedUpdates = False
+    LoadDefaults = False
+    SQL.Strings = (
+      'Select O.IdOrdCmp, O.Idsucursal, O.FechaOC, O.NroOrdCmp,'
+      
+        '           O.NroOrdPrv, O.Entidad, O.CantItems, O.TotalOC, O.Fec' +
+        'haEnv, '
+      '           O.CondPago, O.EstadoOC, P.Nombre as NomEntidad'
+      'From OrdCmp O'
+      'Join Proveedores P'
+      '  on P.IdProveedor = O.Entidad'
+      'Where O.EstadoOC <> 1'
+      'Order By O.FechaOC desc'
+      ' ')
+    Left = 22
+    Top = 493
+    object qOrdCompIdOrdCmp: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'IdOrdCmp'
+      Origin = '"ORDCMP"."IDORDCMP"'
+    end
+    object qOrdCompIdSucursal: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'IdSucursal'
+      Origin = '"ORDCMP"."IDSUCURSAL"'
+    end
+    object qOrdCompFechaOC: TDateField
+      DisplayLabel = 'Fecha'
+      DisplayWidth = 10
+      FieldName = 'FechaOC'
+      Origin = '"ORDCMP"."FECHAOC"'
+    end
+    object qOrdCompNroOrdCmp: TStringField
+      DisplayLabel = 'Orden'
+      DisplayWidth = 13
+      FieldName = 'NroOrdCmp'
+      Origin = '"ORDCMP"."NROORDCMP"'
+      Size = 13
+    end
+    object qOrdCompNroOrdPrv: TStringField
+      DisplayWidth = 13
+      FieldName = 'NroOrdPrv'
+      Origin = '"ORDCMP"."NROORDPRV"'
+      Size = 13
+    end
+    object qOrdCompEntidad: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'Entidad'
+      Origin = '"ORDCMP"."ENTIDAD"'
+    end
+    object qOrdCompCantItems: TSmallintField
+      DisplayWidth = 10
+      FieldName = 'CantItems'
+      Origin = '"ORDCMP"."CANTITEMS"'
+    end
+    object qOrdCompFechaEnv: TDateField
+      DisplayWidth = 10
+      FieldName = 'FechaEnv'
+      Origin = '"ORDCMP"."FECHAENV"'
+    end
+    object qOrdCompCondPago: TStringField
+      DisplayWidth = 120
+      FieldName = 'CondPago'
+      Origin = '"ORDCMP"."CONDPAGO"'
+      Size = 120
+    end
+    object qOrdCompEstadoOC: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'EstadoOC'
+      Origin = '"ORDCMP"."ESTADOOC"'
+    end
+    object qOrdCompNomEntidad: TStringField
+      DisplayLabel = 'Proveedor'
+      DisplayWidth = 15
+      FieldName = 'NomEntidad'
+      Origin = 'Proveedores.Nombre'
+      Size = 25
+    end
+    object qOrdCompTOTALOC: TMDOBCDField
+      FieldName = 'TOTALOC'
+      Origin = '"ORDCMP"."TOTALOC"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+  end
+  object qItemsOC: TMDOQuery
+    Database = dmGestion.dbGestion
+    Transaction = dmSaveFile.trSaveComp
+    BufferChunks = 1000
+    CachedUpdates = False
+    DataSource = dsqOrdCmp
+    LoadDefaults = False
+    SQL.Strings = (
+      
+        'Select I.IdOrdCmp, I.IdSucursal, I.IdItemOC, I.Entidad, I.FechaO' +
+        'C, '
+      
+        '           I.FechaRec, I.IdArticulo, I.CantidadP, I.CantidadR, I' +
+        '.PrecioN, '
+      
+        '           I.ImpInt, I.PrecioTotal, I.PrcBonif, I.PrecioR, I.Est' +
+        'ado, I.Detalle, '
+      '           (A.Marca||'#39' '#39'||A.Detalle) as DetProd'
+      'From ItemsOC I'
+      'Join Articulos A'
+      '  on A.IdArticulo = I.IdArticulo'
+      'Where I.IdOrdCmp = :IdOrdCmp And '
+      '            I.IdSucursal = :IdSucursal')
+    Left = 82
+    Top = 493
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IdOrdCmp'
+        ParamType = ptUnknown
+        Size = 4
+      end
+      item
+        DataType = ftInteger
+        Name = 'IdSucursal'
+        ParamType = ptUnknown
+        Size = 4
+      end>
+    object qItemsOCIdOrdCmp: TIntegerField
+      FieldName = 'IdOrdCmp'
+      Origin = '"ITEMSOC"."IDORDCMP"'
+    end
+    object qItemsOCIdsucursal: TIntegerField
+      FieldName = 'Idsucursal'
+      Origin = '"ITEMSOC"."IDSUCURSAL"'
+    end
+    object qItemsOCIdItemOc: TIntegerField
+      FieldName = 'IdItemOc'
+      Origin = '"ITEMSOC"."IDITEMOC"'
+    end
+    object qItemsOCEntidad: TIntegerField
+      FieldName = 'Entidad'
+      Origin = '"ITEMSOC"."ENTIDAD"'
+    end
+    object qItemsOCFechaOC: TDateField
+      FieldName = 'FechaOC'
+      Origin = '"ITEMSOC"."FECHAOC"'
+    end
+    object qItemsOCFechaRec: TDateField
+      FieldName = 'FechaRec'
+      Origin = '"ITEMSOC"."FECHAREC"'
+    end
+    object qItemsOCIdArticulo: TIntegerField
+      FieldName = 'IdArticulo'
+      Origin = '"ITEMSOC"."IDARTICULO"'
+    end
+    object qItemsOCEstado: TSmallintField
+      FieldName = 'Estado'
+      Origin = '"ITEMSOC"."ESTADO"'
+    end
+    object qItemsOCDetalle: TStringField
+      FieldName = 'Detalle'
+      Origin = '"ITEMSOC"."DETALLE"'
+      Size = 50
+    end
+    object qItemsOCDetProd: TStringField
+      FieldName = 'DetProd'
+      Size = 81
+    end
+    object qItemsOCCANTIDADP: TMDOBCDField
+      FieldName = 'CANTIDADP'
+      Origin = '"ITEMSOC"."CANTIDADP"'
+      DisplayFormat = '0'
+      Precision = 18
+      Size = 4
+    end
+    object qItemsOCCANTIDADR: TMDOBCDField
+      FieldName = 'CANTIDADR'
+      Origin = '"ITEMSOC"."CANTIDADR"'
+      DisplayFormat = '0'
+      Precision = 18
+      Size = 4
+    end
+    object qItemsOCPRECION: TMDOBCDField
+      FieldName = 'PRECION'
+      Origin = '"ITEMSOC"."PRECION"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qItemsOCIMPINT: TMDOBCDField
+      FieldName = 'IMPINT'
+      Origin = '"ITEMSOC"."IMPINT"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qItemsOCPRECIOTOTAL: TMDOBCDField
+      FieldName = 'PRECIOTOTAL'
+      Origin = '"ITEMSOC"."PRECIOTOTAL"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qItemsOCPRCBONIF: TMDOBCDField
+      FieldName = 'PRCBONIF'
+      Origin = '"ITEMSOC"."PRCBONIF"'
+      DisplayFormat = '0.00'
+      Precision = 18
+      Size = 4
+    end
+    object qItemsOCPRECIOR: TMDOBCDField
+      FieldName = 'PRECIOR'
+      Origin = '"ITEMSOC"."PRECIOR"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+  end
+  object dsqOrdCmp: TDataSource
+    DataSet = qOrdComp
+    Left = 52
+    Top = 493
+  end
+  object OrdCom: TClientDataSet
+    Aggregates = <>
+    Params = <
+      item
+        DataType = ftInteger
+        Name = 'IdOrdCmp'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftInteger
+        Name = 'IdSucursal'
+        ParamType = ptUnknown
+      end>
+    ProviderName = 'dspqOrdenes'
+    AfterOpen = OrdComAfterOpen
+    OnNewRecord = OrdComNewRecord
+    OnReconcileError = OrdComReconcileError
+    Left = 386
+    Top = 493
+    object OrdComIDORDCMP: TIntegerField
+      FieldName = 'IDORDCMP'
+      Origin = '"ORDCMP"."IDORDCMP"'
+      Required = True
+      OnGetText = OrdComIDORDCMPGetText
+    end
+    object OrdComIDSUCURSAL: TIntegerField
+      FieldName = 'IDSUCURSAL'
+      Origin = '"ORDCMP"."IDSUCURSAL"'
+      Required = True
+    end
+    object OrdComFECHAOC: TDateField
+      FieldName = 'FECHAOC'
+      Origin = '"ORDCMP"."FECHAOC"'
+    end
+    object OrdComNROORDCMP: TStringField
+      FieldName = 'NROORDCMP'
+      Origin = '"ORDCMP"."NROORDCMP"'
+      Size = 13
+    end
+    object OrdComNROORDPRV: TStringField
+      FieldName = 'NROORDPRV'
+      Origin = '"ORDCMP"."NROORDPRV"'
+      Size = 13
+    end
+    object OrdComENTIDAD: TIntegerField
+      FieldName = 'ENTIDAD'
+      Origin = '"ORDCMP"."ENTIDAD"'
+      OnValidate = OrdComENTIDADValidate
+    end
+    object OrdComCANTITEMS: TSmallintField
+      FieldName = 'CANTITEMS'
+      Origin = '"ORDCMP"."CANTITEMS"'
+    end
+    object OrdComTOTALOC: TBCDField
+      FieldName = 'TOTALOC'
+      Origin = '"ORDCMP"."TOTALOC"'
+      currency = True
+      Precision = 18
+    end
+    object OrdComFECHAENV: TDateField
+      FieldName = 'FECHAENV'
+      Origin = '"ORDCMP"."FECHAENV"'
+    end
+    object OrdComCONDPAGO: TStringField
+      FieldName = 'CONDPAGO'
+      Origin = '"ORDCMP"."CONDPAGO"'
+      Size = 120
+    end
+    object OrdComESTADOOC: TIntegerField
+      FieldName = 'ESTADOOC'
+      Origin = '"ORDCMP"."ESTADOOC"'
+    end
+    object OrdComqItems: TDataSetField
+      FieldName = 'qItems'
+    end
+    object OrdComNomProv: TStringField
+      FieldKind = fkInternalCalc
+      FieldName = 'NomProv'
+      Size = 30
+    end
+    object OrdComNomVjte: TStringField
+      FieldKind = fkInternalCalc
+      FieldName = 'NomVjte'
+      Size = 30
+    end
+    object OrdComIdEmpresa: TIntegerField
+      FieldName = 'IdEmpresa'
+    end
+  end
+  object dsOrdCmp: TDataSource
+    DataSet = OrdCom
+    Left = 416
+    Top = 493
+  end
+  object ItemsOC: TClientDataSet
+    Aggregates = <>
+    DataSetField = OrdComqItems
+    Params = <>
+    AfterPost = ItemsOCAfterPost
+    AfterDelete = ItemsOCAfterDelete
+    OnNewRecord = ItemsOCNewRecord
+    OnReconcileError = ItemsOCReconcileError
+    Left = 447
+    Top = 493
+    object ItemsOCIDORDCMP: TIntegerField
+      FieldName = 'IDORDCMP'
+      Origin = '"ITEMSOC"."IDORDCMP"'
+      Required = True
+    end
+    object ItemsOCIDSUCURSAL: TIntegerField
+      FieldName = 'IDSUCURSAL'
+      Origin = '"ITEMSOC"."IDSUCURSAL"'
+      Required = True
+    end
+    object ItemsOCIDITEMOC: TIntegerField
+      FieldName = 'IDITEMOC'
+      Origin = '"ITEMSOC"."IDITEMOC"'
+      Required = True
+    end
+    object ItemsOCENTIDAD: TIntegerField
+      FieldName = 'ENTIDAD'
+      Origin = '"ITEMSOC"."ENTIDAD"'
+    end
+    object ItemsOCFECHAOC: TDateField
+      FieldName = 'FECHAOC'
+      Origin = '"ITEMSOC"."FECHAOC"'
+      DisplayFormat = 'dd/mm/yy'
+    end
+    object ItemsOCFECHAREC: TDateField
+      FieldName = 'FECHAREC'
+      Origin = '"ITEMSOC"."FECHAREC"'
+      DisplayFormat = 'dd/mm/yy'
+    end
+    object ItemsOCIDARTICULO: TIntegerField
+      FieldName = 'IDARTICULO'
+      Origin = '"ITEMSOC"."IDARTICULO"'
+      OnSetText = ItemsOCIdArticuloSetText
+      OnValidate = ItemsOCIdArticuloValidate
+    end
+    object ItemsOCCANTIDADP: TBCDField
+      FieldName = 'CANTIDADP'
+      Origin = '"ITEMSOC"."CANTIDADP"'
+      Precision = 18
+    end
+    object ItemsOCCANTIDADR: TBCDField
+      FieldName = 'CANTIDADR'
+      Origin = '"ITEMSOC"."CANTIDADR"'
+      Precision = 18
+    end
+    object ItemsOCPRECION: TBCDField
+      FieldName = 'PRECION'
+      Origin = '"ITEMSOC"."PRECION"'
+      OnChange = ItemsOCPrecioNChange
+      currency = True
+      Precision = 18
+    end
+    object ItemsOCIMPINT: TBCDField
+      FieldName = 'IMPINT'
+      Origin = '"ITEMSOC"."IMPINT"'
+      currency = True
+      Precision = 18
+    end
+    object ItemsOCPRECIOTOTAL: TBCDField
+      FieldName = 'PRECIOTOTAL'
+      Origin = '"ITEMSOC"."PRECIOTOTAL"'
+      currency = True
+      Precision = 18
+    end
+    object ItemsOCPRCBONIF: TBCDField
+      FieldName = 'PRCBONIF'
+      Origin = '"ITEMSOC"."PRCBONIF"'
+      DisplayFormat = '0.00%'
+      EditFormat = '0.00'
+      Precision = 18
+    end
+    object ItemsOCPRECIOR: TBCDField
+      FieldName = 'PRECIOR'
+      Origin = '"ITEMSOC"."PRECIOR"'
+      currency = True
+      Precision = 18
+    end
+    object ItemsOCESTADO: TSmallintField
+      FieldName = 'ESTADO'
+      Origin = '"ITEMSOC"."ESTADO"'
+    end
+    object ItemsOCDETALLE: TStringField
+      FieldName = 'DETALLE'
+      Origin = '"ITEMSOC"."DETALLE"'
+      Size = 50
+    end
+    object ItemsOCDetProd: TStringField
+      DisplayWidth = 50
+      FieldKind = fkInternalCalc
+      FieldName = 'DetProd'
+      Size = 50
+    end
+  end
+  object dsItemsOC: TDataSource
+    DataSet = ItemsOC
+    Left = 477
+    Top = 493
+  end
+  object qOrdenes: TMDOQuery
+    Database = dmGestion.dbGestion
+    Transaction = dmSaveFile.trSaveComp
+    BufferChunks = 1000
+    CachedUpdates = False
+    LoadDefaults = False
+    SQL.Strings = (
+      'Select IDORDCMP, IDSUCURSAL, FECHAOC, NROORDCMP,'
+      '           NROORDPRV, ENTIDAD, CANTITEMS, TOTALOC,'
+      '           FECHAENV, CONDPAGO, ESTADOOC, IDEMPRESA'
+      'From ORDCMP'
+      'Where IDORDCMP =:IdOrdCmp And'
+      '            IDSUCURSAL =:IdSucursal')
+    Left = 507
+    Top = 493
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IdOrdCmp'
+        ParamType = ptUnknown
+      end
+      item
+        DataType = ftInteger
+        Name = 'IdSucursal'
+        ParamType = ptUnknown
+      end>
+    object qOrdenesIDORDCMP: TIntegerField
+      FieldName = 'IDORDCMP'
+      Origin = '"ORDCMP"."IDORDCMP"'
+      Required = True
+    end
+    object qOrdenesIDSUCURSAL: TIntegerField
+      FieldName = 'IDSUCURSAL'
+      Origin = '"ORDCMP"."IDSUCURSAL"'
+      Required = True
+    end
+    object qOrdenesFECHAOC: TDateField
+      FieldName = 'FECHAOC'
+      Origin = '"ORDCMP"."FECHAOC"'
+    end
+    object qOrdenesNROORDCMP: TMDOStringField
+      FieldName = 'NROORDCMP'
+      Origin = '"ORDCMP"."NROORDCMP"'
+      Size = 13
+    end
+    object qOrdenesNROORDPRV: TMDOStringField
+      FieldName = 'NROORDPRV'
+      Origin = '"ORDCMP"."NROORDPRV"'
+      Size = 13
+    end
+    object qOrdenesENTIDAD: TIntegerField
+      FieldName = 'ENTIDAD'
+      Origin = '"ORDCMP"."ENTIDAD"'
+    end
+    object qOrdenesCANTITEMS: TSmallintField
+      FieldName = 'CANTITEMS'
+      Origin = '"ORDCMP"."CANTITEMS"'
+    end
+    object qOrdenesTOTALOC: TMDOBCDField
+      FieldName = 'TOTALOC'
+      Origin = '"ORDCMP"."TOTALOC"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qOrdenesFECHAENV: TDateField
+      FieldName = 'FECHAENV'
+      Origin = '"ORDCMP"."FECHAENV"'
+    end
+    object qOrdenesCONDPAGO: TMDOStringField
+      FieldName = 'CONDPAGO'
+      Origin = '"ORDCMP"."CONDPAGO"'
+      Size = 120
+    end
+    object qOrdenesESTADOOC: TIntegerField
+      FieldName = 'ESTADOOC'
+      Origin = '"ORDCMP"."ESTADOOC"'
+    end
+    object qOrdenesNomProveedor: TStringField
+      DisplayLabel = 'Proveedor'
+      FieldKind = fkCalculated
+      FieldName = 'NomProveedor'
+      Size = 30
+      Calculated = True
+    end
+    object qOrdenesIDEMPRESA: TIntegerField
+      FieldName = 'IDEMPRESA'
+      Origin = '"ORDCMP"."IDEMPRESA"'
+    end
+  end
+  object qItems: TMDOQuery
+    Database = dmGestion.dbGestion
+    OnCalcFields = qItemsCalcFields
+    Transaction = dmSaveFile.trSaveComp
+    BufferChunks = 1000
+    CachedUpdates = False
+    DataSource = dsqOrdenes
+    LoadDefaults = False
+    SQL.Strings = (
+      'Select IDORDCMP, IDSUCURSAL, IDITEMOC, ENTIDAD, FECHAOC,'
+      '           FECHAREC, IDARTICULO, CANTIDADP, CANTIDADR, PRECION,'
+      '           IMPINT, PRECIOTOTAL, PRCBONIF, PRECIOR, ESTADO, '
+      '           DETALLE'
+      'From ITEMSOC'
+      'Where IDORDCMP =:IdOrdCmp And'
+      '            IDSUCURSAL =:IdSucursal')
+    Left = 599
+    Top = 493
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'IDORDCMP'
+        ParamType = ptUnknown
+        Size = 4
+      end
+      item
+        DataType = ftInteger
+        Name = 'IDSUCURSAL'
+        ParamType = ptUnknown
+        Size = 4
+      end>
+    object qItemsIDORDCMP: TIntegerField
+      FieldName = 'IDORDCMP'
+      Origin = '"ITEMSOC"."IDORDCMP"'
+      Required = True
+    end
+    object qItemsIDSUCURSAL: TIntegerField
+      FieldName = 'IDSUCURSAL'
+      Origin = '"ITEMSOC"."IDSUCURSAL"'
+      Required = True
+    end
+    object qItemsIDITEMOC: TIntegerField
+      FieldName = 'IDITEMOC'
+      Origin = '"ITEMSOC"."IDITEMOC"'
+      Required = True
+    end
+    object qItemsENTIDAD: TIntegerField
+      FieldName = 'ENTIDAD'
+      Origin = '"ITEMSOC"."ENTIDAD"'
+    end
+    object qItemsFECHAOC: TDateField
+      FieldName = 'FECHAOC'
+      Origin = '"ITEMSOC"."FECHAOC"'
+    end
+    object qItemsFECHAREC: TDateField
+      FieldName = 'FECHAREC'
+      Origin = '"ITEMSOC"."FECHAREC"'
+    end
+    object qItemsIDARTICULO: TIntegerField
+      FieldName = 'IDARTICULO'
+      Origin = '"ITEMSOC"."IDARTICULO"'
+    end
+    object qItemsCANTIDADP: TMDOBCDField
+      FieldName = 'CANTIDADP'
+      Origin = '"ITEMSOC"."CANTIDADP"'
+      Precision = 18
+      Size = 4
+    end
+    object qItemsCANTIDADR: TMDOBCDField
+      FieldName = 'CANTIDADR'
+      Origin = '"ITEMSOC"."CANTIDADR"'
+      Precision = 18
+      Size = 4
+    end
+    object qItemsPRECION: TMDOBCDField
+      FieldName = 'PRECION'
+      Origin = '"ITEMSOC"."PRECION"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qItemsIMPINT: TMDOBCDField
+      FieldName = 'IMPINT'
+      Origin = '"ITEMSOC"."IMPINT"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qItemsPRECIOTOTAL: TMDOBCDField
+      FieldName = 'PRECIOTOTAL'
+      Origin = '"ITEMSOC"."PRECIOTOTAL"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qItemsPRCBONIF: TMDOBCDField
+      FieldName = 'PRCBONIF'
+      Origin = '"ITEMSOC"."PRCBONIF"'
+      DisplayFormat = '0.00%'
+      EditFormat = '0.00'
+      Precision = 18
+      Size = 4
+    end
+    object qItemsPRECIOR: TMDOBCDField
+      FieldName = 'PRECIOR'
+      Origin = '"ITEMSOC"."PRECIOR"'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+    object qItemsESTADO: TSmallintField
+      FieldName = 'ESTADO'
+      Origin = '"ITEMSOC"."ESTADO"'
+    end
+    object qItemsDETALLE: TMDOStringField
+      FieldName = 'DETALLE'
+      Origin = '"ITEMSOC"."DETALLE"'
+      Size = 50
+    end
+    object qItemsDetProducto: TStringField
+      FieldKind = fkCalculated
+      FieldName = 'DetProducto'
+      Size = 60
+      Calculated = True
+    end
+  end
+  object dspqOrdenes: TDataSetProvider
+    DataSet = qOrdenes
+    Options = [poIncFieldProps, poCascadeDeletes, poCascadeUpdates]
+    BeforeUpdateRecord = dspqOrdenesBeforeUpdateRecord
+    Left = 538
+    Top = 493
+  end
+  object dsqOrdenes: TDataSource
+    DataSet = qOrdenes
+    Left = 568
+    Top = 493
+  end
+end

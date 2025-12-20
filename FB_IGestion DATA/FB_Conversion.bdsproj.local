@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2008/05/12 15:55:24.421.bdsproj,C:\Documents and Settings\Administrador\Mis documentos\Borland Studio Projects\Project1.bdsproj=C:\IyC\FB_Gestion32\FB_Conversion.bdsproj</Transaction>
+    <Transaction>2008/07/25 17:19:37.515.pas,C:\IyC\FB_Gestion32\Unit1.pas=C:\IyC\FB_Gestion32\uFB_Convert.pas</Transaction>
+    <Transaction>2008/07/25 17:19:37.515.dfm,C:\IyC\FB_Gestion32\Unit1.dfm=C:\IyC\FB_Gestion32\uFB_Convert.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

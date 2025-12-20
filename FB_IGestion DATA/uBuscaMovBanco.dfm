@@ -1,0 +1,504 @@
+object frmBuscaMovBanco: TfrmBuscaMovBanco
+  Left = 224
+  Top = 210
+  Caption = 'Busqueda de Valores'
+  ClientHeight = 273
+  ClientWidth = 577
+  Color = clWhite
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clNavy
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Icon.Data = {
+    0000010001002020040000000000E80200001600000028000000200000004000
+    0000010004000000000000020000000000000000000000000000000000000000
+    0000000080000080000000808000800000008000800080800000C0C0C0008080
+    80000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF000000
+    0000000000000000000000000000000000000000000000888888800000000000
+    08888800000883088888888000000333308000FF000888000000000000000083
+    3000FF7700008800000000000000000F00FF77F7000088000000000000000000
+    FF77FFF70000880000000000000000FF77FFFFF7000088300000000000000F77
+    FFFFFFF7000088300000088888880F7FFFFFFFF700008830000000000888078F
+    FFFFFFF700008800000000733088078FFFFFFF8700008300000000733080078F
+    FFF888F703308800000000033000078FF88FFF00330388000000003300000788
+    8B70003333038800000003330000078BBB000003333388000888833000000B00
+    0008833033008803088833300000007033000073003308830883330000000700
+    0333337330783083088333000000007077333337307780880883330003300077
+    8878833780778088808333003870030378888777708780888883330387000083
+    3337788873078088888333037000007788888088730780888883330300000707
+    0888800870878088888333030000070700788888777707778883330800000708
+    7778888770770777778330370000078887777770030088778883308700000778
+    8000000000888888888000770000007770000000000088888808877000000000
+    000000000000000000000000000000000000000000000000000000000000FFFF
+    FFFFFFF6007F8004001F01041FFF80061FFFC0061FFFC0061FFF00060FFF0006
+    0F8000060F8000061F8000001F8100001FC300001F87000018070000000F0000
+    000F0000001F0000001980000010800000008000000180000003000000070000
+    00070000000700000007000000070018000783FC000FC7FF001FFFFFFFFF}
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnlHeadBusBco: TRzPanel
+    Left = 0
+    Top = 0
+    Width = 577
+    Height = 75
+    Align = alTop
+    BorderOuter = fsFlat
+    ParentColor = True
+    TabOrder = 0
+    object lblCualBusqueda: TLabel
+      Left = 73
+      Top = 4
+      Width = 38
+      Height = 26
+      Caption = '&Buscar por:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      Transparent = True
+      WordWrap = True
+    end
+    object lblValor: TLabel
+      Left = 326
+      Top = 4
+      Width = 42
+      Height = 26
+      Caption = '&Valor a buscar:'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      Transparent = True
+      WordWrap = True
+    end
+    object rgOpciones: TRzRadioGroup
+      Left = 1
+      Top = 32
+      Width = 575
+      Height = 42
+      Align = alBottom
+      Alignment = taCenter
+      Caption = ' Opciones de b'#250'squeda '
+      Columns = 5
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      GroupStyle = gsBanner
+      ItemHotTrack = True
+      ItemFont.Charset = ANSI_CHARSET
+      ItemFont.Color = clMaroon
+      ItemFont.Height = -11
+      ItemFont.Name = 'Tahoma'
+      ItemFont.Style = [fsBold]
+      ItemIndex = 0
+      Items.Strings = (
+        '= (Igual)'
+        '> (Mayor)'
+        '< (Menor)'
+        '>= (Mayor igual)'
+        '<= (Menor igual)')
+      ParentColor = True
+      ParentFont = False
+      StartXPos = 45
+      TabOrder = 2
+      OnClick = rgOpcionesClick
+    end
+    object edtBusqueda: TRzMaskEdit
+      Left = 373
+      Top = 8
+      Width = 121
+      Height = 21
+      Color = clWhite
+      FrameHotTrack = True
+      FrameVisible = True
+      ParentColor = True
+      TabOnEnter = True
+      TabOrder = 1
+      OnChange = edtBusquedaChange
+      OnKeyPress = edtBusquedaKeyPress
+    end
+    object cbBusqueda: TRzComboBox
+      Left = 116
+      Top = 8
+      Width = 145
+      Height = 21
+      Color = clWhite
+      Ctl3D = False
+      FlatButtons = True
+      FrameHotTrack = True
+      FrameVisible = True
+      ItemHeight = 13
+      ParentColor = True
+      ParentCtl3D = False
+      TabOnEnter = True
+      TabOrder = 0
+      OnChange = cbBusquedaChange
+    end
+  end
+  object pnlFootBusBco: TRzPanel
+    Left = 0
+    Top = 236
+    Width = 577
+    Height = 37
+    Align = alBottom
+    BorderOuter = fsFlat
+    ParentColor = True
+    TabOrder = 1
+    object sSearch: TShape
+      Left = 7
+      Top = 8
+      Width = 22
+      Height = 20
+    end
+    object lblHelp: TLabel
+      Left = 35
+      Top = 12
+      Width = 171
+      Height = 13
+      Caption = 'Campo por los que se puede buscar'
+    end
+    object btnAceptar: TRzBitBtn
+      Left = 498
+      Top = 3
+      Width = 30
+      Height = 30
+      ModalResult = 1
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      HotTrack = True
+      ParentColor = True
+      ParentFont = False
+      TabOrder = 0
+      Glyph.Data = {
+        36060000424D3606000000000000360400002800000020000000100000000100
+        08000000000000020000630B0000630B00000001000000000000000000003300
+        00006600000099000000CC000000FF0000000033000033330000663300009933
+        0000CC330000FF33000000660000336600006666000099660000CC660000FF66
+        000000990000339900006699000099990000CC990000FF99000000CC000033CC
+        000066CC000099CC0000CCCC0000FFCC000000FF000033FF000066FF000099FF
+        0000CCFF0000FFFF000000003300330033006600330099003300CC003300FF00
+        330000333300333333006633330099333300CC333300FF333300006633003366
+        33006666330099663300CC663300FF6633000099330033993300669933009999
+        3300CC993300FF99330000CC330033CC330066CC330099CC3300CCCC3300FFCC
+        330000FF330033FF330066FF330099FF3300CCFF3300FFFF3300000066003300
+        66006600660099006600CC006600FF0066000033660033336600663366009933
+        6600CC336600FF33660000666600336666006666660099666600CC666600FF66
+        660000996600339966006699660099996600CC996600FF99660000CC660033CC
+        660066CC660099CC6600CCCC6600FFCC660000FF660033FF660066FF660099FF
+        6600CCFF6600FFFF660000009900330099006600990099009900CC009900FF00
+        990000339900333399006633990099339900CC339900FF339900006699003366
+        99006666990099669900CC669900FF6699000099990033999900669999009999
+        9900CC999900FF99990000CC990033CC990066CC990099CC9900CCCC9900FFCC
+        990000FF990033FF990066FF990099FF9900CCFF9900FFFF99000000CC003300
+        CC006600CC009900CC00CC00CC00FF00CC000033CC003333CC006633CC009933
+        CC00CC33CC00FF33CC000066CC003366CC006666CC009966CC00CC66CC00FF66
+        CC000099CC003399CC006699CC009999CC00CC99CC00FF99CC0000CCCC0033CC
+        CC0066CCCC0099CCCC00CCCCCC00FFCCCC0000FFCC0033FFCC0066FFCC0099FF
+        CC00CCFFCC00FFFFCC000000FF003300FF006600FF009900FF00CC00FF00FF00
+        FF000033FF003333FF006633FF009933FF00CC33FF00FF33FF000066FF003366
+        FF006666FF009966FF00CC66FF00FF66FF000099FF003399FF006699FF009999
+        FF00CC99FF00FF99FF0000CCFF0033CCFF0066CCFF0099CCFF00CCCCFF00FFCC
+        FF0000FFFF0033FFFF0066FFFF0099FFFF00CCFFFF00FFFFFF00000080000080
+        000000808000800000008000800080800000C0C0C00080808000191919004C4C
+        4C00B2B2B200E5E5E500C8AC2800E0CC6600F2EABF00B59B2400D8E9EC009933
+        6600D075A300ECC6D900646F710099A8AC00E2EFF10000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000E8E8E8E8E8E8
+        E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+        E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8180C
+        E8E8E8E8E8E8E8E8E8E8E8E8E8E8E2DFE8E8E8E8E8E8E8E8E8E8E8E8E8181212
+        0CE8E8E8E8E8E8E8E8E8E8E8E8E28181DFE8E8E8E8E8E8E8E8E8E8E818121212
+        120CE8E8E8E8E8E8E8E8E8E8E281818181DFE8E8E8E8E8E8E8E8E81812121212
+        12120CE8E8E8E8E8E8E8E8E2818181818181DFE8E8E8E8E8E8E8E81812120C18
+        1212120CE8E8E8E8E8E8E8E28181DFE2818181DFE8E8E8E8E8E8E818120CE8E8
+        181212120CE8E8E8E8E8E8E281DFE8E8E2818181DFE8E8E8E8E8E8180CE8E8E8
+        E8181212120CE8E8E8E8E8E2DFE8E8E8E8E2818181DFE8E8E8E8E8E8E8E8E8E8
+        E8E8181212120CE8E8E8E8E8E8E8E8E8E8E8E2818181DFE8E8E8E8E8E8E8E8E8
+        E8E8E8181212120CE8E8E8E8E8E8E8E8E8E8E8E2818181DFE8E8E8E8E8E8E8E8
+        E8E8E8E81812120CE8E8E8E8E8E8E8E8E8E8E8E8E28181DFE8E8E8E8E8E8E8E8
+        E8E8E8E8E818120CE8E8E8E8E8E8E8E8E8E8E8E8E8E281DFE8E8E8E8E8E8E8E8
+        E8E8E8E8E8E8180CE8E8E8E8E8E8E8E8E8E8E8E8E8E8E2DFE8E8E8E8E8E8E8E8
+        E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+        E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
+      NumGlyphs = 2
+    end
+    object btnCancelar: TRzBitBtn
+      Left = 534
+      Top = 3
+      Width = 30
+      Height = 30
+      Cancel = True
+      ModalResult = 2
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      HotTrack = True
+      ParentColor = True
+      ParentFont = False
+      TabOrder = 1
+      Glyph.Data = {
+        36060000424D3606000000000000360400002800000020000000100000000100
+        08000000000000020000630B0000630B00000001000000000000000000003300
+        00006600000099000000CC000000FF0000000033000033330000663300009933
+        0000CC330000FF33000000660000336600006666000099660000CC660000FF66
+        000000990000339900006699000099990000CC990000FF99000000CC000033CC
+        000066CC000099CC0000CCCC0000FFCC000000FF000033FF000066FF000099FF
+        0000CCFF0000FFFF000000003300330033006600330099003300CC003300FF00
+        330000333300333333006633330099333300CC333300FF333300006633003366
+        33006666330099663300CC663300FF6633000099330033993300669933009999
+        3300CC993300FF99330000CC330033CC330066CC330099CC3300CCCC3300FFCC
+        330000FF330033FF330066FF330099FF3300CCFF3300FFFF3300000066003300
+        66006600660099006600CC006600FF0066000033660033336600663366009933
+        6600CC336600FF33660000666600336666006666660099666600CC666600FF66
+        660000996600339966006699660099996600CC996600FF99660000CC660033CC
+        660066CC660099CC6600CCCC6600FFCC660000FF660033FF660066FF660099FF
+        6600CCFF6600FFFF660000009900330099006600990099009900CC009900FF00
+        990000339900333399006633990099339900CC339900FF339900006699003366
+        99006666990099669900CC669900FF6699000099990033999900669999009999
+        9900CC999900FF99990000CC990033CC990066CC990099CC9900CCCC9900FFCC
+        990000FF990033FF990066FF990099FF9900CCFF9900FFFF99000000CC003300
+        CC006600CC009900CC00CC00CC00FF00CC000033CC003333CC006633CC009933
+        CC00CC33CC00FF33CC000066CC003366CC006666CC009966CC00CC66CC00FF66
+        CC000099CC003399CC006699CC009999CC00CC99CC00FF99CC0000CCCC0033CC
+        CC0066CCCC0099CCCC00CCCCCC00FFCCCC0000FFCC0033FFCC0066FFCC0099FF
+        CC00CCFFCC00FFFFCC000000FF003300FF006600FF009900FF00CC00FF00FF00
+        FF000033FF003333FF006633FF009933FF00CC33FF00FF33FF000066FF003366
+        FF006666FF009966FF00CC66FF00FF66FF000099FF003399FF006699FF009999
+        FF00CC99FF00FF99FF0000CCFF0033CCFF0066CCFF0099CCFF00CCCCFF00FFCC
+        FF0000FFFF0033FFFF0066FFFF0099FFFF00CCFFFF00FFFFFF00000080000080
+        000000808000800000008000800080800000C0C0C00080808000191919004C4C
+        4C00B2B2B200E5E5E500C8AC2800E0CC6600F2EABF00B59B2400D8E9EC009933
+        6600D075A300ECC6D900646F710099A8AC00E2EFF10000000000000000000000
+        0000000000000000000000000000000000000000000000000000000000000000
+        0000000000000000000000000000000000000000000000000000E8E8E8E8E8E8
+        E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+        E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+        E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8B46C6C6CE8
+        E8E8E8E8B46C6C6CE8E8E8E2DFDFDFE8E8E8E8E8E2DFDFDFE8E8E8B49090906C
+        E8E8E8B49090906CE8E8E8E2818181DFE8E8E8E2818181DFE8E8E8E8B4909090
+        6CE8B49090906CE8E8E8E8E8E2818181DFE8E2818181DFE8E8E8E8E8E8B49090
+        906C9090906CE8E8E8E8E8E8E8E2818181DF818181DFE8E8E8E8E8E8E8E8B490
+        909090906CE8E8E8E8E8E8E8E8E8E28181818181DFE8E8E8E8E8E8E8E8E8E8B4
+        9090906CE8E8E8E8E8E8E8E8E8E8E8E2818181DFE8E8E8E8E8E8E8E8E8E8B490
+        909090906CE8E8E8E8E8E8E8E8E8E28181818181DFE8E8E8E8E8E8E8E8B49090
+        906C9090906CE8E8E8E8E8E8E8E2818181DF818181DFE8E8E8E8E8E8B4909090
+        6CE8B49090906CE8E8E8E8E8E2818181DFE8E2818181DFE8E8E8E8B49090906C
+        E8E8E8B49090906CE8E8E8E2818181DFE8E8E8E2818181DFE8E8E8B4B4B4B4E8
+        E8E8E8E8B4B4B4B4E8E8E8E2E2E2E2E8E8E8E8E8E2E2E2E2E8E8E8E8E8E8E8E8
+        E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8
+        E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8}
+      NumGlyphs = 2
+    end
+  end
+  object gBuscaBanco: TDBGrid
+    Left = 0
+    Top = 75
+    Width = 577
+    Height = 161
+    Align = alClient
+    BorderStyle = bsNone
+    DataSource = dsBanco
+    FixedColor = 15925234
+    Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
+    ParentColor = True
+    TabOrder = 2
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clNavy
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnDblClick = gBuscaBancoDblClick
+    OnKeyDown = gBuscaBancoKeyDown
+  end
+  object BancoProp: TMDOTable
+    Database = dmGestion.dbGestion
+    Transaction = dmGestion.trGestion
+    BufferChunks = 1000
+    CachedUpdates = False
+    TableName = 'BANCOPROP'
+    Left = 256
+    Top = 240
+    object BancoPropIdBanco: TIntegerField
+      Tag = 100
+      Alignment = taCenter
+      DisplayLabel = 'N'#186' '
+      DisplayWidth = 5
+      FieldName = 'IdBanco'
+      Origin = 'BancoProp.IdBanco'
+    end
+    object BancoPropBanco: TStringField
+      DisplayWidth = 20
+      FieldKind = fkLookup
+      FieldName = 'Banco'
+      LookupDataSet = dmGestion.Bancos
+      LookupKeyFields = 'IdBanco'
+      LookupResultField = 'Banco'
+      KeyFields = 'IdBanco'
+      Lookup = True
+    end
+    object BancoPropFechaEmision: TDateField
+      Tag = 100
+      Alignment = taCenter
+      DisplayLabel = 'Emisi'#243'n'
+      DisplayWidth = 10
+      FieldName = 'FechaEmision'
+      Origin = 'BancoProp.FechaEmision'
+    end
+    object BancoPropFechaVencimiento: TDateField
+      Tag = 100
+      Alignment = taCenter
+      DisplayLabel = 'Vto.'
+      DisplayWidth = 10
+      FieldName = 'FechaVencimiento'
+      Origin = 'BancoProp.FechaVencimiento'
+    end
+    object BancoPropFechaResumen: TDateField
+      Tag = 100
+      Alignment = taCenter
+      DisplayLabel = 'Resumen'
+      DisplayWidth = 8
+      FieldName = 'FechaResumen'
+      Origin = 'BancoProp.FechaResumen'
+    end
+    object BancoPropNROCHEQUE: TIntegerField
+      Tag = 100
+      FieldName = 'NROCHEQUE'
+    end
+    object BancoPropDetalleMov: TStringField
+      Tag = 100
+      DisplayLabel = 'Detalle'
+      DisplayWidth = 30
+      FieldName = 'DetalleMov'
+      Origin = 'BancoProp.DetalleMov'
+      Size = 30
+    end
+    object BancoPropIdEntidad: TIntegerField
+      Alignment = taCenter
+      DisplayLabel = 'Entidad'
+      DisplayWidth = 5
+      FieldName = 'IdEntidad'
+      Origin = 'BancoProp.IdEntidad'
+      Visible = False
+    end
+    object BancoPropIdMov: TIntegerField
+      FieldName = 'IdMov'
+      Origin = 'BancoProp.IdMov'
+      Visible = False
+    end
+    object BancoPropTipoMov: TSmallintField
+      FieldName = 'TipoMov'
+      Origin = 'BancoProp.TipoMov'
+      Visible = False
+    end
+    object BancoPropMONTO: TMDOBCDField
+      Tag = 100
+      FieldName = 'MONTO'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+  end
+  object BancoTer: TMDOTable
+    Database = dmGestion.dbGestion
+    Transaction = dmGestion.trGestion
+    BufferChunks = 1000
+    CachedUpdates = False
+    TableName = 'BANCOTER'
+    Left = 288
+    Top = 240
+    object BancoTerIdMov: TIntegerField
+      Alignment = taCenter
+      DisplayLabel = 'N'#186
+      DisplayWidth = 5
+      FieldName = 'IdMov'
+      Origin = 'BancoTer.IdMov'
+      ReadOnly = True
+    end
+    object BancoTerNombreBanco: TStringField
+      Tag = 100
+      DisplayLabel = 'Banco'
+      DisplayWidth = 15
+      FieldName = 'NombreBanco'
+      Origin = 'BancoTer.NombreBanco'
+      Size = 30
+    end
+    object BancoTerNroCuenta: TStringField
+      Tag = 100
+      DisplayLabel = 'N'#186' Cuenta'
+      DisplayWidth = 10
+      FieldName = 'NroCuenta'
+      Origin = 'BancoTer.NroCuenta'
+      Size = 30
+    end
+    object BancoTerTitular: TStringField
+      Tag = 100
+      DisplayWidth = 20
+      FieldName = 'Titular'
+      Origin = 'BancoTer.Titular'
+      Size = 30
+    end
+    object BancoTerEndoso: TStringField
+      Tag = 100
+      DisplayWidth = 20
+      FieldName = 'Endoso'
+      Origin = 'BancoTer.Endoso'
+      Size = 30
+    end
+    object BancoTerNroCheque: TIntegerField
+      Tag = 100
+      DisplayLabel = 'N'#186' Cheque'
+      DisplayWidth = 10
+      FieldName = 'NroCheque'
+      Origin = 'BancoTer.NroCheque'
+    end
+    object BancoTerFechaVencimiento: TDateField
+      Tag = 100
+      Alignment = taCenter
+      DisplayLabel = 'Vto.'
+      DisplayWidth = 8
+      FieldName = 'FechaVencimiento'
+      Origin = 'BancoTer.FechaVencimiento'
+    end
+    object BancoTerFechaEntrega: TDateField
+      Tag = 100
+      Alignment = taCenter
+      DisplayLabel = 'Salida'
+      DisplayWidth = 8
+      FieldName = 'FechaEntrega'
+      Origin = 'BancoTer.FechaEntrega'
+    end
+    object BancoTerSituacion: TSmallintField
+      DisplayWidth = 10
+      FieldName = 'Situacion'
+      Origin = 'BancoTer.Situacion'
+      OnGetText = BancoTerSituacionGetText
+    end
+    object BancoTerMONTO: TMDOBCDField
+      Tag = 100
+      FieldName = 'MONTO'
+      currency = True
+      Precision = 18
+      Size = 4
+    end
+  end
+  object dsBanco: TDataSource
+    DataSet = BancoProp
+    Left = 320
+    Top = 240
+  end
+end
