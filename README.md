@@ -25,3 +25,9 @@ Librerías del entorno de Delphi. El sufijo "100" indica la versión 10.0 (Delph
 * **`dsnap100.bpl`**: DataSnap, utilizado para aplicaciones multicapa.
 * **`bdertl100.bpl`**: Borland Database Engine (Motor de base de datos legado).
 * **`vclx100.bpl`**: Componentes visuales extendidos.
+
+
+LINK DRIVE IDATOS:
+https://drive.google.com/drive/folders/1ew8MiZCOUmhhR9VyS1XKuOeJB-c1tUai?usp=sharing
+uAFIP: CREADO 
+uTools: UPDATE 
